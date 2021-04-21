@@ -22,7 +22,7 @@ Caso queira visualizar o projeto, acesse esse [link do design e telas do projeto
 Para relembrar e de certa forma homenagear as locadoras, nós decidimos desenvolver o *ALOKA*, uma locadora de filmes virtual. É possível dividir o nosso sistema em três partes, onde duas dela são as partes principais do sistema:
 
 ### 👩🏻‍💼👨🏽‍💼 Administrador
-O administrador é o personagem responsável por gerenciar da locadora, sendo assim, é capaz de realizar:
+O administrador é o personagem responsável por gerenciar a locadora, sendo assim, é capaz de realizar:
 
 #### :clipboard::clapper: **Cadastro de filmes**
 Para realizar o cadastro de um filme, o administrador precisará disponibilizar:

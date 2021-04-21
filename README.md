@@ -3,7 +3,7 @@
   <img width=350 src="https://user-images.githubusercontent.com/42751604/115566016-47e34880-a290-11eb-99c6-5052a4c88d13.png"/> 
 </p>
 
-O Aloka é um sistema criado como projeto final da disciplina de Paradigmas de Linguagens de Programação com a finalizade de fixar os conhecimentos de programação funcional.
+O Aloka é um sistema criado como projeto final da disciplina de Paradigmas de Linguagens de Programação com a finalidade de fixar os conhecimentos de programação funcional.
 
 Caso queria visualizar o projeto, acesse esse [link do design e telas do projeto](https://www.figma.com/file/7sJAJApkPpNLwYtmqszuc4/ALOKA?node-id=9%3A30).
 

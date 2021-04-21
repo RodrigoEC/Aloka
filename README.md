@@ -1,4 +1,4 @@
-# Aloka
+# :minidisc: Aloka
 <p align=center>
   <img width=350 src="https://user-images.githubusercontent.com/42751604/115566016-47e34880-a290-11eb-99c6-5052a4c88d13.png"/> 
 </p>

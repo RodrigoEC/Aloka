@@ -21,6 +21,7 @@ Para fazer o cadastro de um filme, o administrador precisará disponibilizar:
 - Data de lançamento;
 - Unidades disponíveis;
 - Id do filme;
+
 Com esse dados em mãos o administrador pode fazer o cadastro do filme tranquilamente.
 
 #### Exibir locações

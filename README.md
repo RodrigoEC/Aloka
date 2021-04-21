@@ -5,12 +5,12 @@
 
 ### Índice
 - [O que é o ALOKA?](#o-que-é-o-aloka)
-- [Administrador](#-administrador)
-  - [Cadastro de filmes](#clipboardclapper-cadastro-de-filmes)
-  - [Exibir locações](#pencil-exibir-locações)
-  - [Gerenciamento de estoque](#bar_chart-gerenciamento-de-estoque)
-- [Cliente](#-cliente)
-- [Cadastro de novos clientes](#clipboard-cadastro-de-novos-clientes)
+  - [Administrador](#-administrador)
+    - [Cadastro de filmes](#clipboardclapper-cadastro-de-filmes)
+    - [Exibir locações](#pencil-exibir-locações)
+    - [Gerenciamento de estoque](#bar_chart-gerenciamento-de-estoque)
+  - [Cliente](#-cliente)
+  - [Cadastro de novos clientes](#clipboard-cadastro-de-novos-clientes)
 - [Como executar o projeto?](#arrow_forward-como-executar-o-projeto)
 - [Equipe do ALOKA(H)](#pushpin-equipe-do-alokah)
 

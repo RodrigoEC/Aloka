@@ -47,6 +47,13 @@ Um usuário novo pode querer se cadastrar no sistema do Aloka, dessa forma, é p
 - Telefone;
 - Endereço.
 
+## Como executar o projeto?
 
+## Equipe do ALOKA(H)
 
+- [Daniel Gomes de Lima](https://github.com/dnlgomesl)
+- [Franciclaudio Dantas](https://github.com/claudiodantas)
+- [Gustavo Farias](https://github.com/GusttaFS)
+- [Leandra Oliveira](https://github.com/LeandraOS)
+- [Rodrigo Eloy](https://github.com/RodrigoEC)
 

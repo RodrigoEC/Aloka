@@ -88,7 +88,7 @@ mudaTelaLogado opcao    | opcao == 1 = telaListarFilmes
                         | opcao == 2 = telaFazerLocacao
                         | opcao == 3 = telaRecomendacao
                         | opcao == 4 = telaDevolucao "<<usuario>>"
-                        | otherwise = telaPrincipal
+                        | otherwise = do {putStrLn("Erro! Opção inválida") ; telaPrincipal}
 
 
 -------------- Sessão Fazer Locação -------------

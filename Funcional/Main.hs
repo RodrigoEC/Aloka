@@ -63,7 +63,7 @@ telaLoginCliente = do
 --verificaUserLogin::String -> IO()
 --verificaUserLogin cpfUsuario = if(not(verificaUsuarioBD cpfUsuario)) then do {putStrLn("Erro! Usuário não cadastrado") ; telaLogin}
                                                 --else(telaLogado cpfUsuario)
-                                                
+
 ----- findClienteByCpfBD: consulta o nome do cliente a partir do seu cpf
 telaLogado :: String -> IO()
 telaLogado cpfUsuario = do
@@ -120,6 +120,7 @@ locarFilme idFilme cpfUsuario = do
 -------- Sessão Recomendação da Locadora ---------
 telaRecomendacao :: String -> IO()
 telaRecomendacao cpfUsuario = do
+    system "cls"
     putStrLn("Baseado no seu perfil nós lhe recomendamos o seguinte filme:")
     recomendaFilme cpfUsuario
 

@@ -101,3 +101,24 @@ telaFazerLocacao = do
 telaRecomendacao :: IO()
 telaRecomendacao = do
     putStrLn("Tela Recomendação")
+
+
+----------- Sessão Cadastro de Usuario -----------
+telaCadastroUsuario :: IO()
+telaCadastroUsuario = do
+    putStrLn("Nome do usuário: ")
+    nome <- lerEntradaString
+    putStrLn("--- \nCPF: ")
+    cpf <- lerEntradaString
+    putStrLn("--- \nTelefone: ")
+    telefone <- lerEntradaString
+    putStrLn("--- \nEndereço: ")
+    endereco <- lerEntradaString
+    
+    --faz o cadastro
+
+    putStrLn("---\n")
+    putStrLn("Usuário " ++ nome ++ " cadastrado com sucesso!")
+    putStrLn("\n---")
+    
+    main

@@ -50,25 +50,19 @@ main = do
     telaPrincipal
 --------------------------------------------
 
-
-
 -------------- Sessão de Login -------------
 telaLoginCliente :: IO()
 telaLoginCliente = do
     system "cls"
     putStrLn("----")
     putStrLn("Usuário:")
-
     cpfUsuario <- lerEntradaString
+    verificaUserLogin cpfUsuario
 
-    telaLogado cpfUsuario
-
--- verificaUserLogin cpfUsuario
-
---verificaUserLogin :: String -> IO()
---verificaUserLogin cpfUsuario = if (not(verificaBD cpfUsuario)) 
-                             --       then putStrLn("Usuário não cadastrado")
-                               -- else (telaLogado cpfUsuario)
+--- verificaUsuarioBD cpfUsuario (verifica se o cpf digitado existe no bd e retorna um bolean)    
+--verificaUserLogin::String -> IO()
+--verificaUserLogin cpfUsuario = if(not(verificaUsuarioBD cpfUsuario)) then do {putStrLn("Erro! Usuário não cadastrado") ; telaLogin}
+                                                --else(telaLogado cpfUsuario)
 
 telaLogado :: String -> IO()
 telaLogado cpfUsuario = do
@@ -88,7 +82,7 @@ telaLogado cpfUsuario = do
 
 mudaTelaLogado :: Int -> String -> IO()
 mudaTelaLogado opcao cpfUsuario
-    | opcao == 1 = telaListarFilmes
+    | opcao == 1 = telaListarFilmes cpfUsuario
     | opcao == 2 = telaFazerLocacao cpfUsuario
     | opcao == 3 = telaRecomendacao cpfUsuario
     | opcao == 4 = telaDevolucao cpfUsuario
@@ -96,9 +90,29 @@ mudaTelaLogado opcao cpfUsuario
 
 
 -------------- Sessão Fazer Locação -------------
-telaFazerLocacao :: String -> IO()
+telaFazerLocacao::String-> IO()
 telaFazerLocacao cpfUsuario = do
-    putStrLn("Tela Locação")
+    putStrLn("OBS: Caso queira verificar a lista de filmes digite '7' no lugar do id do folme.")
+    putStrLn("ID do filme desejado: ")
+    idFilme <- lerEntradaInt
+    verificaFilme idFilme cpfUsuario
+
+---- verificaExistenciaFilmeBD: verifica se o filme ta cadastrado no bd - retorna um bolean
+---- verificaDisponibilidadeBD: verifica se ainda tem copia do filme para alugar, no bd -  retorna um bolean
+
+verificaFilme::Int-> String-> IO()
+verificaFilme idFilme cpfUsuario|idFilme == 7 = telaListarFilmes cpfUsuario
+                                |not(verificaExistenciaFilmeBD idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaFazerLocacao cpfUsuario}
+                                |not(verificaDisponibilidadeBD idFilme) = do {putStrLn("Erro! Filme indisponível") ; telaFazerLocacao cpfUsuario}
+                                |otherwise = locarFilme idFilme cpfUsuario
+
+---- locarFilmeBD: adiciona um filme no usuario, no bd - retorna uma string "Filme #nomeFilme alugado com sucesso!"
+locarFilme:: Int-> String-> IO()
+locarFilme idFilme cpfUsuario = do
+    let alugado = locarFilmeBD idFilme cpfUsuario
+    putStrLn(alugado)
+    putStrLn("----")
+    telaLogado cpfUsuario
 
 
 -------- Sessão Recomendação da Locadora ---------
@@ -131,8 +145,8 @@ telaCadastroUsuario = do
     telaPrincipal
 
 ----------- Sessão Listar Filmes -----------
-telaListarFilmes :: IO()
-telaListarFilmes = do
+telaListarFilmes:: String-> IO()
+telaListarFilmes cpfUsuario = do
     system "cls"
     -- realiza consulta de dados
 
@@ -140,7 +154,7 @@ telaListarFilmes = do
     putStrLn("<<Lista de filmes>>") --listando os dados
     putStrLn("---")
 
-    telaPrincipal
+    telaLogado cpfUsuario
 
 
 ----------- Sessão Devolucao -----------

@@ -2,9 +2,10 @@ import System.IO
 import System.IO.Unsafe
 import System.IO.Error 
 import System.Process
+import System.Info
 import Control.Concurrent
 
----------- Leitura de entradas ----------
+---------------- Utilitarios ---------------
 lerEntradaInt :: IO Int
 lerEntradaInt = do
          x <- readLn
@@ -15,7 +16,9 @@ lerEntradaString = do
          x <- getLine
          return x
 
-
+clrScr = if os == "mingw32"
+            then system "cls" 
+         else system "clear"
 
 --------------------------------------------
 
@@ -33,7 +36,7 @@ logo = unsafeDupablePerformIO (readFile "logo.txt")
 
 telaPrincipal :: IO()
 telaPrincipal = do
-    system "cls"
+    clrScr
     putStrLn(logo)
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Login como cliente")
@@ -55,7 +58,7 @@ mudaTelaPrincipal opcao | opcao == 1 = telaLoginCliente
 -------------- Sessão de Login -------------
 telaLoginCliente :: IO()
 telaLoginCliente = do
-    system "cls"
+    clrScr
     putStrLn(logo)
     putStrLn("       -----LOGIN CLIENTE----")
     putStrLn("\nOlá, cinéfilo! :)")
@@ -76,7 +79,7 @@ telaLoginCliente = do
 
 telaLogado :: String -> IO()
 telaLogado cpfUsuario = do
-    system "cls"
+    clrScr
     putStrLn(logo)
 
     -- Consultar bd para obter o nome do usuario
@@ -104,7 +107,7 @@ mudaTelaLogado opcao cpfUsuario
 ----------- Sessão Cadastro de Usuario -----------
 telaCadastroUsuario :: IO()
 telaCadastroUsuario = do
-    system "cls"
+    clrScr
     putStrLn(logo)
     putStrLn("       -------CADASTRO-------")
     putStrLn("\nNome do usuário: ")
@@ -119,12 +122,12 @@ telaCadastroUsuario = do
     --faz o cadastro
 
     resumoCadastroCliente nome cpf telefone endereco
-    threadDelay 4000000
+    threadDelay 2000000
     telaPrincipal
 
 resumoCadastroCliente :: String -> String -> String -> String -> IO()
 resumoCadastroCliente nome cpf telefone endereco = do
-    system "cls"
+    clrScr
     putStrLn("---\n")
     putStrLn("Usuário " ++ nome ++ " cadastrado com sucesso!")
     putStrLn("\n--- RESUMO ---\n")
@@ -138,7 +141,7 @@ resumoCadastroCliente nome cpf telefone endereco = do
 -------------- Sessão Fazer Locação -------------
 telaFazerLocacao :: String -> IO()
 telaFazerLocacao cpfUsuario = do
-    system "cls"
+    clrScr
     putStrLn(logo)
     putStrLn("       -VAI UM FILMINHO AI?-")
     putStrLn("\nOBS: Para verificar a lista de filmes basta digitar 0!")
@@ -168,13 +171,13 @@ locarFilme idFilme cpfUsuario = do
     putStrLn("Filme " ++ "<<nome>>" ++ " alugado com sucesso!")
     putStrLn("---")
 
-    threadDelay 4000000
+    threadDelay 2000000
     telaLogado cpfUsuario
 
 -------- Sessão Recomendação da Locadora ---------
 telaRecomendacao :: String -> IO()
 telaRecomendacao cpfUsuario = do
-    system "cls"
+    clrScr
     putStrLn(logo)
     putStrLn("       -HMM VEJAMOS, JÁ SEI!-")
     putStrLn("\nBaseado no seu perfil, recomendamos o seguinte filme:")
@@ -204,7 +207,7 @@ alugarRecomendado opcao cpfUsuario idFilme
 ----------- Sessão Listar Filmes -----------
 telaListarFilmes:: String -> Char -> IO()
 telaListarFilmes cpfUsuario telaAnterior = do
-    system "cls"
+    clrScr
     -- realiza consulta de dados
     putStrLn("-----DA SÓ UMA OLHADA NA NOSSA LISTA DE FILMES!-----")
     putStrLn("\n<<Lista de filmes>>\n") --listando os dados
@@ -222,7 +225,7 @@ telaDevolucao :: String -> IO()
 telaDevolucao cpfUsuario = do
     -- consulta dados
     
-    system "cls"
+    clrScr
     putStrLn("-----------------------DEVOLUÇÃO----------------------")
     putStrLn("\nUau, Já assistiu?!")
     putStrLn("Você tem a(s) seguinte(s) locação(ões) em andamento:")
@@ -238,7 +241,7 @@ telaDevolucao cpfUsuario = do
     idFilme <- lerEntradaInt
     verificaFilmeDevolucao idFilme cpfUsuario
 
-    threadDelay 4000000
+    threadDelay 2000000
     telaPrincipal
 
 verificaFilmeDevolucao :: Int -> String -> IO()

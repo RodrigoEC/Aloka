@@ -98,8 +98,8 @@ telaFazerLocacao cpfUsuario = do
     idFilme <- lerEntradaInt
     verificaFilme idFilme cpfUsuario
 
----- verificaExistenciaFilmeBD: verifica se o filme ta cadastrado no bd - retorna um bolean
----- verificaDisponibilidadeBD: verifica se ainda tem copia do filme para alugar, no bd -  retorna um bolean
+---- verificaExistenciaFilmeBD: verifica se o filme ta cadastrado no bd - retorna um boolean
+---- verificaDisponibilidadeBD: verifica se ainda tem copia do filme para alugar, no bd -  retorna um boolean
 
 verificaFilme::Int-> String-> IO()
 verificaFilme idFilme cpfUsuario|idFilme == 7 = telaListarFilmes cpfUsuario
@@ -107,19 +107,37 @@ verificaFilme idFilme cpfUsuario|idFilme == 7 = telaListarFilmes cpfUsuario
 --                              |not(verificaDisponibilidadeBD idFilme) = do {putStrLn("Erro! Filme indisponível") ; telaFazerLocacao cpfUsuario}
                                 |otherwise = locarFilme idFilme cpfUsuario
 
----- locarFilmeBD: adiciona um filme no usuario, no bd - retorna uma string "Filme #nomeFilme alugado com sucesso!"
+---- locarFilmeBD: adiciona um filme no usuario, no bd
+---- pesquisaFilmeBDByID: retorna o nome do filme
 locarFilme:: Int-> String-> IO()
 locarFilme idFilme cpfUsuario = do
-    let alugado = locarFilmeBD idFilme cpfUsuario
-    putStrLn(alugado)
+--  locarFilmeBD idFilme cpfUsuario
+--  let alugado = pesquisaFilmeBDByID idFilme 
+--  putStrLn("Filme " ++ alugado ++ "alugado com sucesso!")
     putStrLn("----")
     telaLogado cpfUsuario
 
 -------- Sessão Recomendação da Locadora ---------
 telaRecomendacao :: String -> IO()
 telaRecomendacao cpfUsuario = do
-    putStrLn("Tela Recomendação")
+    putStrLn("Baseado no seu perfil nós lhe recomendamos o seguinte filme:")
+    recomendaFilme cpfUsuario
 
+---- pesquisaFilmeParaRecomendarBD: retorna o id do filme recomendado, disponivel
+---- pesquisaFilmeBDByID: retorna o nome do filme
+recomendaFilme:: String-> IO()
+recomendaFilme cpfUsuario = do
+--  let idFilme = pesquisaFilmeParaRecomendarBD
+--  let recomendacao = pesquisaFilmeBDByID idFilme 
+--  putStrLn(recomendacao)
+    putStrLn("Você deseja fazer a locassao desse filme? [y/n]")
+--  let idFilme = pesquisaFilmeParaRecomendarBD
+    opcao <- lerEntradaString
+--  alugarRecomendado opcao cpfUsuario idFilme
+
+alugarRecomendado:: String-> String-> Int-> IO()
+alugarRecomendado opcao cpfUsuario idFilme | opcao == "y" = locarFilme idFilme cpfUsuario
+                                           | otherwise = telaLogado cpfUsuario
 
 ----------- Sessão Cadastro de Usuario -----------
 telaCadastroUsuario :: IO()

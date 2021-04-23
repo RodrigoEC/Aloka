@@ -2,6 +2,7 @@ import System.IO
 import System.IO.Unsafe
 import System.IO.Error 
 import System.Process
+import System.IO.Unsafe(unsafeDupablePerformIO)
 
 ------------------------------ Ler entradas ---------------------------------------------------------------
 lerEntradaInt :: IO Int
@@ -15,16 +16,22 @@ lerEntradaString = do
          return x
 
 --- Tela Principal
-telaPrincipal::IO()
+
+logo :: String
+logo = unsafeDupablePerformIO (readFile "logo.txt")
+
+telaPrincipal :: IO()
 telaPrincipal = do
     system "clear"
     putStrLn("---")
     putStrLn("BEM-VINDE AO ALOKA")
-    putStrLn("A SUA LOCADORA VIRTUAL")
-    putStrLn("Como deseja prosseguir?")
+    putStrLn(logo)
+    putStrLn("\nA SUA LOCADORA VIRTUAL")
+    putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Login como cliente")
     putStrLn("[2] Login como administrador")
     putStrLn("[3] Cadastro de Usuário")
+
     opcao <- lerEntradaInt
     mudaTelaInicial opcao
 
@@ -44,7 +51,6 @@ telaLogin = do
     cpfUsuario <- lerEntradaString
     verificaUserLogin cpfUsuario
 
---- verificaBD cpfUsuario (verifica se o cpf digitado existe no bd e retorna um bolean)    
 verificaUserLogin::String -> IO()
 verificaUserLogin cpfUsuario = if(not(verificaBD cpfUsuario)) then putStrLn("Usuário não cadastrado")
                                                 else(telaLogado cpfUsuario)

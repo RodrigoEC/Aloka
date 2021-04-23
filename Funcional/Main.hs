@@ -15,112 +15,165 @@ lerEntradaString = do
          x <- getLine
          return x
 
-------------- Tela Principal -------------
 
+
+--------------------------------------------
+
+main :: IO()
+main = do
+    telaPrincipal
+
+--------------------------------------------
+
+
+
+------------- Tela Principal -------------
 logo :: String
 logo = unsafeDupablePerformIO (readFile "logo.txt")
 
 telaPrincipal :: IO()
 telaPrincipal = do
     system "cls"
-    putStrLn("---")
-    putStrLn("BEM-VINDE AO ALOKA")
     putStrLn(logo)
-    putStrLn("\nA SUA LOCADORA VIRTUAL")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Login como cliente")
     putStrLn("[2] Login como administrador")
     putStrLn("[3] Cadastro de Usuário")
-    putStrLn("[4] Logout")
+    putStrLn("[4] Sair\n")
 
     opcao <- lerEntradaInt
-    mudaTelaInicial opcao
+    mudaTelaPrincipal opcao
 
---------------- Muda tela -----------------
-mudaTelaInicial :: Int -> IO()
-mudaTelaInicial opcao | opcao == 1 = telaLoginCliente
----                   | opcao == 2 = telaAdmistrador (Cláudio)
-                      | opcao == 3 = telaCadastroUsuario
-                      | opcao == 4 = putStrLn("end")
-                      | otherwise = do {putStrLn("Erro! Opção inválida") ; telaPrincipal}
+mudaTelaPrincipal :: Int -> IO()
+mudaTelaPrincipal opcao | opcao == 1 = telaLoginCliente
+--                      | opcao == 2 = telaAdmistrador (Cláudio)
+                        | opcao == 3 = telaCadastroUsuario
+                        | opcao == 4 = putStrLn("\nHasta la vista, baby!")
+                        | otherwise = do {putStrLn("Erro: Opção inválida. Tente novamente!") ; telaPrincipal}
 
---------------------------------------------
-main :: IO()
-main = do
-    telaPrincipal
---------------------------------------------
 
 -------------- Sessão de Login -------------
 telaLoginCliente :: IO()
 telaLoginCliente = do
     system "cls"
-    putStrLn("----")
-    putStrLn("Usuário:")
+    putStrLn(logo)
+    putStrLn("       -----LOGIN CLIENTE----")
+    putStrLn("\nOlá, cinéfilo! :)")
+    putStrLn("Informe o cpf para continuar.")
+    putStrLn("\nCPF (apenas números): ")
     cpfUsuario <- lerEntradaString
---  verificaUserLogin cpfUsuario
 
---- verificaUsuarioBD cpfUsuario (verifica se o cpf digitado existe no bd e retorna um bolean)    
---verificaUserLogin::String -> IO()
---verificaUserLogin cpfUsuario = if(not(verificaUsuarioBD cpfUsuario)) then do {putStrLn("Erro! Usuário não cadastrado") ; telaLogin}
-                                                --else(telaLogado cpfUsuario)
+    --  verificaUserLogin cpfUsuario
 
------ findClienteByCpfBD: consulta o nome do cliente a partir do seu cpf
+    putStrLn "<<login realizado>>" --codigo provisorio
+    telaLogado cpfUsuario
+
+-- verificaUsuarioBD cpfUsuario (verifica se o cpf digitado existe no bd e retorna um bolean)    
+--verificaUserLogin :: String -> IO()
+--verificaUserLogin cpfUsuario = if(not(verificaUsuarioBD cpfUsuario)) 
+--                                 then do {putStrLn("Erro! Usuário não cadastrado") ; telaLogin}
+--                               else(telaLogado cpfUsuario)
+
 telaLogado :: String -> IO()
 telaLogado cpfUsuario = do
     system "cls"
-    putStrLn("----")
---  let nomeCliente = findClienteByCpfBD cpfUsuario  
-    putStrLn("Bem-vindx ao Aloka, " ++ cpfUsuario) -- coloquei com o cps so pra teste mesmo
-    putStrLn("Como deseja prosseguir?")
+    putStrLn(logo)
+
+    -- Consultar bd para obter o nome do usuario
+
+    putStrLn("\nÉ você, " ++ "<<nome>>" ++ "!") 
+    putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Listar Filmes")
     putStrLn("[2] Fazer locação")
     putStrLn("[3] Recomendação da locadora")
     putStrLn("[4] Devolução da locação")
-    putStrLn("[5] Logout")
+    putStrLn("[5] Voltar ao menu principal\n")
 
     opcao <- lerEntradaInt
     mudaTelaLogado opcao cpfUsuario
 
 mudaTelaLogado :: Int -> String -> IO()
 mudaTelaLogado opcao cpfUsuario
-    | opcao == 1 = telaListarFilmes cpfUsuario
+    | opcao == 1 = telaListarFilmes cpfUsuario 'I'
     | opcao == 2 = telaFazerLocacao cpfUsuario
     | opcao == 3 = telaRecomendacao cpfUsuario
     | opcao == 4 = telaDevolucao cpfUsuario
-    | otherwise = do {putStrLn("Erro! Opção inválida") ; telaPrincipal}
+    | otherwise = do {putStrLn("Erro: Opção inválida. Tente novamente!") ; telaPrincipal}
+
+
+----------- Sessão Cadastro de Usuario -----------
+telaCadastroUsuario :: IO()
+telaCadastroUsuario = do
+    system "cls"
+    putStrLn(logo)
+    putStrLn("       -------CADASTRO-------")
+    putStrLn("\nNome do usuário: ")
+    nome <- lerEntradaString
+    putStrLn("--- \nCPF (apenas numeros): ")
+    cpf <- lerEntradaString 
+    putStrLn("--- \nTelefone (DDD + Número): ")
+    telefone <- lerEntradaString
+    putStrLn("--- \nEndereço: ")
+    endereco <- lerEntradaString
+    
+    --faz o cadastro
+
+    resumoCadastroCliente nome cpf telefone endereco
+    threadDelay 5000000
+    telaPrincipal
+
+resumoCadastroCliente :: String -> String -> String -> String -> IO()
+resumoCadastroCliente nome cpf telefone endereco = do
+    system "cls"
+    putStrLn("---\n")
+    putStrLn("Usuário " ++ nome ++ " cadastrado com sucesso!")
+    putStrLn("\n--- RESUMO ---\n")
+    putStrLn("Nome do usuário: " ++ nome)
+    putStrLn("CPF: " ++ cpf)
+    putStrLn("Telefone: " ++ telefone)
+    putStrLn("Endereço: " ++ endereco)
+    putStrLn("\n---")
 
 
 -------------- Sessão Fazer Locação -------------
-telaFazerLocacao::String-> IO()
+telaFazerLocacao :: String -> IO()
 telaFazerLocacao cpfUsuario = do
     system "cls"
-    putStrLn("OBS: Caso queira verificar a lista de filmes digite '7' no lugar do id do folme.")
-    putStrLn("ID do filme desejado: ")
+    putStrLn(logo)
+    putStrLn("       -VAI UM FILMINHO AI?-")
+    putStrLn("\nOBS: Para verificar a lista de filmes basta digitar 0!")
+    putStrLn("\nID do filme: ")
+    
     idFilme <- lerEntradaInt
     verificaFilme idFilme cpfUsuario
 
 ---- verificaExistenciaFilmeBD: verifica se o filme ta cadastrado no bd - retorna um boolean
 ---- verificaDisponibilidadeBD: verifica se ainda tem copia do filme para alugar, no bd -  retorna um boolean
-verificaFilme::Int-> String-> IO()
-verificaFilme idFilme cpfUsuario|idFilme == 7 = telaListarFilmes cpfUsuario
---                              |not(verificaExistenciaFilmeBD idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaFazerLocacao cpfUsuario}
---                              |not(verificaDisponibilidadeBD idFilme) = do {putStrLn("Erro! Filme indisponível") ; telaFazerLocacao cpfUsuario}
-                                |otherwise = locarFilme idFilme cpfUsuario
+
+verificaFilme :: Int -> String -> IO()
+verificaFilme idFilme cpfUsuario
+    | idFilme == 0 = telaListarFilmes cpfUsuario 'L'
+--  | not(verificaExistenciaFilmeBD idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaFazerLocacao cpfUsuario}
+--  | not(verificaDisponibilidadeBD idFilme) = do {putStrLn("Erro! Filme indisponível") ; telaFazerLocacao cpfUsuario}
+    | otherwise = locarFilme idFilme cpfUsuario
 
 ---- locarFilmeBD: adiciona um filme no usuario, no bd
 ---- pesquisaFilmeBDByID: retorna o nome do filme
-locarFilme:: Int-> String-> IO()
+locarFilme :: Int -> String -> IO()
 locarFilme idFilme cpfUsuario = do
 --  locarFilmeBD idFilme cpfUsuario
 --  let alugado = pesquisaFilmeBDByID idFilme 
---  putStrLn("Filme " ++ alugado ++ "alugado com sucesso!")
-    putStrLn("----")
+    
+    putStrLn("\nJá pode ir preparando a pipoca...")
+    putStrLn("Filme " ++ "<<nome>>" ++ " alugado com sucesso!")
+    putStrLn("---")
+
+    threadDelay 4000000
     telaLogado cpfUsuario
 
 -------- Sessão Recomendação da Locadora ---------
 telaRecomendacao :: String -> IO()
 telaRecomendacao cpfUsuario = do
-    system "cls"
     putStrLn("Baseado no seu perfil nós lhe recomendamos o seguinte filme:")
     recomendaFilme cpfUsuario
 
@@ -131,71 +184,68 @@ recomendaFilme cpfUsuario = do
 --  let idFilme = pesquisaFilmeParaRecomendarBD
 --  let recomendacao = pesquisaFilmeBDByID idFilme 
 --  putStrLn(recomendacao)
-    putStrLn("Você deseja fazer a locassao desse filme? [y/n]")
+    putStrLn("Você deseja fazer a locação desse filme? [y/n]")
 --  let idFilme = pesquisaFilmeParaRecomendarBD
     opcao <- lerEntradaString
+
+    putStrLn("") -- provisorio
 --  alugarRecomendado opcao cpfUsuario idFilme
 
 alugarRecomendado:: String-> String-> Int-> IO()
-alugarRecomendado opcao cpfUsuario idFilme | opcao == "y" = locarFilme idFilme cpfUsuario
-                                           | otherwise = telaLogado cpfUsuario
+alugarRecomendado opcao cpfUsuario idFilme 
+    | opcao == "y" = locarFilme idFilme cpfUsuario
+    | otherwise = telaLogado cpfUsuario
 
------------ Sessão Cadastro de Usuario -----------
-telaCadastroUsuario :: IO()
-telaCadastroUsuario = do
-    system "cls"
-    putStrLn("Nome do usuário: ")
-    nome <- lerEntradaString
-    putStrLn("--- \nCPF: ")
-    cpf <- lerEntradaString
-    putStrLn("--- \nTelefone: ")
-    telefone <- lerEntradaString
-    putStrLn("--- \nEndereço: ")
-    endereco <- lerEntradaString
-    
-    --faz o cadastro
-
-    system "cls"
-    putStrLn("---\n")
-    putStrLn("Usuário " ++ nome ++ " cadastrado com sucesso!")
-    putStrLn("\n---")
-    
-    threadDelay 1000000
-    telaPrincipal
 
 ----------- Sessão Listar Filmes -----------
-telaListarFilmes:: String-> IO()
-telaListarFilmes cpfUsuario = do
+telaListarFilmes:: String -> Char -> IO()
+telaListarFilmes cpfUsuario telaAnterior = do
     system "cls"
     -- realiza consulta de dados
-
-    putStrLn("")
-    putStrLn("<<Lista de filmes>>") --listando os dados
+    putStrLn("-----DA SÓ UMA OLHADA NA NOSSA LISTA DE FILMES!-----")
+    putStrLn("\n<<Lista de filmes>>\n") --listando os dados
     putStrLn("---")
 
-    telaLogado cpfUsuario
+    putStrLn("\nPressione a tecla ENTER para voltar")
+    opcao <- lerEntradaString
+    if (telaAnterior == 'L')
+        then telaFazerLocacao cpfUsuario
+    else telaLogado cpfUsuario
 
 
 ----------- Sessão Devolucao -----------
 telaDevolucao :: String -> IO()
 telaDevolucao cpfUsuario = do
-    -- consulta dados com base no nome
+    -- consulta dados
     
     system "cls"
-    putStrLn("Olá " ++ cpfUsuario ++ ", você tem a(s) seguinte(s) locação(ões) em andamento:")
+    putStrLn("-----------------------DEVOLUÇÃO----------------------")
+    putStrLn("\nUau, Já assistiu?!")
+    putStrLn("Você tem a(s) seguinte(s) locação(ões) em andamento:")
 
-    putStrLn("\n------\n")
-    putStrLn("<<Filme1>>") --Listando os dados
-    putStrLn("\n-----\n")
+    putStrLn("\n---")
+    putStrLn("\n<<Lista de filmes>>\n") --Listando os dados
+    putStrLn("---\n")
 
-    putStrLn("Digite o id da locação que você deseja finalizar: ")
-    id <- lerEntradaInt
+    putStrLn("Qual filme você quer devolver?")
+    putStrLn("Se acha que precisa assistir novamente basta digitar 0!")
+    putStrLn("\nID do filme: ")
 
+    idFilme <- lerEntradaInt
+    verificaFilmeDevolucao idFilme cpfUsuario
+
+    threadDelay 4000000
+    telaPrincipal
+
+verificaFilmeDevolucao :: Int -> String -> IO()
+verificaFilmeDevolucao idFilme cpfUsuario
+    | idFilme == 0 = telaLogado cpfUsuario
+    | otherwise = devolverFilme idFilme cpfUsuario
+
+devolverFilme :: Int -> String -> IO()
+devolverFilme idFilme cpfUsuario = do 
     --faz a devolucao
     --verifica valor da multa
-
-    putStrLn("\nLocação finalizada!")
+    putStrLn("\nDevolução realizada, esperamos que tenha gostado!")
     putStrLn("Multa: R$ " ++ "<<valor>>")
     putStrLn("---")
-
-    telaPrincipal

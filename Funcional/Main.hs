@@ -122,3 +122,40 @@ telaCadastroUsuario = do
     putStrLn("\n---")
     
     main
+
+----------- Sessão Listar Filmes -----------
+telaListarFilmes :: IO()
+telaListarFilmes = do
+
+    -- realiza consulta de dados
+
+    putStrLn("")
+    putStrLn("<<Lista de filmes>>") --listando os dados
+    putStrLn("---")
+
+    main
+
+
+----------- Sessão Devolucao -----------
+telaDevolucao :: String -> IO()
+telaDevolucao nome = do
+    
+    -- consulta dados com base no nome
+    
+    putStrLn("Olá " ++ nome ++ ", você tem a(s) seguinte(s) locação(ões) em andamento:")
+
+    putStrLn("\n------\n")
+    putStrLn("<<Filme1>>") --Listando os dados
+    putStrLn("\n-----\n")
+
+    putStrLn("Digite o id da locação que você deseja finalizar: ")
+    id <- lerEntradaInt
+
+    --faz a devolucao
+    --verifica valor da multa
+
+    putStrLn("\nLocação finalizada!")
+    putStrLn("Multa: R$ " ++ "<<valor>>")
+    putStrLn("---")
+
+    main

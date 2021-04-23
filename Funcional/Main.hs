@@ -68,7 +68,7 @@ telaLoginCliente = do
     putStrLn "<<login realizado>>" --codigo provisorio
     telaLogado cpfUsuario
 
--- verificaUsuarioBD cpfUsuario (verifica se o cpf digitado existe no bd e retorna um bolean)    
+--verificaUsuarioBD cpfUsuario (verifica se o cpf digitado existe no bd e retorna um bolean)    
 --verificaUserLogin :: String -> IO()
 --verificaUserLogin cpfUsuario = if(not(verificaUsuarioBD cpfUsuario)) 
 --                                 then do {putStrLn("Erro! Usuário não cadastrado") ; telaLogin}
@@ -119,7 +119,7 @@ telaCadastroUsuario = do
     --faz o cadastro
 
     resumoCadastroCliente nome cpf telefone endereco
-    threadDelay 5000000
+    threadDelay 4000000
     telaPrincipal
 
 resumoCadastroCliente :: String -> String -> String -> String -> IO()
@@ -174,7 +174,11 @@ locarFilme idFilme cpfUsuario = do
 -------- Sessão Recomendação da Locadora ---------
 telaRecomendacao :: String -> IO()
 telaRecomendacao cpfUsuario = do
-    putStrLn("Baseado no seu perfil nós lhe recomendamos o seguinte filme:")
+    system "cls"
+    putStrLn(logo)
+    putStrLn("       -HMM VEJAMOS, JÁ SEI!-")
+    putStrLn("\nBaseado no seu perfil, recomendamos o seguinte filme:")
+    putStrLn("\n<<Resumo do Filme>>\n")
     recomendaFilme cpfUsuario
 
 ---- pesquisaFilmeParaRecomendarBD: retorna o id do filme recomendado, disponivel

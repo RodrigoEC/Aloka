@@ -57,7 +57,7 @@ telaLoginCliente = do
     putStrLn("----")
     putStrLn("Usuário:")
     cpfUsuario <- lerEntradaString
-    verificaUserLogin cpfUsuario
+--  verificaUserLogin cpfUsuario
 
 --- verificaUsuarioBD cpfUsuario (verifica se o cpf digitado existe no bd e retorna um bolean)    
 --verificaUserLogin::String -> IO()
@@ -92,6 +92,7 @@ mudaTelaLogado opcao cpfUsuario
 -------------- Sessão Fazer Locação -------------
 telaFazerLocacao::String-> IO()
 telaFazerLocacao cpfUsuario = do
+    system "cls"
     putStrLn("OBS: Caso queira verificar a lista de filmes digite '7' no lugar do id do folme.")
     putStrLn("ID do filme desejado: ")
     idFilme <- lerEntradaInt
@@ -102,8 +103,8 @@ telaFazerLocacao cpfUsuario = do
 
 verificaFilme::Int-> String-> IO()
 verificaFilme idFilme cpfUsuario|idFilme == 7 = telaListarFilmes cpfUsuario
-                                |not(verificaExistenciaFilmeBD idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaFazerLocacao cpfUsuario}
-                                |not(verificaDisponibilidadeBD idFilme) = do {putStrLn("Erro! Filme indisponível") ; telaFazerLocacao cpfUsuario}
+--                              |not(verificaExistenciaFilmeBD idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaFazerLocacao cpfUsuario}
+--                              |not(verificaDisponibilidadeBD idFilme) = do {putStrLn("Erro! Filme indisponível") ; telaFazerLocacao cpfUsuario}
                                 |otherwise = locarFilme idFilme cpfUsuario
 
 ---- locarFilmeBD: adiciona um filme no usuario, no bd - retorna uma string "Filme #nomeFilme alugado com sucesso!"
@@ -113,7 +114,6 @@ locarFilme idFilme cpfUsuario = do
     putStrLn(alugado)
     putStrLn("----")
     telaLogado cpfUsuario
-
 
 -------- Sessão Recomendação da Locadora ---------
 telaRecomendacao :: String -> IO()

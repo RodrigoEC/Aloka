@@ -63,13 +63,14 @@ telaLoginCliente = do
 --verificaUserLogin::String -> IO()
 --verificaUserLogin cpfUsuario = if(not(verificaUsuarioBD cpfUsuario)) then do {putStrLn("Erro! Usuário não cadastrado") ; telaLogin}
                                                 --else(telaLogado cpfUsuario)
-
+                                                
+----- findClienteByCpfBD: consulta o nome do cliente a partir do seu cpf
 telaLogado :: String -> IO()
 telaLogado cpfUsuario = do
     system "cls"
     putStrLn("----")
-    putStrLn("Bem-vindx ao Aloka, " ++ cpfUsuario) 
-    --- aqui, ou a gente deixa o bem vindo com o cpf (identificador) ou entao faz uma consulta que retorna o nome desse id
+--  let nomeCliente = findClienteByCpfBD cpfUsuario  
+    putStrLn("Bem-vindx ao Aloka, " ++ cpfUsuario) -- coloquei com o cps so pra teste mesmo
     putStrLn("Como deseja prosseguir?")
     putStrLn("[1] Listar Filmes")
     putStrLn("[2] Fazer locação")
@@ -100,7 +101,6 @@ telaFazerLocacao cpfUsuario = do
 
 ---- verificaExistenciaFilmeBD: verifica se o filme ta cadastrado no bd - retorna um boolean
 ---- verificaDisponibilidadeBD: verifica se ainda tem copia do filme para alugar, no bd -  retorna um boolean
-
 verificaFilme::Int-> String-> IO()
 verificaFilme idFilme cpfUsuario|idFilme == 7 = telaListarFilmes cpfUsuario
 --                              |not(verificaExistenciaFilmeBD idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaFazerLocacao cpfUsuario}

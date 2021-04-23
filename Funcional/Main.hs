@@ -41,7 +41,7 @@ mudaTelaInicial opcao | opcao == 1 = telaLoginCliente
 ---                   | opcao == 2 = telaAdmistrador (Cláudio)
                       | opcao == 3 = telaCadastroUsuario
                       | opcao == 4 = putStrLn("end")
-                      | otherwise = putStrLn("Erro! Opção inválida")
+                      | otherwise = do {putStrLn("Erro! Opção inválida") ; telaPrincipal}
 
 --------------------------------------------
 main :: IO()

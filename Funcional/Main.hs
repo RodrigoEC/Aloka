@@ -36,6 +36,7 @@ logo = unsafeDupablePerformIO (readFile "logo.txt")
 
 telaPrincipal :: IO()
 telaPrincipal = do
+    carregaLogo
     clrScr
     putStrLn(logo)
     putStrLn("\nComo deseja prosseguir?")
@@ -256,3 +257,19 @@ devolverFilme idFilme cpfUsuario = do
     putStrLn("\nDevolução realizada, esperamos que tenha gostado!")
     putStrLn("Multa: R$ " ++ "<<valor>>")
     putStrLn("---")
+
+
+carregaLogo :: IO()
+carregaLogo = do
+    clrScr
+    putStrLn(unsafeDupablePerformIO(readFile "loading1.txt"))
+    threadDelay 200000
+    clrScr
+    putStrLn(unsafeDupablePerformIO(readFile "loading2.txt"))
+    threadDelay 200000
+    clrScr
+    putStrLn(unsafeDupablePerformIO(readFile "loading3.txt"))
+    threadDelay 200000
+    clrScr
+    putStrLn(unsafeDupablePerformIO(readFile "loading4.txt"))
+    threadDelay 1000000

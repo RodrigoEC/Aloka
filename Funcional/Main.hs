@@ -2,6 +2,7 @@ import System.IO
 import System.IO.Unsafe
 import System.IO.Error 
 import System.Process
+import Control.Concurrent
 
 ---------- Leitura de entradas ----------
 lerEntradaInt :: IO Int
@@ -21,7 +22,7 @@ logo = unsafeDupablePerformIO (readFile "logo.txt")
 
 telaPrincipal :: IO()
 telaPrincipal = do
-    system "clear"
+    system "cls"
     putStrLn("---")
     putStrLn("BEM-VINDE AO ALOKA")
     putStrLn(logo)
@@ -54,13 +55,15 @@ main = do
 -------------- Sessão de Login -------------
 telaLoginCliente :: IO()
 telaLoginCliente = do
-    system "clear"
+    system "cls"
     putStrLn("----")
     putStrLn("Usuário:")
 
     cpfUsuario <- lerEntradaString
-    putStrLn ""
-   -- verificaUserLogin cpfUsuario
+
+    telaLogado cpfUsuario
+
+-- verificaUserLogin cpfUsuario
 
 --verificaUserLogin :: String -> IO()
 --verificaUserLogin cpfUsuario = if (not(verificaBD cpfUsuario)) 
@@ -69,7 +72,7 @@ telaLoginCliente = do
 
 telaLogado :: String -> IO()
 telaLogado cpfUsuario = do
-    system "clear"
+    system "cls"
     putStrLn("----")
     putStrLn("Bem-vindx ao Aloka, " ++ cpfUsuario) 
     --- aqui, ou a gente deixa o bem vindo com o cpf (identificador) ou entao faz uma consulta que retorna o nome desse id
@@ -81,31 +84,33 @@ telaLogado cpfUsuario = do
     putStrLn("[5] Logout")
 
     opcao <- lerEntradaInt
-    mudaTelaLogado opcao
+    mudaTelaLogado opcao cpfUsuario
 
-mudaTelaLogado :: Int -> IO()
-mudaTelaLogado opcao    | opcao == 1 = telaListarFilmes
-                        | opcao == 2 = telaFazerLocacao
-                        | opcao == 3 = telaRecomendacao
-                        | opcao == 4 = telaDevolucao "<<usuario>>"
-                        | otherwise = do {putStrLn("Erro! Opção inválida") ; telaPrincipal}
+mudaTelaLogado :: Int -> String -> IO()
+mudaTelaLogado opcao cpfUsuario
+    | opcao == 1 = telaListarFilmes
+    | opcao == 2 = telaFazerLocacao cpfUsuario
+    | opcao == 3 = telaRecomendacao cpfUsuario
+    | opcao == 4 = telaDevolucao cpfUsuario
+    | otherwise = do {putStrLn("Erro! Opção inválida") ; telaPrincipal}
 
 
 -------------- Sessão Fazer Locação -------------
-telaFazerLocacao :: IO()
-telaFazerLocacao = do
+telaFazerLocacao :: String -> IO()
+telaFazerLocacao cpfUsuario = do
     putStrLn("Tela Locação")
 
 
 -------- Sessão Recomendação da Locadora ---------
-telaRecomendacao :: IO()
-telaRecomendacao = do
+telaRecomendacao :: String -> IO()
+telaRecomendacao cpfUsuario = do
     putStrLn("Tela Recomendação")
 
 
 ----------- Sessão Cadastro de Usuario -----------
 telaCadastroUsuario :: IO()
 telaCadastroUsuario = do
+    system "cls"
     putStrLn("Nome do usuário: ")
     nome <- lerEntradaString
     putStrLn("--- \nCPF: ")
@@ -117,32 +122,34 @@ telaCadastroUsuario = do
     
     --faz o cadastro
 
+    system "cls"
     putStrLn("---\n")
     putStrLn("Usuário " ++ nome ++ " cadastrado com sucesso!")
     putStrLn("\n---")
     
-    main
+    threadDelay 1000000
+    telaPrincipal
 
 ----------- Sessão Listar Filmes -----------
 telaListarFilmes :: IO()
 telaListarFilmes = do
-
+    system "cls"
     -- realiza consulta de dados
 
     putStrLn("")
     putStrLn("<<Lista de filmes>>") --listando os dados
     putStrLn("---")
 
-    main
+    telaPrincipal
 
 
 ----------- Sessão Devolucao -----------
 telaDevolucao :: String -> IO()
-telaDevolucao nome = do
-    
+telaDevolucao cpfUsuario = do
     -- consulta dados com base no nome
     
-    putStrLn("Olá " ++ nome ++ ", você tem a(s) seguinte(s) locação(ões) em andamento:")
+    system "cls"
+    putStrLn("Olá " ++ cpfUsuario ++ ", você tem a(s) seguinte(s) locação(ões) em andamento:")
 
     putStrLn("\n------\n")
     putStrLn("<<Filme1>>") --Listando os dados
@@ -158,4 +165,4 @@ telaDevolucao nome = do
     putStrLn("Multa: R$ " ++ "<<valor>>")
     putStrLn("---")
 
-    main
+    telaPrincipal

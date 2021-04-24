@@ -4,272 +4,189 @@ import System.IO.Error
 import System.Process
 import System.Info
 import Control.Concurrent
-
----------------- Utilitarios ---------------
-lerEntradaInt :: IO Int
-lerEntradaInt = do
-         x <- readLn
-         return x
-
-lerEntradaString :: IO String
-lerEntradaString = do
-         x <- getLine
-         return x
-
-clrScr = if os == "mingw32"
-            then system "cls" 
-         else system "clear"
+import qualified Util as Util
 
 --------------------------------------------
 
 main :: IO()
 main = do
+    Util.carregaLogoInicial
     telaPrincipal
 
 --------------------------------------------
 
 
-
 ------------- Tela Principal -------------
-logo :: String
-logo = unsafeDupablePerformIO (readFile "logo.txt")
-
 telaPrincipal :: IO()
 telaPrincipal = do
-    carregaLogo
-    clrScr
-    putStrLn(logo)
-    putStrLn("\nComo deseja prosseguir?")
-    putStrLn("[1] Login como cliente")
-    putStrLn("[2] Login como administrador")
-    putStrLn("[3] Cadastro de Usuário")
-    putStrLn("[4] Sair\n")
+    Util.carregaLogo
+    Util.listaOpcoesMenuInicial
 
-    opcao <- lerEntradaInt
+    opcao <- Util.lerEntradaInt
     mudaTelaPrincipal opcao
 
 mudaTelaPrincipal :: Int -> IO()
 mudaTelaPrincipal opcao | opcao == 1 = telaLoginCliente
 --                      | opcao == 2 = telaAdmistrador (Cláudio)
                         | opcao == 3 = telaCadastroUsuario
-                        | opcao == 4 = putStrLn("\nHasta la vista, baby!")
-                        | otherwise = do {putStrLn("Erro: Opção inválida. Tente novamente!") ; telaPrincipal}
+                        | opcao == 4 = Util.putMsgSainda
+                        | otherwise = do {Util.putOpcaoInvalida ; telaPrincipal}
 
 
 -------------- Sessão de Login -------------
 telaLoginCliente :: IO()
 telaLoginCliente = do
-    clrScr
-    putStrLn(logo)
-    putStrLn("       -----LOGIN CLIENTE----")
-    putStrLn("\nOlá, cinéfilo! :)")
-    putStrLn("Informe o cpf para continuar.")
-    putStrLn("\nCPF (apenas números): ")
-    cpfUsuario <- lerEntradaString
+    Util.carregaLogo
+    Util.putInfoLoginCliente
 
-    --  verificaUserLogin cpfUsuario
+    cpfCliente <- Util.lerEntradaString
 
-    putStrLn "<<login realizado>>" --codigo provisorio
-    telaLogado cpfUsuario
+    --  verificaUserLogin cpfCliente
 
---verificaUsuarioBD cpfUsuario (verifica se o cpf digitado existe no bd e retorna um bolean)    
+    telaLogado cpfCliente
+
+--verificaClienteBD cpfCliente (verifica se o cpf digitado existe no bd e retorna um bolean)    
 --verificaUserLogin :: String -> IO()
---verificaUserLogin cpfUsuario = if(not(verificaUsuarioBD cpfUsuario)) 
+--verificaUserLogin cpfCliente = if(not(verificaClienteBD cpfCliente)) 
 --                                 then do {putStrLn("Erro! Usuário não cadastrado") ; telaLogin}
---                               else(telaLogado cpfUsuario)
+--                               else(telaLogado cpfCliente)
 
 telaLogado :: String -> IO()
-telaLogado cpfUsuario = do
-    clrScr
-    putStrLn(logo)
+telaLogado cpfCliente = do
+    Util.carregaLogo
 
-    -- Consultar bd para obter o nome do usuario
+    -- Consultar bd para obter o nome do Cliente
 
-    putStrLn("\nÉ você, " ++ "<<nome>>" ++ "!") 
-    putStrLn("\nComo deseja prosseguir?")
-    putStrLn("[1] Listar Filmes")
-    putStrLn("[2] Fazer locação")
-    putStrLn("[3] Recomendação da locadora")
-    putStrLn("[4] Devolução da locação")
-    putStrLn("[5] Voltar ao menu principal\n")
+    Util.listaOpcoesMenuLogin "<<nome>>" -- passar o nome do  futuramente
 
-    opcao <- lerEntradaInt
-    mudaTelaLogado opcao cpfUsuario
+    opcao <- Util.lerEntradaInt
+    mudaTelaLogado opcao cpfCliente
 
 mudaTelaLogado :: Int -> String -> IO()
-mudaTelaLogado opcao cpfUsuario
-    | opcao == 1 = telaListarFilmes cpfUsuario 'I'
-    | opcao == 2 = telaFazerLocacao cpfUsuario
-    | opcao == 3 = telaRecomendacao cpfUsuario
-    | opcao == 4 = telaDevolucao cpfUsuario
-    | otherwise = do {putStrLn("Erro: Opção inválida. Tente novamente!") ; telaPrincipal}
+mudaTelaLogado opcao cpfCliente
+    | opcao == 1 = telaListaFilmes cpfCliente 'I'
+    | opcao == 2 = telaLocacaoFilme cpfCliente
+    | opcao == 3 = telaRecomendacao cpfCliente
+    | opcao == 4 = telaDevolucao cpfCliente
+    | otherwise = do {Util.putOpcaoInvalida ; telaPrincipal}
 
 
 ----------- Sessão Cadastro de Usuario -----------
 telaCadastroUsuario :: IO()
 telaCadastroUsuario = do
-    clrScr
-    putStrLn(logo)
-    putStrLn("       -------CADASTRO-------")
-    putStrLn("\nNome do usuário: ")
-    nome <- lerEntradaString
-    putStrLn("--- \nCPF (apenas numeros): ")
-    cpf <- lerEntradaString 
-    putStrLn("--- \nTelefone (DDD + Número): ")
-    telefone <- lerEntradaString
-    putStrLn("--- \nEndereço: ")
-    endereco <- lerEntradaString
+    Util.carregaLogo
+    Util.putInfoCadastroNome
+    nome <- Util.lerEntradaString
+    Util.putInfoCadastroCpf
+    cpf <- Util.lerEntradaString
+    Util.putInfoCadastroTelefone
+    telefone <- Util.lerEntradaString
+    Util.putInfoCadastroEndereco
+    endereco <- Util.lerEntradaString
     
     --faz o cadastro
 
-    resumoCadastroCliente nome cpf telefone endereco
-    threadDelay 2000000
+    Util.putResumoCadastroUsuario nome cpf telefone endereco
     telaPrincipal
-
-resumoCadastroCliente :: String -> String -> String -> String -> IO()
-resumoCadastroCliente nome cpf telefone endereco = do
-    clrScr
-    putStrLn("---\n")
-    putStrLn("Usuário " ++ nome ++ " cadastrado com sucesso!")
-    putStrLn("\n--- RESUMO ---\n")
-    putStrLn("Nome do usuário: " ++ nome)
-    putStrLn("CPF: " ++ cpf)
-    putStrLn("Telefone: " ++ telefone)
-    putStrLn("Endereço: " ++ endereco)
-    putStrLn("\n---")
 
 
 -------------- Sessão Fazer Locação -------------
-telaFazerLocacao :: String -> IO()
-telaFazerLocacao cpfUsuario = do
-    clrScr
-    putStrLn(logo)
-    putStrLn("       -VAI UM FILMINHO AI?-")
-    putStrLn("\nOBS: Para verificar a lista de filmes basta digitar 0!")
-    putStrLn("\nID do filme: ")
+telaLocacaoFilme :: String -> IO()
+telaLocacaoFilme cpfCliente = do
+    Util.carregaLogo
+    Util.putInfoLocacaoFilme
     
-    idFilme <- lerEntradaInt
-    verificaFilme idFilme cpfUsuario
+    idFilme <- Util.lerEntradaInt
+    verificaFilme idFilme cpfCliente
 
 ---- verificaExistenciaFilmeBD: verifica se o filme ta cadastrado no bd - retorna um boolean
 ---- verificaDisponibilidadeBD: verifica se ainda tem copia do filme para alugar, no bd -  retorna um boolean
 
 verificaFilme :: Int -> String -> IO()
-verificaFilme idFilme cpfUsuario
-    | idFilme == 0 = telaListarFilmes cpfUsuario 'L'
---  | not(verificaExistenciaFilmeBD idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaFazerLocacao cpfUsuario}
---  | not(verificaDisponibilidadeBD idFilme) = do {putStrLn("Erro! Filme indisponível") ; telaFazerLocacao cpfUsuario}
-    | otherwise = locarFilme idFilme cpfUsuario
+verificaFilme idFilme cpfCliente
+    | idFilme == 0 = telaListaFilmes cpfCliente 'L'
+--  | not(verificaExistenciaFilmeBD idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaFazerLocacao cpfCliente}
+--  | not(verificaDisponibilidadeBD idFilme) = do {putStrLn("Erro! Filme indisponível") ; telaFazerLocacao cpfCliente}
+    | otherwise = locaFilme idFilme cpfCliente
 
----- locarFilmeBD: adiciona um filme no usuario, no bd
+---- locarFilmeBD: adiciona um filme no Cliente, no bd
 ---- pesquisaFilmeBDByID: retorna o nome do filme
-locarFilme :: Int -> String -> IO()
-locarFilme idFilme cpfUsuario = do
---  locarFilmeBD idFilme cpfUsuario
+locaFilme :: Int -> String -> IO()
+locaFilme idFilme cpfCliente = do
+--  locarFilmeBD idFilme cpfCliente
 --  let alugado = pesquisaFilmeBDByID idFilme 
     
-    putStrLn("\nJá pode ir preparando a pipoca...")
-    putStrLn("Filme " ++ "<<nome>>" ++ " alugado com sucesso!")
-    putStrLn("---")
-
-    threadDelay 2000000
-    telaLogado cpfUsuario
+    Util.putInfoLocaFilme
+    telaLogado cpfCliente
 
 -------- Sessão Recomendação da Locadora ---------
 telaRecomendacao :: String -> IO()
-telaRecomendacao cpfUsuario = do
-    clrScr
-    putStrLn(logo)
-    putStrLn("       -HMM VEJAMOS, JÁ SEI!-")
-    putStrLn("\nBaseado no seu perfil, recomendamos o seguinte filme:")
-    putStrLn("\n<<Resumo do Filme>>\n")
-    recomendaFilme cpfUsuario
+telaRecomendacao cpfCliente = do
+    Util.carregaLogo
+    Util.putInfoRecomendacao
+
+    recomendaFilme cpfCliente
 
 ---- pesquisaFilmeParaRecomendarBD: retorna o id do filme recomendado, disponivel
 ---- pesquisaFilmeBDByID: retorna o nome do filme
 recomendaFilme:: String-> IO()
-recomendaFilme cpfUsuario = do
+recomendaFilme cpfCliente = do
 --  let idFilme = pesquisaFilmeParaRecomendarBD
 --  let recomendacao = pesquisaFilmeBDByID idFilme 
 --  putStrLn(recomendacao)
-    putStrLn("Você deseja fazer a locação desse filme? [y/n]")
+    Util.putInfoRecomendaFilme
 --  let idFilme = pesquisaFilmeParaRecomendarBD
-    opcao <- lerEntradaString
+    opcao <- Util.lerEntradaString
 
     putStrLn("") -- provisorio
---  alugarRecomendado opcao cpfUsuario idFilme
+--  alugarRecomendado opcao cpfCliente idFilme
 
-alugarRecomendado:: String-> String-> Int-> IO()
-alugarRecomendado opcao cpfUsuario idFilme 
-    | opcao == "y" = locarFilme idFilme cpfUsuario
-    | otherwise = telaLogado cpfUsuario
+alugaRecomendado:: String-> String-> Int-> IO()
+alugaRecomendado opcao cpfCliente idFilme 
+    | opcao == "y" = locaFilme idFilme cpfCliente
+    | otherwise = telaLogado cpfCliente
 
 
 ----------- Sessão Listar Filmes -----------
-telaListarFilmes:: String -> Char -> IO()
-telaListarFilmes cpfUsuario telaAnterior = do
-    clrScr
-    -- realiza consulta de dados
-    putStrLn("-----DA SÓ UMA OLHADA NA NOSSA LISTA DE FILMES!-----")
-    putStrLn("\n<<Lista de filmes>>\n") --listando os dados
-    putStrLn("---")
+telaListaFilmes :: String -> Char -> IO()
+telaListaFilmes cpfCliente telaAnterior = do
+    Util.putInfoListaFilmes
+    listaFilmes --listando os dados
 
-    putStrLn("\nPressione a tecla ENTER para voltar")
-    opcao <- lerEntradaString
+    Util.putInfoListaFilmesBottom
+    opcao <- Util.lerEntradaString
     if (telaAnterior == 'L')
-        then telaFazerLocacao cpfUsuario
-    else telaLogado cpfUsuario
+        then telaLocacaoFilme cpfCliente
+    else telaLogado cpfCliente
 
+listaFilmes :: IO()
+listaFilmes = do
+    putStrLn("---")
+    putStrLn("\n<<Lista de filmes>>\n")
+    putStrLn("---")
 
 ----------- Sessão Devolucao -----------
 telaDevolucao :: String -> IO()
-telaDevolucao cpfUsuario = do
+telaDevolucao cpfCliente = do
+    Util.putInfoDevolucaoTop
+
     -- consulta dados
+    listaFilmes
+
+    Util.putInfoDevolucaoBottom
+
+    idFilme <- Util.lerEntradaInt
+    verificaFilmeDevolucao idFilme cpfCliente
     
-    clrScr
-    putStrLn("-----------------------DEVOLUÇÃO----------------------")
-    putStrLn("\nUau, Já assistiu?!")
-    putStrLn("Você tem a(s) seguinte(s) locação(ões) em andamento:")
-
-    putStrLn("\n---")
-    putStrLn("\n<<Lista de filmes>>\n") --Listando os dados
-    putStrLn("---\n")
-
-    putStrLn("Qual filme você quer devolver?")
-    putStrLn("Se acha que precisa assistir novamente basta digitar 0!")
-    putStrLn("\nID do filme: ")
-
-    idFilme <- lerEntradaInt
-    verificaFilmeDevolucao idFilme cpfUsuario
-
-    threadDelay 2000000
-    telaPrincipal
+    telaLogado cpfCliente
 
 verificaFilmeDevolucao :: Int -> String -> IO()
-verificaFilmeDevolucao idFilme cpfUsuario
-    | idFilme == 0 = telaLogado cpfUsuario
-    | otherwise = devolverFilme idFilme cpfUsuario
+verificaFilmeDevolucao idFilme cpfCliente
+    | idFilme == 0 = telaLogado cpfCliente
+    | otherwise = devolveFilme idFilme cpfCliente
 
-devolverFilme :: Int -> String -> IO()
-devolverFilme idFilme cpfUsuario = do 
+devolveFilme :: Int -> String -> IO()
+devolveFilme idFilme cpfCliente = do 
     --faz a devolucao
     --verifica valor da multa
-    putStrLn("\nDevolução realizada, esperamos que tenha gostado!")
-    putStrLn("Multa: R$ " ++ "<<valor>>")
-    putStrLn("---")
-
-
-carregaLogo :: IO()
-carregaLogo = do
-    clrScr
-    putStrLn(unsafeDupablePerformIO(readFile "loading1.txt"))
-    threadDelay 200000
-    clrScr
-    putStrLn(unsafeDupablePerformIO(readFile "loading2.txt"))
-    threadDelay 200000
-    clrScr
-    putStrLn(unsafeDupablePerformIO(readFile "loading3.txt"))
-    threadDelay 200000
-    clrScr
-    putStrLn(unsafeDupablePerformIO(readFile "loading4.txt"))
-    threadDelay 1000000
+    Util.putInfoDevolveFilme

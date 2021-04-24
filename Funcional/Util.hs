@@ -70,7 +70,7 @@ listaOpcoesMenuLogin nome = do
 
 putMsgSainda :: IO()
 putMsgSainda = do
-   rodaLogoInicial (reverse listaLoading) "           SAINDO DO"
+   rodaLogoInicial (reverse listaLoading) "            SAINDO DO"
    clrScr
    putStrLn(unsafeDupablePerformIO(readFile "arquivos/corta.txt"))
    threadDelay 300000
@@ -140,7 +140,7 @@ putInfoRecomendacao = do
 putInfoRecomendaFilme :: IO()
 putInfoRecomendaFilme = do
    putStrLn("Você deseja fazer a locação desse filme? [y/n]")
-   
+
 putInfoListaFilmes :: IO()
 putInfoListaFilmes = do
    clrScr

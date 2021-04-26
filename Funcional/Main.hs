@@ -16,15 +16,15 @@ telaPrincipal = do
     Util.carregaLogo
     Util.listaOpcoesMenuInicial
 
-    opcao <- Util.lerEntradaInt
+    opcao <- Util.lerEntradaString
     mudaTelaPrincipal opcao
 
-mudaTelaPrincipal :: Int -> IO()
-mudaTelaPrincipal opcao | opcao == 1 = telaLoginCliente
---                      | opcao == 2 = telaAdmistrador (Cláudio)
-                        | opcao == 3 = telaCadastroUsuario
-                        | opcao == 4 = Util.putMsgSainda
-                        | otherwise = do {Util.putOpcaoInvalida ; telaPrincipal}
+mudaTelaPrincipal :: String -> IO()
+mudaTelaPrincipal opcao | opcao == "1" = telaLoginCliente
+--                      | opcao == "2" = telaAdmistrador (Cláudio)
+                        | opcao == "3" = telaCadastroUsuario
+                        | opcao == "4" = Util.putMsgSaida
+                        | otherwise = do {Util.putOpcaoInvalida; telaPrincipal}
 
 
 -------------- Sessão de Login -------------
@@ -53,16 +53,17 @@ telaLogado cpfCliente = do
 
     Util.listaOpcoesMenuLogin "<<nome>>" -- passar o nome do  futuramente
 
-    opcao <- Util.lerEntradaInt
+    opcao <- Util.lerEntradaString
     mudaTelaLogado opcao cpfCliente
 
-mudaTelaLogado :: Int -> String -> IO()
+mudaTelaLogado :: String -> String -> IO()
 mudaTelaLogado opcao cpfCliente
-    | opcao == 1 = telaListaFilmes cpfCliente 'I'
-    | opcao == 2 = telaLocacaoFilme cpfCliente
-    | opcao == 3 = telaRecomendacao cpfCliente
-    | opcao == 4 = telaDevolucao cpfCliente
-    | otherwise = do {Util.putOpcaoInvalida ; telaPrincipal}
+    | opcao == "1" = telaListaFilmes cpfCliente 'I'
+    | opcao == "2" = telaLocacaoFilme cpfCliente
+    | opcao == "3" = telaRecomendacao cpfCliente
+    | opcao == "4" = telaDevolucao cpfCliente
+    | opcao == "5" = telaPrincipal
+    | otherwise = do {Util.putOpcaoInvalida ; telaLogado cpfCliente}
 
 
 ----------- Sessão Cadastro de Usuario -----------
@@ -123,7 +124,7 @@ telaRecomendacao cpfCliente = do
 
 ---- pesquisaFilmeParaRecomendarBD: retorna o id do filme recomendado, disponivel
 ---- pesquisaFilmeBDByID: retorna o nome do filme
-recomendaFilme:: String-> IO()
+recomendaFilme:: String -> IO()
 recomendaFilme cpfCliente = do
 --  let idFilme = pesquisaFilmeParaRecomendarBD
 --  let recomendacao = pesquisaFilmeBDByID idFilme 
@@ -131,13 +132,11 @@ recomendaFilme cpfCliente = do
     Util.putInfoRecomendaFilme
 --  let idFilme = pesquisaFilmeParaRecomendarBD
     opcao <- Util.lerEntradaString
+    redireciona opcao cpfCliente
 
-    putStrLn("") -- provisorio
---  alugarRecomendado opcao cpfCliente idFilme
-
-alugaRecomendado:: String-> String-> Int-> IO()
-alugaRecomendado opcao cpfCliente idFilme 
-    | opcao == "y" = locaFilme idFilme cpfCliente
+redireciona :: String -> String -> IO()
+redireciona opcao cpfCliente 
+    | opcao == "y" = telaLocacaoFilme cpfCliente
     | otherwise = telaLogado cpfCliente
 
 

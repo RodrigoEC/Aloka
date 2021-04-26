@@ -30,7 +30,7 @@ lerEntradaString = do
 
 carregaLogoInicial :: IO()
 carregaLogoInicial = do
-   rodaLogoInicial listaLoading "            INICIANDO"
+   rodaLogoInicial listaLoading "            INICIANDO O"
 
 rodaLogoInicial :: [String] -> String -> IO()
 rodaLogoInicial [] _ = threadDelay 200000
@@ -51,7 +51,7 @@ carregaLogo = do
 
 listaOpcoesMenuInicial :: IO()
 listaOpcoesMenuInicial = do
-   putStrLn("       --LUZ, CÂMERA, AÇÃO!--")
+   putStrLn("       ----MENU PRINCIPAL----")
    putStrLn("\nComo deseja prosseguir?")
    putStrLn("[1] Login como cliente")
    putStrLn("[2] Login como administrador")
@@ -60,7 +60,8 @@ listaOpcoesMenuInicial = do
 
 listaOpcoesMenuLogin :: String -> IO()
 listaOpcoesMenuLogin nome = do
-   putStrLn("\nÉ você, " ++ nome ++ "!") 
+   putStrLn("       --LUZ, CÂMERA, AÇÃO!--")
+   putStrLn("\nOlá, " ++ nome ++ "!")
    putStrLn("\nComo deseja prosseguir?")
    putStrLn("[1] Listar Filmes")
    putStrLn("[2] Fazer locação")
@@ -68,18 +69,20 @@ listaOpcoesMenuLogin nome = do
    putStrLn("[4] Devolução da locação")
    putStrLn("[5] Voltar ao menu principal\n")
 
-putMsgSainda :: IO()
-putMsgSainda = do
+putMsgSaida :: IO()
+putMsgSaida = do
    rodaLogoInicial (reverse listaLoading) "            SAINDO DO"
    clrScr
    putStrLn(unsafeDupablePerformIO(readFile "arquivos/corta.txt"))
-   threadDelay 300000
+   threadDelay 200000
    clrScr
-   putStrLn("")
+   putStr("")
 
 putOpcaoInvalida :: IO()
 putOpcaoInvalida = do
    putStrLn("Erro: Opção inválida. Tente novamente!")
+   threadDelay 200000
+   putStr("")
 
 putInfoLoginCliente :: IO() 
 putInfoLoginCliente = do
@@ -116,7 +119,7 @@ putResumoCadastroUsuario nome cpf telefone endereco = do
    putStrLn("Telefone: " ++ telefone)
    putStrLn("Endereço: " ++ endereco)
    putStrLn("\n---")
-   threadDelay 2000000
+   threadDelay 1000000
 
 putInfoLocacaoFilme :: IO()
 putInfoLocacaoFilme = do

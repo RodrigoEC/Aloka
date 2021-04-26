@@ -64,7 +64,7 @@ mudaTelaLogado opcao cpfCliente
     | opcao == "3" = telaRecomendacao cpfCliente
     | opcao == "4" = telaDevolucao cpfCliente
     | opcao == "5" = telaPrincipal
-    | otherwise = do {Util.putMsgOpcaoInvalida ; telaLogado cpfCliente}
+    | otherwise = do {Util.putMsgOpcaoInvalida; telaLogado cpfCliente}
 
 
 ----------- Sessão Cadastro de Usuario -----------
@@ -97,13 +97,13 @@ telaLocacaoFilme cpfCliente = do
     Util.putInfoLocacaoFilme
     
     idFilme <- Util.lerEntradaString
-    if Util.ehIdValido idFilme
-        then do {verificaFilme idFilme cpfCliente}
-    else if idFilme == "0" 
+    if idFilme == "0"
         then do telaListaFilmes cpfCliente 'L'
-    else do {Util.putMsgIdInvalido; 
-            telaLocacaoFilme cpfCliente}
-    
+    else if not(Util.ehIdValido idFilme)
+        then do {Util.putMsgIdInvalido; telaLocacaoFilme cpfCliente}
+    else do {
+        verificaFilme idFilme cpfCliente
+    }
 
 ---- verificaExistenciaFilmeBD: verifica se o filme ta cadastrado no bd - retorna um boolean
 ---- verificaDisponibilidadeBD: verifica se ainda tem copia do filme para alugar, no bd -  retorna um boolean
@@ -168,6 +168,7 @@ listaFilmes = do
     putStrLn("\n<<Lista de filmes>>\n")
     putStrLn("---")
 
+
 ----------- Sessão Devolucao -----------
 telaDevolucao :: String -> IO()
 telaDevolucao cpfCliente = do
@@ -178,17 +179,17 @@ telaDevolucao cpfCliente = do
 
     Util.putInfoDevolucaoBottom
 
-    idFilme <- Util.lerEntradaInt
-    verificaFilmeDevolucao idFilme cpfCliente
-    
-    telaLogado cpfCliente
+    idFilme <- Util.lerEntradaString
+    if idFilme == "0"
+        then do telaLogado cpfCliente
+    else if not(Util.ehIdValido idFilme)
+        then do {Util.putMsgIdInvalido; telaDevolucao cpfCliente}
+    else do {
+        devolveFilme idFilme cpfCliente;
+        telaLogado cpfCliente
+    }
 
-verificaFilmeDevolucao :: Int -> String -> IO()
-verificaFilmeDevolucao idFilme cpfCliente
-    | idFilme == 0 = telaLogado cpfCliente
-    | otherwise = devolveFilme idFilme cpfCliente
-
-devolveFilme :: Int -> String -> IO()
+devolveFilme :: String -> String -> IO()
 devolveFilme idFilme cpfCliente = do 
     --faz a devolucao
     --verifica valor da multa

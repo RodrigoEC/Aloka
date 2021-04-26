@@ -136,21 +136,21 @@ putResumoCadastroUsuario nome cpf telefone endereco = do
 putInfoLocacaoFilme :: IO()
 putInfoLocacaoFilme = do
    putStrLn("       -VAI UM FILMINHO AI?-")
-   putStrLn("\nOBS: Para verificar a lista de filmes basta digitar 0!")
+   putStrLn("\nOBS: Para verificar a lista de filmes basta digitar 'L'!")
    putStrLn("\nID do filme: ")
 
-putInfoLocaFilme :: IO()
-putInfoLocaFilme = do
+putInfoLocaFilme :: String -> IO()
+putInfoLocaFilme nomeFilme = do
    putStrLn("\nJá pode ir preparando a pipoca...")
-   putStrLn("Filme " ++ "<<nome>>" ++ " alugado com sucesso!")
+   putStrLn("Filme " ++ nomeFilme ++ " alugado com sucesso!")
    putStrLn("---")
    threadDelay 1000000
 
-putInfoRecomendacao :: IO()
-putInfoRecomendacao = do
+putInfoRecomendacao :: String -> IO()
+putInfoRecomendacao filme = do
    putStrLn("       -HMM VEJAMOS, JÁ SEI!-")
    putStrLn("\nBaseado no seu perfil, recomendamos o seguinte filme:")
-   putStrLn("\n<<Resumo do Filme>>\n")
+   putStrLn("\n"++ filme ++"\n")
 
 putInfoRecomendaFilme :: IO()
 putInfoRecomendaFilme = do
@@ -174,14 +174,13 @@ putInfoDevolucaoTop = do
 
 putInfoDevolucaoBottom :: IO()
 putInfoDevolucaoBottom = do
-   putStrLn("Qual filme você quer devolver?")
-   putStrLn("Se acha que precisa assistir novamente basta digitar 0!")
-   putStrLn("\nID do filme: ")
+   putStrLn("Qual locação você deseja encerrar?")
+   putStrLn("Para voltar ao menu basta digitar 'M'!")
+   putStrLn("\nID da locação: ")
 
 putInfoDevolveFilme :: IO()
 putInfoDevolveFilme = do
    putStrLn("\nDevolução realizada, esperamos que tenha gostado!")
-   putStrLn("Multa: R$ " ++ "<<valor>>")
    putStrLn("---")
    threadDelay 2000000
 
@@ -191,6 +190,6 @@ ehCpfValido cpfCliente
    | otherwise = all (`elem` ['0'..'9']) cpfCliente
 
 ehIdValido :: String -> Bool
-ehIdValido idFilme
-   | length idFilme == 0 = False
-   | otherwise = all (`elem` ['1'..'9']) idFilme
+ehIdValido id
+   | length id== 0 = False
+   | otherwise = all (`elem` ['0'..'9']) id

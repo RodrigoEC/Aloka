@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 ### Haskell ###
+=======
+>>>>>>> cd5aa509fb9f125fa8ba1129ea7a7e9c9147c33e
 dist
 dist-*
 cabal-dev
@@ -9,6 +12,10 @@ cabal-dev
 *.chs.h
 *.dyn_o
 *.dyn_hi
+<<<<<<< HEAD
+=======
+*.exe
+>>>>>>> cd5aa509fb9f125fa8ba1129ea7a7e9c9147c33e
 .hpc
 .hsenv
 .cabal-sandbox/
@@ -21,6 +28,7 @@ cabal.sandbox.config
 cabal.project.local
 cabal.project.local~
 .HTF/
+<<<<<<< HEAD
 .ghc.environment.*
 
 ### macOS ###
@@ -61,3 +69,6 @@ Temporary Items
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/haskell,macos,vscode
+=======
+.ghc.environment.*
+>>>>>>> cd5aa509fb9f125fa8ba1129ea7a7e9c9147c33e

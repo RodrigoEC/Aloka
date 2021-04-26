@@ -39,7 +39,7 @@ telaLoginCliente = do
     else do {Util.putMsgCpfInvalido; telaLoginCliente}
    
     --  verificaUserLogin cpfCliente
-    
+
 --verificaClienteBD cpfCliente (verifica se o cpf digitado existe no bd e retorna um bolean)    
 --verificaUserLogin :: String -> IO()
 --verificaUserLogin cpfCliente = if(not(verificaClienteBD cpfCliente)) 
@@ -75,16 +75,20 @@ telaCadastroUsuario = do
     nome <- Util.lerEntradaString
     Util.putInfoCadastroCpf
     cpf <- Util.lerEntradaString
-    Util.putInfoCadastroTelefone
-    telefone <- Util.lerEntradaString
-    Util.putInfoCadastroEndereco
-    endereco <- Util.lerEntradaString
+    if not(Util.ehCpfValido cpf) 
+        then do {Util.putMsgCpfInvalido; telaCadastroUsuario}
+    else do {
+            Util.putInfoCadastroTelefone;
+            telefone <- Util.lerEntradaString;
+            Util.putInfoCadastroEndereco;
+            endereco <- Util.lerEntradaString;
+
+            --faz o cadastro
+
+            Util.putResumoCadastroUsuario nome cpf telefone endereco;
+            telaPrincipal
+        }
     
-    --faz o cadastro
-
-    Util.putResumoCadastroUsuario nome cpf telefone endereco
-    telaPrincipal
-
 
 -------------- Sessão Fazer Locação -------------
 telaLocacaoFilme :: String -> IO()
@@ -92,22 +96,27 @@ telaLocacaoFilme cpfCliente = do
     Util.carregaLogo
     Util.putInfoLocacaoFilme
     
-    idFilme <- Util.lerEntradaInt
-    verificaFilme idFilme cpfCliente
+    idFilme <- Util.lerEntradaString
+    if Util.ehIdValido idFilme
+        then do {verificaFilme idFilme cpfCliente}
+    else if idFilme == "0" 
+        then do telaListaFilmes cpfCliente 'L'
+    else do {Util.putMsgIdInvalido; 
+            telaLocacaoFilme cpfCliente}
+    
 
 ---- verificaExistenciaFilmeBD: verifica se o filme ta cadastrado no bd - retorna um boolean
 ---- verificaDisponibilidadeBD: verifica se ainda tem copia do filme para alugar, no bd -  retorna um boolean
 
-verificaFilme :: Int -> String -> IO()
+verificaFilme :: String -> String -> IO()
 verificaFilme idFilme cpfCliente
-    | idFilme == 0 = telaListaFilmes cpfCliente 'L'
 --  | not(verificaExistenciaFilmeBD idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaFazerLocacao cpfCliente}
 --  | not(verificaDisponibilidadeBD idFilme) = do {putStrLn("Erro! Filme indisponível") ; telaFazerLocacao cpfCliente}
     | otherwise = locaFilme idFilme cpfCliente
 
 ---- locarFilmeBD: adiciona um filme no Cliente, no bd
 ---- pesquisaFilmeBDByID: retorna o nome do filme
-locaFilme :: Int -> String -> IO()
+locaFilme :: String -> String -> IO()
 locaFilme idFilme cpfCliente = do
 --  locarFilmeBD idFilme cpfCliente
 --  let alugado = pesquisaFilmeBDByID idFilme 

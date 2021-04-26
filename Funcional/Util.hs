@@ -90,6 +90,12 @@ putMsgCpfInvalido = do
    threadDelay 200000
    putStr("")
 
+putMsgIdInvalido :: IO()
+putMsgIdInvalido = do
+   putStrLn("\nErro: id inválido. Tente novamente!")
+   threadDelay 200000
+   putStr("")
+
 putInfoLoginCliente :: IO() 
 putInfoLoginCliente = do
    putStrLn("       -----LOGIN CLIENTE----")
@@ -138,7 +144,7 @@ putInfoLocaFilme = do
    putStrLn("\nJá pode ir preparando a pipoca...")
    putStrLn("Filme " ++ "<<nome>>" ++ " alugado com sucesso!")
    putStrLn("---")
-   threadDelay 2000000
+   threadDelay 1000000
 
 putInfoRecomendacao :: IO()
 putInfoRecomendacao = do
@@ -184,3 +190,7 @@ ehCpfValido cpfCliente
    | length cpfCliente /= 11 = False
    | otherwise = all (`elem` ['0'..'9']) cpfCliente
 
+ehIdValido :: String -> Bool
+ehIdValido idFilme
+   | length idFilme == 0 = False
+   | otherwise = all (`elem` ['1'..'9']) idFilme

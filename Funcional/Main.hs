@@ -1,5 +1,7 @@
-import qualified Util as Util
-import qualified Admin
+import Util
+import Admin
+import Filme
+import Cliente
 
 --------------------------------------------
 
@@ -44,7 +46,7 @@ telaLoginCliente = do
 --verificaClienteBD cpfCliente (verifica se o cpf digitado existe no bd e retorna um bolean)    
 verificaUserLogin :: String -> IO()
 verificaUserLogin cpfCliente = if(not(Cliente.verificaExistenciaCliente cpfCliente)) 
-                                 then do {putStrLn("Erro! Usuário não cadastrado") ; telaLogin}
+                                 then do {putStrLn("Erro! Usuário não cadastrado") ; telaLoginCliente}
                                else(telaLogado cpfCliente)
 
 telaLogado :: String -> IO()
@@ -107,15 +109,15 @@ telaLocacaoFilme cpfCliente = do
 
 verificaFilme :: String -> String -> IO()
 verificaFilme idFilme cpfCliente
-    | not(Filme.verificaExistenciaFilme idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaFazerLocacao cpfCliente}
-    | (Filme.recuperaEstoqueFilme idFilme < 0) = do {putStrLn("Erro! Filme indisponível") ; telaFazerLocacao cpfCliente}
+    | not(Filme.verificaExistenciaFilme idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaLocacaoFilme cpfCliente}
+    | (Filme.recuperaEstoqueFilme idFilme < 0) = do {putStrLn("Erro! Filme indisponível") ; telaLocacaoFilme cpfCliente}
     | otherwise = locaFilme idFilme cpfCliente
 
 ---- locarFilmeBD: adiciona una locacaO
 locaFilme :: String -> String -> IO()
 locaFilme idFilme cpfCliente = do
 --  locarFilmeBD idFilme cpfCliente
-    let alugado = Filme.recuperaTituloFilme idFilme
+    let alugado = Filme.recuperaFilmesID (read idFilme)
     
     Util.putInfoLocaFilme alugado
     telaLogado cpfCliente

@@ -1,20 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Filme (
-    Filme(Filme),
-    addFilme,
-    recuperaFilmes,
-    recuperaFilmesID,
-    recuperaFilmesPorGenero,
-    verificaExistenciaFilme,
-    recuperaEstoqueFilme,
-    alteraEstoqueFilme,
-    addEstoqueFilme,
-    removeEstoqueFilme,
-    formataFilmes,
-    formataFilme
-) where
+module Filme where
 
-import System.Random
 import           Control.Applicative
 import qualified Data.Text as T
 import           Database.SQLite.Simple

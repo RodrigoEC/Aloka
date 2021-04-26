@@ -1,13 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Cliente (
-    addCliente,
-    deletaCliente,
-    recuperaClientes,
-    recuperaClienteViaCpf,
-    recuperaNomeCliente,
-    formataExibicaoCliente,
-    toString
-) where
+module Cliente where
 import Database.SQLite.Simple
 import Database.SQLite.Simple.FromRow
 import Database.SQLite.Simple.ToField
@@ -37,7 +29,7 @@ instance ToRow Cliente where
 --a partir do nome, cpf, telefone e endereco.
 addCliente :: String -> String -> String -> String -> IO ()
 addCliente nome cpf telefone endereco = do
-    conn <- open "../dados/aloka.db"
+    conn <- open "./dados/aloka.db"
     execute_ conn "CREATE TABLE IF NOT EXISTS clientes(\
                    \nome TEXT,\
                    \cpf TEXT PRIMARY KEY,\
@@ -55,20 +47,20 @@ addCliente nome cpf telefone endereco = do
 -- metodo responsavel por deletar o cliente que possui o cpf passado como parametro 
 deletaCliente :: String -> IO()
 deletaCliente cpf = do
-    conn <- open "../dados/aloka.db"
+    conn <- open "./dados/aloka.db"
     execute conn "DELETE FROM clientes WHERE cpf = ?"(Only cpf)
 
 
 -- Metodo responsavel por retornar uma lista que contém todos os clientes cadastrados no banco de dados.
 recuperaClientes :: IO [Cliente]
 recuperaClientes = do
-    conn <- open "../dados/aloka.db"
+    conn <- open "./dados/aloka.db"
     query_ conn "SELECT * FROM clientes"
 
 -- Metodo responsavel por retornar uma lista que contém o cliente com o cpf passado como parametro
 recuperaClienteViaCpf :: String -> IO [Cliente]
 recuperaClienteViaCpf cpf = do
-    conn <- open "../dados/aloka.db"
+    conn <- open "./dados/aloka.db"
     query conn "SELECT * FROM clientes WHERE cpf = ?"(Only cpf) :: IO [Cliente]
 
 -- Metodo responsavel por retornar uma string que contém o nome do cliente que possui o cpf passado como parametro.

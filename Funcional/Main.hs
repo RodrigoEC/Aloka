@@ -24,7 +24,7 @@ mudaTelaPrincipal opcao | opcao == "1" = telaLoginCliente
 --                      | opcao == "2" = telaAdmistrador (Cláudio)
                         | opcao == "3" = telaCadastroUsuario
                         | opcao == "4" = Util.putMsgSaida
-                        | otherwise = do {Util.putOpcaoInvalida; telaPrincipal}
+                        | otherwise = do {Util.putMsgOpcaoInvalida; telaPrincipal}
 
 
 -------------- Sessão de Login -------------
@@ -34,11 +34,12 @@ telaLoginCliente = do
     Util.putInfoLoginCliente
 
     cpfCliente <- Util.lerEntradaString
-
+    if Util.ehCpfValido cpfCliente
+        then do telaLogado cpfCliente
+    else do {Util.putMsgCpfInvalido; telaLoginCliente}
+   
     --  verificaUserLogin cpfCliente
-
-    telaLogado cpfCliente
-
+    
 --verificaClienteBD cpfCliente (verifica se o cpf digitado existe no bd e retorna um bolean)    
 --verificaUserLogin :: String -> IO()
 --verificaUserLogin cpfCliente = if(not(verificaClienteBD cpfCliente)) 
@@ -63,7 +64,7 @@ mudaTelaLogado opcao cpfCliente
     | opcao == "3" = telaRecomendacao cpfCliente
     | opcao == "4" = telaDevolucao cpfCliente
     | opcao == "5" = telaPrincipal
-    | otherwise = do {Util.putOpcaoInvalida ; telaLogado cpfCliente}
+    | otherwise = do {Util.putMsgOpcaoInvalida ; telaLogado cpfCliente}
 
 
 ----------- Sessão Cadastro de Usuario -----------

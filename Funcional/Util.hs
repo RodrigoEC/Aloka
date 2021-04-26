@@ -78,9 +78,15 @@ putMsgSaida = do
    clrScr
    putStr("")
 
-putOpcaoInvalida :: IO()
-putOpcaoInvalida = do
-   putStrLn("Erro: Opção inválida. Tente novamente!")
+putMsgOpcaoInvalida :: IO()
+putMsgOpcaoInvalida = do
+   putStrLn("\nErro: Opção inválida. Tente novamente!")
+   threadDelay 200000
+   putStr("")
+
+putMsgCpfInvalido :: IO()
+putMsgCpfInvalido = do
+   putStrLn("\nErro: cpf inválido. Tente novamente!")
    threadDelay 200000
    putStr("")
 
@@ -172,3 +178,9 @@ putInfoDevolveFilme = do
    putStrLn("Multa: R$ " ++ "<<valor>>")
    putStrLn("---")
    threadDelay 2000000
+
+ehCpfValido :: String -> Bool
+ehCpfValido cpfCliente
+   | length cpfCliente /= 11 = False
+   | otherwise = all (`elem` ['0'..'9']) cpfCliente
+

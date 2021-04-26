@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+module Filme where
 
 import System.Random
 import           Control.Applicative
@@ -7,6 +8,7 @@ import           Database.SQLite.Simple
 import           Database.SQLite.Simple.FromRow
 
 import Data.Typeable
+import qualified Data.Text.IO as T
 
 
 data Filme = Filme {
@@ -53,6 +55,7 @@ addFilme id_filme titulo diretor dataLancamento genero estoque = do
 
     close conn
 
+
 recuperaFilmes :: IO [Filme]
 recuperaFilmes = do
     conn <- open "../dados/filmes.db"
@@ -75,19 +78,27 @@ verificaExistenciaFilme id_filme = do
     filmes <- recuperaFilmesID id_filme
     if null filmes then return False else return True
 
-main :: IO ()
-main = do
-    -- addFilme 20 "o ataque dos tomates assassinos" "john doe" "20/02/1995" "aventura" 4
-    filmesTerror <- recuperaFilmesPorGenero "terror"
-    filmes <- recuperaFilmes
+recuperaEstoqueFilme :: Int -> IO Int
+recuperaEstoqueFilme idFilme = do
+    filmes <- recuperaFilmesID idFilme
+    return (estoque (head filmes))
 
-    mapM_ print (formataFilmes 0 filmesTerror)
-    print "------todos os filmes-------"
-    mapM_ print (formataFilmes 0 filmes)
-    r <- verificaExistenciaFilme 20
-    print(r)
+alteraEstoqueFilme :: Int -> Int -> IO ()
+alteraEstoqueFilme idFilme novoEstoque = do
+    conn <- open "../dados/filmes.db"
+    execute conn "UPDATE filmes SET estoque = ? WHERE id_filme = ?" (novoEstoque, idFilme)
 
+addEstoqueFilme :: Int -> Int -> IO ()
+addEstoqueFilme idFilme qtd = do
+    estoque <- recuperaEstoqueFilme idFilme
 
+    if estoque + qtd >= 0 
+        then alteraEstoqueFilme idFilme (estoque + qtd)
+        else T.putStrLn "Não temos essa quantidade de DVDs disponíveis! Nao dê aLoka, loke menos filmes."
+
+removeEstoqueFilme :: Int -> Int -> IO ()
+removeEstoqueFilme idFilme qtd = do
+    addEstoqueFilme idFilme (-qtd)
 
 formataFilmes :: Integer -> [Filme] -> [String]
 formataFilmes _ [] = []

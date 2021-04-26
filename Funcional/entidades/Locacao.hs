@@ -33,7 +33,7 @@ instance ToRow Locacao where
   toRow (Locacao id_locacao id_filme cpf_cliente data_locacao status) = toRow (id_locacao, id_filme, cpf_cliente, data_locacao, status)
 
 
--- Adiciona filme a partir de título, diretor, dataLancamento, genero, estoque
+-- cadastra locação a partir do id do filme, cpf do clinete e data da locação
 -- OBS: Verificar formato da data antes de fazer a adição no BD
 cadastraLocacao :: Int -> T.Text  -> T.Text  -> IO()
 cadastraLocacao id_filme cpf_cliente data_locacao = do
@@ -60,6 +60,7 @@ cadastraLocacao id_filme cpf_cliente data_locacao = do
                 \ (?, ?, ?, ?, ?);" (Locacao (qtdLinhas + 1) id_filme cpf_cliente data_locacao "em andamento")
     close conn
 
+-- Metodo que gera um id da tabela a partir da quantidade de locacoes cadastradas
 geraId :: IO Int
 geraId = do
     locacoes <- recuperaLocacoes
@@ -67,6 +68,7 @@ geraId = do
     return (length locacoes)
 
 
+-- Metodo que altera o status da locacao para finalizado
 finalizaLocacao :: Int -> IO ()
 finalizaLocacao id_locacao = do
     conn <- open "../dados/aloka.db"

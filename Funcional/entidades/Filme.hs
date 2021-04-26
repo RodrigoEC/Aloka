@@ -1,5 +1,18 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Filme where
+module Filme (
+    Filme(Filme),
+    addFilme,
+    recuperaFilmes,
+    recuperaFilmesID,
+    recuperaFilmesPorGenero,
+    verificaExistenciaFilme,
+    recuperaEstoqueFilme,
+    alteraEstoqueFilme,
+    addEstoqueFilme,
+    removeEstoqueFilme,
+    formataFilmes,
+    formataFilme
+) where
 
 import System.Random
 import           Control.Applicative
@@ -123,3 +136,5 @@ formataFilmes indice filmes@(filme:resto) = ("[" ++ show indice ++ "] " ++ forma
 -- Metodo que serve para formatar um filme específico para exibição.
 formataFilme :: Filme -> String
 formataFilme filme = "titulo: " ++ titulo filme ++ ", Genero: " ++ genero filme
+
+

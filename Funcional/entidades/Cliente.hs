@@ -1,5 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Cliente where
+module Cliente (
+    addCliente,
+    deletaCliente,
+    recuperaClientes,
+    recuperaClienteViaCpf,
+    recuperaNomeCliente,
+    formataExibicaoCliente,
+    toString
+) where
 import Database.SQLite.Simple
 import Database.SQLite.Simple.FromRow
 import Database.SQLite.Simple.ToField
@@ -36,6 +44,7 @@ addCliente nome cpf telefone endereco = do
                    \telefone TEXT,\
                    \endereco INTEGER\
                    \);"
+
     execute conn "INSERT INTO clientes(nome,\
                   \ cpf,\
                   \telefone,\

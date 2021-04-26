@@ -52,8 +52,8 @@ instance ToRow Filme where
 
 -- Adiciona filme a partir de título, diretor, dataLancamento, genero, estoque
 -- OBS: Verificar formato da data antes de fazer a adição no BD
-addFilme :: Int -> String -> String -> String -> String -> Int -> IO()
-addFilme id_filme titulo diretor dataLancamento genero estoque = do
+addFilme :: String -> String -> String -> String -> Int -> IO()
+addFilme titulo diretor dataLancamento genero estoque = do
     conn <- open "../dados/aloka.db"
     execute_ conn "CREATE TABLE IF NOT EXISTS filmes (\
                  \ id_filme INTEGER PRIMARY KEY, \
@@ -64,6 +64,8 @@ addFilme id_filme titulo diretor dataLancamento genero estoque = do
                  \ estoque INTEGER \
                  \);"
 
+    qtdLinhas <- geraId
+
     execute conn "INSERT INTO filmes (id_filme,\
                 \ titulo,\
                 \ diretor,\
@@ -71,9 +73,15 @@ addFilme id_filme titulo diretor dataLancamento genero estoque = do
                 \ genero,\
                 \ estoque)\
                 \ VALUES\
-                \ (?, ?, ?, ?, ?, ?)" (Filme id_filme titulo diretor dataLancamento genero estoque)
+                \ (?, ?, ?, ?, ?, ?)" (Filme (qtdLinhas + 1) titulo diretor dataLancamento genero estoque)
 
     close conn
+
+geraId :: IO Int
+geraId = do
+    filmes <- recuperaFilmes
+    return (length filmes)
+
 
 -- Metodo que retorna uma lista com todos os filmes cadastrados no BD de ALOKA.
 recuperaFilmes :: IO [Filme]

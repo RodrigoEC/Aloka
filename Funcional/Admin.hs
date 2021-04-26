@@ -92,17 +92,41 @@ exibirLocacoes = do
     putStrLn(opcoesExibirLocacoes)
     opcao <- Util.lerEntradaString
 
-    if opcao == "4" then menuAdmistrador
-    else  putStrLn(getLocacoes opcao)
+    if opcao == "1" then
+        getHistoricoLocacoes
+    else if opcao == "2" then do
+        getHistoricoLocacoesCliente
+    else if opcao == "3" then do
+        getLocacoesEmAndamento
+    else if opcao == "4" then do
+        menuAdmistrador
+    else
+        exibirLocacoes
 
 
-getLocacoes :: String -> String
-getLocacoes opcao
-    | opcao == "1" = "\nexibindo histórico geral"
-    | opcao == "2" = "\nhistórico do cliente"
-    | opcao == "3" = "\nlocações em andamento"
-    | otherwise = "\nopção inválida"
+getHistoricoLocacoes :: IO()
+getHistoricoLocacoes = do
+    -- TODO: faz a busca no bd
+    putStrLn("histórico geral")
+    exibirLocacoes
 
+
+getHistoricoLocacoesCliente :: IO()
+getHistoricoLocacoesCliente = do
+    putStrLn("Digite o id do cliente: ")
+    clienteID <- getLine
+
+    -- TODO: Faz a busca pelo id do cliente
+
+    putStrLn("histórico do cliente" ++ clienteID)
+    exibirLocacoes
+
+
+getLocacoesEmAndamento :: IO()
+getLocacoesEmAndamento = do
+    -- TODO: faz a busca no bd
+    putStrLn("locações em andamento aqui")
+    exibirLocacoes
 
 ----------- Sessão Gerenciar Estoque -----------
 opcoesGerenciarEstoque = 
@@ -120,12 +144,11 @@ gerenciarEstoque = do
 
     -- esses ifs encadeados estão tenebrosos mas estava dando erro de compilação se eu n fizesse assim :'(
     if opcao == "1" then addFilmeAoEstoque
-    else 
-        if opcao == "2" then verificarDisponibilidade
-        else
-            if opcao == "3" then menuAdmistrador
-            else 
-                gerenciarEstoque
+    else if opcao == "2" then 
+        verificarDisponibilidade
+    else if opcao == "3" then 
+        menuAdmistrador
+    else gerenciarEstoque
 
 
 addFilmeAoEstoque :: IO()

@@ -139,18 +139,18 @@ putInfoLocacaoFilme = do
    putStrLn("\nOBS: Para verificar a lista de filmes basta digitar 0!")
    putStrLn("\nID do filme: ")
 
-putInfoLocaFilme :: IO()
-putInfoLocaFilme = do
+putInfoLocaFilme :: String -> IO()
+putInfoLocaFilme nomeFilme = do
    putStrLn("\nJá pode ir preparando a pipoca...")
-   putStrLn("Filme " ++ "<<nome>>" ++ " alugado com sucesso!")
+   putStrLn("Filme " ++ nomeFilme ++ " alugado com sucesso!")
    putStrLn("---")
    threadDelay 1000000
 
-putInfoRecomendacao :: IO()
-putInfoRecomendacao = do
+putInfoRecomendacao :: String -> IO()
+putInfoRecomendacao filme = do
    putStrLn("       -HMM VEJAMOS, JÁ SEI!-")
    putStrLn("\nBaseado no seu perfil, recomendamos o seguinte filme:")
-   putStrLn("\n<<Resumo do Filme>>\n")
+   putStrLn("\n"++ filme ++"\n")
 
 putInfoRecomendaFilme :: IO()
 putInfoRecomendaFilme = do

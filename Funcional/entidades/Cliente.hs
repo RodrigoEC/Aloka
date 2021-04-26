@@ -20,24 +20,49 @@ instance FromRow Cliente   where
 instance ToRow Cliente where
   toRow(Cliente nome cpf telefone endereco) = toRow(nome, cpf, telefone, endereco)
 
-
 addCliente :: String -> String -> String -> String -> IO ()
-addCliente cpf nome telefone endereco = do
-    conn <- open "../dados/clientes.db"
+addCliente nome cpf telefone endereco = do
+    conn <- open "../dados/Aloka.db"
     execute_ conn "CREATE TABLE IF NOT EXISTS clientes(\
-                   \cpf TEXT PRIMARY KEY,\
                    \nome TEXT,\
+                   \cpf TEXT PRIMARY KEY,\
                    \telefone TEXT,\
                    \endereco INTEGER\
                    \);"
-    execute conn "INSERT INTO clientes (nome, cpf, telefone, endereco) VALUES (?, ?, ?, ?)" (Cliente nome cpf telefone endereco)
+    execute conn "INSERT INTO clientes(nome,\
+                  \ cpf,\
+                  \telefone,\
+                  \endereco)\
+                  \ VALUES (?, ?, ?, ?)"
+                  (Cliente nome cpf telefone endereco)
 
-getClientes :: IO [Cliente]
-getClientes = do
-    conn <- open "../dados/clientes.db"
+recuperaClientes :: IO [Cliente]
+recuperaClientes = do
+    conn <- open "../dados/Aloka.db"
     query_ conn "SELECT * FROM clientes"
 
-getClienteNome :: String -> IO [Cliente]
-getClienteNome cpf = do
-    conn <- open "../dados/clientes.db"
-    query conn "SELECT nome FROM clientes WHERE cpf = ?"(Only cpf) :: IO[Cliente]
+recuperaClienteViaCpf :: String -> IO [Cliente]
+recuperaClienteViaCpf cpf = do
+    conn <- open "../dados/Aloka.db"
+    query conn "SELECT * FROM clientes WHERE cpf = ?"(Only cpf) :: IO [Cliente]
+
+recuperaNomeCliente :: String -> IO String
+recuperaNomeCliente cpf = do
+    clientes <- recuperaClienteViaCpf cpf
+    return (nome(head clientes))
+
+verificaExistenciaCliente :: String -> IO Bool
+verificaExistenciaCliente cpf = do
+    clientes <- recuperaClienteViaCpf cpf
+    if null clientes then
+        return False
+    else
+        return True
+
+formataExibicaoCliente :: [Cliente] -> [String]
+formataExibicaoCliente [] = []
+formataExibicaoCliente (cliente:clientes) =  toString cliente : formataExibicaoCliente clientes
+
+toString :: Cliente -> String
+toString cliente = "Nome: " ++ nome cliente  ++ ", cpf: " ++ cpf cliente ++ ", telefone: " 
+    ++ telefone cliente ++ ", endereco: "  ++ endereco cliente

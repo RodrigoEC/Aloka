@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-
+module Locacao where
 import System.Random
 import           Control.Applicative
 import qualified Data.Text as T
@@ -67,6 +67,23 @@ geraId = do
     print locacoes
     return (length locacoes)
 
+-- Método responsavel por retornar todas as locacoes de um cliente
+recuperaLocacoes :: IO [Locacao]
+recuperaLocacoes = do
+    conn <- open "../dados/aloka.db"
+    query_ conn "SELECT * FROM locacao"
+
+-- Método responsavel por retornar a locação do cliente que possui o cpf passado como parametro
+recuperaLocacaoId :: String -> IO [Locacao]
+recuperaLocacaoId cpf_cliente = do
+    conn <- open "../dados/aloka.db"
+    query conn "SELECT * FROM locacao WHERE cpf_cliente = ?"(Only cpf_cliente)
+
+-- Método responsavel por retornar a locação do cliente que possui o status passado como parametro
+recuperaLocacaoStatus :: String -> IO [Locacao]
+recuperaLocacaoStatus status = do
+    conn <- open "../dados/aloka.db"
+    query conn "SELECT * FROM locacao WHERE status = ?"(Only status)
 
 -- Metodo que altera o status da locacao para finalizado
 finalizaLocacao :: Int -> IO ()
@@ -74,7 +91,3 @@ finalizaLocacao id_locacao = do
     conn <- open "../dados/aloka.db"
     executeNamed conn "UPDATE locacao SET status = :str WHERE id_locacao = :id" [":str" := ("finalizado" :: T.Text), ":id" := id_locacao]
     close conn
-
-main :: IO()
-main = do
-    print ""

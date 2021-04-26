@@ -96,7 +96,7 @@ telaLocacaoFilme cpfCliente = do
     Util.putInfoLocacaoFilme
     
     idFilme <- Util.lerEntradaString
-    if idFilme == "0"
+    if idFilme == "L"
         then do telaListaFilmes cpfCliente 'L'
     else if not(Util.ehIdValido idFilme)
         then do {Util.putMsgIdInvalido; telaLocacaoFilme cpfCliente}
@@ -169,18 +169,18 @@ telaDevolucao cpfCliente = do
 
     Util.putInfoDevolucaoBottom
 
-    idFilme <- Util.lerEntradaString
-    if idFilme == "0"
+    idLocacao <- Util.lerEntradaString
+    if idLocacao == "M"
         then do telaLogado cpfCliente
-    else if not(Util.ehIdValido idFilme)
+    else if not(Util.ehIdValido idLocacao)
         then do {Util.putMsgIdInvalido; telaDevolucao cpfCliente}
     else do {
-        devolveFilme idFilme cpfCliente;
+        devolveFilme idLocacao cpfCliente;
         telaLogado cpfCliente
     }
 
 devolveFilme :: String -> String -> IO()
-devolveFilme idFilme cpfCliente = do 
+devolveFilme idLocacao cpfCliente = do 
     --faz a devolucao
     --verifica valor da multa
     Util.putInfoDevolveFilme

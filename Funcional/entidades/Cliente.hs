@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Cliente where
-
 import Database.SQLite.Simple
 import Database.SQLite.Simple.FromRow
 import Database.SQLite.Simple.ToField
@@ -43,6 +42,13 @@ addCliente nome cpf telefone endereco = do
                   \endereco)\
                   \ VALUES (?, ?, ?, ?)"
                   (Cliente nome cpf telefone endereco)
+
+-- metodo responsavel por deletar o cliente que possui o cpf passado como parametro 
+deletaCliente :: String -> IO()
+deletaCliente cpf = do
+    conn <- open "../dados/Aloka.db"
+    execute conn "DELETE FROM clientes WHERE cpf = ?"(Only cpf)
+
 
 -- Metodo responsavel por retornar uma lista que contém todos os clientes cadastrados no banco de dados.
 recuperaClientes :: IO [Cliente]

@@ -5,7 +5,6 @@ import           Control.Applicative
 import qualified Data.Text as T
 import           Database.SQLite.Simple
 import           Database.SQLite.Simple.FromRow
-
 import Data.Typeable
 import qualified Data.Text.IO as T
 import Util(queryBD, executeBD, fromIO)
@@ -76,6 +75,10 @@ recuperaLocacaoId cpf_cliente = fromIO (queryBD ("SELECT * FROM locacao WHERE cp
 -- Método responsavel por retornar a locação do cliente que possui o status passado como parametro
 recuperaLocacaoStatus :: String -> [Locacao]
 recuperaLocacaoStatus status = fromIO (queryBD ("SELECT * FROM locacao WHERE status = '" ++ status ++ "'"))
+
+-- Método responsavel por retornar uma lista contendo as locações que possuem o status "em andamento"
+recuperaLocacoesEmAndamento :: [Locacao]
+recuperaLocacoesEmAndamento  = fromIO (queryBD "SELECT * FROM locacao WHERE status = 'em andamento'")
 
 -- Metodo que altera o status da locacao para finalizado
 finalizaLocacao :: Int -> IO ()

@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Locacao where
-import System.Random
 import           Control.Applicative
 import qualified Data.Text as T
 import           Database.SQLite.Simple
@@ -13,8 +12,8 @@ import Util(queryBD, executeBD, fromIO)
 data Locacao = Locacao {
     id_locacao :: Int,
     id_filme :: Int,
-    cpf_cliente :: T.Text ,
-    data_locacao :: T.Text ,
+    cpf_cliente ::String,
+    data_locacao ::String,
     status :: String
 } deriving (Show)
 
@@ -35,10 +34,9 @@ instance ToRow Locacao where
 
 -- cadastra locação a partir do id do filme, cpf do clinete e data da locação
 -- OBS: Verificar formato da data antes de fazer a adição no BD
-cadastraLocacao :: Int -> T.Text  -> T.Text  -> IO()
+cadastraLocacao :: Int ->String ->String -> IO()
 cadastraLocacao id_filme cpf_cliente data_locacao = do
-    conn <- open "./dados/aloka.db"
-    execute_ conn "CREATE TABLE IF NOT EXISTS locacao (\
+    executeBD "CREATE TABLE IF NOT EXISTS locacao (\
                  \ id_locacao INTEGER PRIMARY KEY, \
                  \ id_filme INTEGER, \
                  \ cpf_cliente TEXT, \
@@ -46,19 +44,22 @@ cadastraLocacao id_filme cpf_cliente data_locacao = do
                  \ status TEXT, \
                  \ CONSTRAINT fk_filme FOREIGN KEY (id_filme) REFERENCES filme(id),\
                  \ CONSTRAINT fk_cliente FOREIGN KEY (cpf_cliente) REFERENCES cliente(cpf)\
-                 \);"
+                 \);"()
 
     let id = geraId
 
-    execute conn "INSERT INTO locacao (\
+    executeBD ("INSERT INTO locacao (\
                 \ id_locacao, \
                 \ id_filme,\
                 \ cpf_cliente,\
                 \ data_locacao,\
                 \ status)\
                 \ VALUES\
-                \ (?, ?, ?, ?, ?);" (Locacao id id_filme cpf_cliente data_locacao "em andamento")
-    close conn
+                \(" ++ show id ++ ",\
+                \"++ show id_filme ++ ",'\
+                \" ++ cpf_cliente ++ "','\
+                \" ++ data_locacao ++ "',\
+                \"++ "'em andamento'" ++")")()
 
 -- Metodo que gera um id da tabela a partir da quantidade de locacoes cadastradas
 geraId :: Int
@@ -74,7 +75,7 @@ recuperaLocacaoId id_locacao = fromIO (queryBD ("SELECT * FROM locacao WHERE id_
 
 -- Método responsavel por retornar a locação do cliente que possui o cpf passado como parametro
 recuperaLocacaoIdCliente :: String -> [Locacao]
-recuperaLocacaoIdCliente cpf_cliente = fromIO (queryBD ("SELECT * FROM locacao WHERE cpf_cliente = " ++ cpf_cliente))
+recuperaLocacaoIdCliente cpf_cliente = fromIO (queryBD ("SELECT * FROM locacao WHERE cpf_cliente = '" ++ cpf_cliente ++ "'"))
 
 -- Método responsavel por retornar a locação do cliente que possui o status passado como parametro
 recuperaLocacaoStatus :: String -> [Locacao]
@@ -88,5 +89,5 @@ recuperaLocacoesEmAndamento  = fromIO (queryBD "SELECT * FROM locacao WHERE stat
 finalizaLocacao :: Int -> IO ()
 finalizaLocacao id_locacao = do
     conn <- open "./dados/aloka.db"
-    executeNamed conn "UPDATE locacao SET status = :str WHERE id_locacao = :id" [":str" := ("finalizado" :: T.Text), ":id" := id_locacao]
+    executeNamed conn "UPDATE locacao SET status = :str WHERE id_locacao = :id" [":str" := ("'finalizado'" :: T.Text), ":id" := id_locacao]
     close conn 

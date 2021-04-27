@@ -42,30 +42,47 @@ instance ToRow Filme where
 getTituloFilme :: Int -> String
 getTituloFilme idFilme = titulo (head(recuperaFilmeID idFilme))
 
+cadastraFilme :: String -> String -> String -> String -> Int -> Filme
+cadastraFilme titulo diretor dataLancamento genero estoque =
+    fromIO (addFilme titulo diretor dataLancamento genero estoque)
+
 -- Adiciona filme a partir de título, diretor, dataLancamento, genero, estoque
 -- OBS: Verificar formato da data antes de fazer a adição no BD
-addFilme :: String -> String -> String -> String -> Int -> IO()
+addFilme :: String -> String -> String -> String -> Int -> IO Filme
 addFilme titulo diretor dataLancamento genero estoque = do
-    conn <- open "./dados/aloka.db"
-    execute_ conn "CREATE TABLE IF NOT EXISTS filmes (\
-                 \ id_filme INTEGER PRIMARY KEY, \
-                 \ titulo TEXT, \
-                 \ diretor TEXT, \
-                 \ dataLancamento DATE, \
-                 \ genero TEXT, \
-                 \ estoque INTEGER \
-                 \);"
-
     let id = geraId
+    criaBD
+    insereDado id titulo diretor dataLancamento genero estoque
 
-    execute conn "INSERT INTO filmes (id_filme,\
+    return (head (recuperaFilmeID id))
+    
+
+insereDado :: Int -> String -> String -> String -> String -> Int -> IO()
+insereDado id titulo diretor dataLancamento genero estoque = do
+    executeBD ("INSERT INTO filmes (id_filme,\
                 \ titulo,\
                 \ diretor,\
                 \ dataLancamento,\
                 \ genero,\
                 \ estoque)\
                 \ VALUES\
-                \ (?, ?, ?, ?, ?, ?)" (Filme id titulo diretor dataLancamento genero estoque)
+                \ (" ++ show id ++ ",\
+                \ '" ++ titulo ++ "',\
+                \ '" ++ diretor ++ "',\
+                \ '" ++ dataLancamento ++ "',\
+                \ '" ++ genero ++ "',\
+                \ " ++ show estoque ++ ");") ()
+
+
+criaBD :: IO ()
+criaBD = do executeBD "CREATE TABLE IF NOT EXISTS filmes (\
+                 \ id_filme INTEGER PRIMARY KEY, \
+                 \ titulo TEXT, \
+                 \ diretor TEXT, \
+                 \ dataLancamento DATE, \
+                 \ genero TEXT, \
+                 \ estoque INTEGER \
+                 \);" ()
 
 -- Metodo que cria um id para o Banco de dados dos filmes
 geraId :: Int

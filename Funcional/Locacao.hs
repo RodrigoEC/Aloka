@@ -68,9 +68,13 @@ geraId = length recuperaLocacoes + 1
 recuperaLocacoes :: [Locacao]
 recuperaLocacoes = fromIO (queryBD "SELECT * FROM locacao")
 
+-- Método responsavel por retornar a locação  que possui o id passado como parametro
+recuperaLocacaoId :: Int -> [Locacao]
+recuperaLocacaoId id_locacao = fromIO (queryBD ("SELECT * FROM locacao WHERE id_locacao = " ++ show id_locacao))
+
 -- Método responsavel por retornar a locação do cliente que possui o cpf passado como parametro
-recuperaLocacaoId :: String -> [Locacao]
-recuperaLocacaoId cpf_cliente = fromIO (queryBD ("SELECT * FROM locacao WHERE cpf_cliente = " ++ cpf_cliente))
+recuperaLocacaoIdCliente :: String -> [Locacao]
+recuperaLocacaoIdCliente cpf_cliente = fromIO (queryBD ("SELECT * FROM locacao WHERE cpf_cliente = " ++ cpf_cliente))
 
 -- Método responsavel por retornar a locação do cliente que possui o status passado como parametro
 recuperaLocacaoStatus :: String -> [Locacao]
@@ -85,4 +89,4 @@ finalizaLocacao :: Int -> IO ()
 finalizaLocacao id_locacao = do
     conn <- open "./dados/aloka.db"
     executeNamed conn "UPDATE locacao SET status = :str WHERE id_locacao = :id" [":str" := ("finalizado" :: T.Text), ":id" := id_locacao]
-    close conn
+    close conn 

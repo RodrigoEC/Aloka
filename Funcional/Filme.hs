@@ -1,18 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Filme (
-    Filme(Filme),
-    addFilme,
-    recuperaFilmes,
-    recuperaFilmesID,
-    recuperaFilmesPorGenero,
-    verificaExistenciaFilme,
-    recuperaEstoqueFilme,
-    alteraEstoqueFilme,
-    addEstoqueFilme,
-    removeEstoqueFilme,
-    formataFilmes,
-    formataFilme
-) where
+module Filme where
 
 import System.Random
 import           Control.Applicative
@@ -22,6 +9,8 @@ import           Database.SQLite.Simple.FromRow
 
 import Data.Typeable
 import qualified Data.Text.IO as T
+
+import Util (queryBD, fromIO, executeBD)
 
 -- Tipo de dado "Filme" que será armazenado no BD
 data Filme = Filme {
@@ -49,12 +38,15 @@ instance FromRow Filme where
 instance ToRow Filme where
   toRow (Filme id_filme titulo diretor dataLancamento genero estoque) = toRow (id_filme, titulo, diretor, dataLancamento, genero, estoque)
 
+-- Método que exibe o título de um filme a partir do id do filme.
+getTituloFilme :: Int -> String
+getTituloFilme idFilme = titulo (head(recuperaFilmeID idFilme))
 
 -- Adiciona filme a partir de título, diretor, dataLancamento, genero, estoque
 -- OBS: Verificar formato da data antes de fazer a adição no BD
 addFilme :: String -> String -> String -> String -> Int -> IO()
 addFilme titulo diretor dataLancamento genero estoque = do
-    conn <- open "../dados/aloka.db"
+    conn <- open "./dados/aloka.db"
     execute_ conn "CREATE TABLE IF NOT EXISTS filmes (\
                  \ id_filme INTEGER PRIMARY KEY, \
                  \ titulo TEXT, \
@@ -64,7 +56,7 @@ addFilme titulo diretor dataLancamento genero estoque = do
                  \ estoque INTEGER \
                  \);"
 
-    qtdLinhas <- geraId
+    let id = geraId
 
     execute conn "INSERT INTO filmes (id_filme,\
                 \ titulo,\
@@ -73,68 +65,56 @@ addFilme titulo diretor dataLancamento genero estoque = do
                 \ genero,\
                 \ estoque)\
                 \ VALUES\
-                \ (?, ?, ?, ?, ?, ?)" (Filme (qtdLinhas + 1) titulo diretor dataLancamento genero estoque)
+                \ (?, ?, ?, ?, ?, ?)" (Filme id titulo diretor dataLancamento genero estoque)
 
-    close conn
-
-geraId :: IO Int
-geraId = do
-    filmes <- recuperaFilmes
-    return (length filmes)
+-- Metodo que cria um id para o Banco de dados dos filmes
+geraId :: Int
+geraId = length recuperaFilmes + 1
 
 
 -- Metodo que retorna uma lista com todos os filmes cadastrados no BD de ALOKA.
-recuperaFilmes :: IO [Filme]
-recuperaFilmes = do
-    conn <- open "../dados/aloka.db"
-    query_ conn "SELECT * FROM filmes"
+recuperaFilmes :: [Filme]
+recuperaFilmes = fromIO (queryBD "SELECT * FROM filmes")
 
 -- Metodo que retorna uma lista contendo o filme do 
 -- id passado se ele existir, caso contrário uma lista vazia é retornada.
-recuperaFilmesID :: Int -> IO [Filme]
-recuperaFilmesID id_filme = do
-    conn <- open "../dados/aloka.db"
-    query conn "SELECT * FROM filmes WHERE id_filme = ?" (Only id_filme) :: IO [Filme]
+recuperaFilmeID :: Int -> [Filme]
+recuperaFilmeID id_filme = fromIO (queryBD ("SELECT * FROM filmes WHERE id_filme = " ++ show id_filme))
 
 -- Metodo retornar uma lista contendo todos os filmes do gênero passado como parâmetro da função
-recuperaFilmesPorGenero :: String -> IO [Filme]
-recuperaFilmesPorGenero genero = do
-    conn <- open "../dados/aloka.db"
-    query conn "SELECT * FROM filmes WHERE genero = ?" (Only genero) :: IO [Filme]
+recuperaFilmesPorGenero :: String -> [Filme]
+recuperaFilmesPorGenero genero = fromIO (queryBD ("SELECT * FROM filmes WHERE genero = '" ++ genero ++ "'"))
 
 -- Metodo que verifica existência de um filme no Banco de dados e retorna um valor booleano
 -- True se ele existir e False se ele não existir
-verificaExistenciaFilme :: Int -> IO Bool
-verificaExistenciaFilme id_filme = do
-    filmes <- recuperaFilmesID id_filme
-    if null filmes then return False else return True
+verificaExistenciaFilme :: Int -> Bool
+verificaExistenciaFilme id_filme
+    | null (recuperaFilmeID (read $ show id_filme)) = False
+    | otherwise = True
 
 -- Metodo que retorna o estoque atual de um filme a partir de um id cadastrado.
-recuperaEstoqueFilme :: Int -> IO Int
-recuperaEstoqueFilme idFilme = do
-    filmes <- recuperaFilmesID idFilme
-    return (estoque (head filmes))
+recuperaEstoqueFilme :: Int -> Int
+recuperaEstoqueFilme idFilme
+    | verificaExistenciaFilme idFilme = estoque (head (recuperaFilmeID idFilme))
+    | otherwise = -1
 
 -- Metodo que altera o estoque de um filme, a partir do parâmetro novoEstoque passado.
 alteraEstoqueFilme :: Int -> Int -> IO ()
-alteraEstoqueFilme idFilme novoEstoque = do
-    conn <- open "../dados/aloka.db"
-    execute conn "UPDATE filmes SET estoque = ? WHERE id_filme = ?" (novoEstoque, idFilme)
+alteraEstoqueFilme idFilme novoEstoque = executeBD ("UPDATE filmes SET estoque = '" ++ show novoEstoque ++ "' WHERE id_filme = " ++ show idFilme) ()
 
 -- Metodo que adiciona ao estoque de um filme o valor do parâmetro qtd que é passado
 addEstoqueFilme :: Int -> Int -> IO ()
 addEstoqueFilme idFilme qtd = do
-    estoque <- recuperaEstoqueFilme idFilme
+    let estoque = recuperaEstoqueFilme idFilme
 
-    if estoque + qtd >= 0 
+    if estoque + qtd >= 0
         then alteraEstoqueFilme idFilme (estoque + qtd)
         else T.putStrLn "Não temos essa quantidade de DVDs disponíveis! Nao dê aLoka, loke menos filmes."
 
 -- Metodo que remove do estoque de um filme o valor do parâmetro qtd que é passado
 -- Caso esse valor seja maior do que a quantidade do estoque atual, uma mensagem é mostrada na tela.
 removeEstoqueFilme :: Int -> Int -> IO ()
-removeEstoqueFilme idFilme qtd = do
-    addEstoqueFilme idFilme (-qtd)
+removeEstoqueFilme idFilme qtd = addEstoqueFilme idFilme (-qtd)
 
 -- Metodo que serve para formatar uma lista de filmes para exibição.
 formataFilmes :: Integer -> [Filme] -> [String]
@@ -144,5 +124,3 @@ formataFilmes indice filmes@(filme:resto) = ("[" ++ show indice ++ "] " ++ forma
 -- Metodo que serve para formatar um filme específico para exibição.
 formataFilme :: Filme -> String
 formataFilme filme = "titulo: " ++ titulo filme ++ ", Genero: " ++ genero filme
-
-

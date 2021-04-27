@@ -12,6 +12,8 @@ import Database.SQLite.Simple
 import Database.SQLite.Simple.FromRow
 import Database.SQLite.Simple.ToField
 import Database.SQLite.Simple.Types
+import Util
+
 
 -- definição do tipo Cliente, este será o objeto a ser armazenado no banco de dados.
 data Cliente = Cliente{

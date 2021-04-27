@@ -1,4 +1,5 @@
 import qualified Util as Util
+import qualified Admin
 
 --------------------------------------------
 
@@ -21,7 +22,7 @@ telaPrincipal = do
 
 mudaTelaPrincipal :: String -> IO()
 mudaTelaPrincipal opcao | opcao == "1" = telaLoginCliente
---                      | opcao == "2" = telaAdmistrador (Cláudio)
+                        | opcao == "2" = Admin.menuAdmistrador
                         | opcao == "3" = telaCadastroUsuario
                         | opcao == "4" = Util.putMsgSaida
                         | otherwise = do {Util.putMsgOpcaoInvalida; telaPrincipal}

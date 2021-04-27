@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+### Haskell ###
+=======
+>>>>>>> cd5aa509fb9f125fa8ba1129ea7a7e9c9147c33e
 dist
 dist-*
 cabal-dev
@@ -8,7 +12,10 @@ cabal-dev
 *.chs.h
 *.dyn_o
 *.dyn_hi
+<<<<<<< HEAD
+=======
 *.exe
+>>>>>>> cd5aa509fb9f125fa8ba1129ea7a7e9c9147c33e
 .hpc
 .hsenv
 .cabal-sandbox/
@@ -21,4 +28,47 @@ cabal.sandbox.config
 cabal.project.local
 cabal.project.local~
 .HTF/
+<<<<<<< HEAD
 .ghc.environment.*
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### vscode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# End of https://www.toptal.com/developers/gitignore/api/haskell,macos,vscode
+=======
+.ghc.environment.*
+>>>>>>> cd5aa509fb9f125fa8ba1129ea7a7e9c9147c33e

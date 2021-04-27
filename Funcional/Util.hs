@@ -211,3 +211,7 @@ queryBD query = do
    conn <- open "./dados/aloka.db"
    let pesquisa = read $ show query :: Query
    query_ conn pesquisa
+
+putGeneroInvalido :: IO()
+putGeneroInvalido = do
+   putStrLn("\nGenÊro inválido")

@@ -2,7 +2,6 @@
 
 module Filme where
 
-import System.Random
 import           Control.Applicative
 import qualified Data.Text as T
 import           Database.SQLite.Simple

@@ -7,7 +7,6 @@ import Database.SQLite.Simple.Types
 
 import Util (queryBD, fromIO, executeBD)
 
-
 -- definição do tipo Cliente, este será o objeto a ser armazenado no banco de dados.
 data Cliente = Cliente{
   nome :: String,

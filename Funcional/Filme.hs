@@ -60,6 +60,7 @@ addFilme titulo diretor dataLancamento genero estoque = do
 insereDado :: Int -> String -> String -> String -> String -> Int -> IO()
 insereDado id titulo diretor dataLancamento genero estoque = do
     executeBD ("INSERT INTO filmes (id_filme,\
+
                 \ titulo,\
                 \ diretor,\
                 \ dataLancamento,\

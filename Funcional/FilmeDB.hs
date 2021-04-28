@@ -146,7 +146,7 @@ formataFilme filme = "titulo: " ++ titulo filme ++ ", Genero: " ++ genero filme
 --- pesdquisa um id de filme para aquele genero, se tiver filmes daquele genero
 pesquisaFilmeParaRecomendar:: String -> Int
 pesquisaFilmeParaRecomendar genero
-    | length (recuperaFilmesPorGeneroDisp genero) > 0 = randomizaIndice (recuperaFilmesPorGeneroDisp genero)
+    | length (recuperaFilmesPorGeneroDisp genero) > 0 = randomizaFilme (recuperaFilmesPorGeneroDisp genero)
     | otherwise = -1
 
 --método auxiliar que randomiza o id do filme

@@ -7,6 +7,8 @@ import System.Process
 import System.Info
 import Control.Concurrent
 
+import Database.SQLite.Simple
+
 
 clrScr = if os == "mingw32"
             then system "cls" 
@@ -193,3 +195,19 @@ ehIdValido :: String -> Bool
 ehIdValido id
    | length id== 0 = False
    | otherwise = all (`elem` ['0'..'9']) id
+
+fromIO :: IO a -> a
+fromIO = unsafePerformIO
+
+executeBD :: ToRow q => String -> q -> IO ()
+executeBD acao propriedades = do
+   conn <- open "./dados/aloka.db"
+   let pesquisa = read $ show acao :: Query
+   execute conn pesquisa propriedades
+   close conn
+
+queryBD :: FromRow r => String -> IO [r]
+queryBD query = do
+   conn <- open "./dados/aloka.db"
+   let pesquisa = read $ show query :: Query
+   query_ conn pesquisa

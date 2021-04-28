@@ -53,7 +53,6 @@ criaBD = do executeBD "CREATE TABLE IF NOT EXISTS clientes(\
                    \cpf TEXT PRIMARY KEY,\
                    \telefone TEXT,\
                    \endereco INTEGER\
-                   \);" ()
 
 
 -- metodo responsavel por deletar o cliente que possui o cpf passado como parametro 

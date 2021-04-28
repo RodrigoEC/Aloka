@@ -10,7 +10,7 @@ listaFilmes = Filme.formataFilmes FilmeDB.recuperaFilmes
 
 formataFilmes :: [Filme] -> String
 formataFilmes [] = "<<vazio>>"
-formataFilmes (x:xs) = geraString (FilmeDB.formataFilmes 0 (x:xs))  ""
+formataFilmes (x:xs) = geraString (FilmeDB.formataFilmes 1 (x:xs))  ""
 
 geraString :: [String] -> String -> String
 geraString [] txt = txt

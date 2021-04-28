@@ -126,12 +126,13 @@ putInfoCadastroEndereco = do
 putResumoCadastroUsuario :: String -> IO()
 putResumoCadastroUsuario cliente = do
    clrScr
-   putStrLn("---\n")
-   putStrLn("Usuário cadastrado com sucesso!")
-   putStrLn("\n--- RESUMO ---\n")
+   carregaLogo
+   putStrLn("       -------CADASTRO-------")
+   putStrLn("\nUsuário cadastrado com sucesso!")
+   putStrLn("\n-----\n")
    putStrLn(cliente)
-   putStrLn("\n---")
-   threadDelay 1000000
+   putStrLn("\n-----")
+   putInfoTeclaEnter
 
 putInfoLocacaoFilme :: IO()
 putInfoLocacaoFilme = do
@@ -161,8 +162,8 @@ putInfoListaFilmes = do
    clrScr
    putStrLn("-----DA SÓ UMA OLHADA NA NOSSA LISTA DE FILMES!-----")
 
-putInfoListaFilmesBottom :: IO()
-putInfoListaFilmesBottom = do
+putInfoTeclaEnter :: IO()
+putInfoTeclaEnter = do
    putStrLn("\nPressione a tecla ENTER para voltar")
 
 putInfoDevolucaoTop :: IO()

@@ -5,6 +5,7 @@ import FilmeDB
 import LocacaoDB
 import Locadora
 import Cliente
+import Filme
 
 --------------------------------------------
 
@@ -90,6 +91,7 @@ telaCadastroUsuario = do
             endereco <- Util.lerEntradaString;
 
             Util.putResumoCadastroUsuario(Cliente.cadastraCliente nome cpf telefone endereco);
+            opcao <- Util.lerEntradaString;
             telaPrincipal
         }
     
@@ -149,28 +151,21 @@ redireciona opcao cpfCliente
 telaListaFilmes :: String -> Char -> IO()
 telaListaFilmes cpfCliente telaAnterior = do
     Util.putInfoListaFilmes
-    listaFilmes --listando os dados
+    
+    putStrLn("\n" ++ Filme.listaFilmes ++ "\n")
 
-    Util.putInfoListaFilmesBottom
+    Util.putInfoTeclaEnter
     opcao <- Util.lerEntradaString
     if (telaAnterior == 'L')
         then telaLocacaoFilme cpfCliente
     else telaLogado cpfCliente
-
-listaFilmes :: IO()
-listaFilmes = do
-    putStrLn("---")
-    putStrLn("\n<<Lista de filmes>>\n")
-    putStrLn("---")
-
 
 ----------- Sessão Devolucao -----------
 telaDevolucao :: String -> IO()
 telaDevolucao cpfCliente = do
     Util.putInfoDevolucaoTop
 
-    -- consulta dados
-    listaFilmes
+    --listaFilmes
 
     Util.putInfoDevolucaoBottom
 

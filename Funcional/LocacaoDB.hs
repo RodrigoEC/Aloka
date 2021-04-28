@@ -95,3 +95,12 @@ finalizaLocacao id_locacao = do
     conn <- open "./dados/aloka.db"
     executeNamed conn "UPDATE locacao SET status = :str WHERE id_locacao = :id" [":str" := ("'finalizado'" :: T.Text), ":id" := id_locacao]
     close conn 
+
+-- metodo responsavel por formatar a lista de locações em uma string mais organizada.
+formataExibicaoLocacao :: [Locacao] -> [String]
+formataExibicaoLocacao = map toString
+
+-- metodo responsavel pela representação dos atributos de locações de forma textual.
+toString :: Locacao -> String
+toString locacao = "(Id locacao: " ++ show (id_locacao locacao)  ++ ", Id filme: " ++ show(id_filme locacao) ++ ", CPF cliente: ,"
+  ++ cpf_cliente locacao ++ ", Data locacao: "  ++ data_locacao locacao ++ ", Status: " ++ status locacao ++ ")"

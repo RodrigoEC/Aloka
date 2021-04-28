@@ -42,9 +42,9 @@ instance ToRow Filme where
 getTituloFilme :: Int -> String
 getTituloFilme idFilme = titulo (head(recuperaFilmeID idFilme))
 
-cadastraFilme :: String -> String -> String -> String -> Int -> Filme
+cadastraFilme :: String -> String -> String -> String -> Int -> String
 cadastraFilme titulo diretor dataLancamento genero estoque =
-    fromIO (addFilme titulo diretor dataLancamento genero estoque)
+    formataFilme(fromIO(addFilme titulo diretor dataLancamento genero estoque))
 
 -- Adiciona filme a partir de título, diretor, dataLancamento, genero, estoque
 -- OBS: Verificar formato da data antes de fazer a adição no BD
@@ -77,12 +77,12 @@ insereDado id titulo diretor dataLancamento genero estoque = do
 
 criaBD :: IO ()
 criaBD = do executeBD "CREATE TABLE IF NOT EXISTS filmes (\
-                 \ id_filme INTEGER PRIMARY KEY, \
+                 \ id_filme INT PRIMARY KEY, \
                  \ titulo TEXT, \
                  \ diretor TEXT, \
                  \ dataLancamento DATE, \
                  \ genero TEXT, \
-                 \ estoque INTEGER \
+                 \ estoque INT \
                  \);" ()
 
 -- Metodo que cria um id para o Banco de dados dos filmes
@@ -145,7 +145,7 @@ removeEstoqueFilme :: Int -> Int -> IO ()
 removeEstoqueFilme idFilme qtd = addEstoqueFilme idFilme (-qtd)
 
 -- Metodo que serve para formatar uma lista de filmes para exibição.
-formataFilmes :: Integer -> [Filme] -> [String]
+formataFilmes :: Int -> [Filme] -> [String]
 formataFilmes _ [] = []
 formataFilmes indice filmes@(filme:resto) = ("[" ++ show indice ++ "] " ++ formataFilme filme) : formataFilmes (indice + 1) resto
 

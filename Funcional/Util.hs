@@ -122,16 +122,13 @@ putInfoCadastroEndereco :: IO()
 putInfoCadastroEndereco = do
    putStrLn("--- \nEndereço: ")
 
-putResumoCadastroUsuario :: String -> String -> String -> String -> IO()
-putResumoCadastroUsuario nome cpf telefone endereco = do
+putResumoCadastroUsuario :: String -> IO()
+putResumoCadastroUsuario cliente = do
    clrScr
    putStrLn("---\n")
-   putStrLn("Usuário " ++ nome ++ " cadastrado com sucesso!")
+   putStrLn("Usuário cadastrado com sucesso!")
    putStrLn("\n--- RESUMO ---\n")
-   putStrLn("Nome do usuário: " ++ nome)
-   putStrLn("CPF: " ++ cpf)
-   putStrLn("Telefone: " ++ telefone)
-   putStrLn("Endereço: " ++ endereco)
+   putStrLn(cliente)
    putStrLn("\n---")
    threadDelay 1000000
 

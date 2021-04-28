@@ -27,13 +27,17 @@ instance FromRow Cliente   where
 instance ToRow Cliente where
   toRow(Cliente nome cpf telefone endereco) = toRow(nome, cpf, telefone, endereco)
 
+cadastraCliente :: String -> String -> String -> String -> String
+cadastraCliente nome cpf telefone endereco =
+  toString(fromIO(addCliente nome cpf telefone endereco))
+
 -- método responsavel por adicionar o objeto cliente no banco de dados 
 --a partir do nome, cpf, telefone e endereco.
-addCliente :: String -> String -> String -> String -> IO [Cliente]
+addCliente :: String -> String -> String -> String -> IO Cliente
 addCliente nome cpf telefone endereco = do
     criaBD
     insereDado nome cpf telefone endereco
-    return (recuperaClienteViaCpf cpf)
+    return (head (recuperaClienteViaCpf cpf))
 
 insereDado :: String -> String -> String -> String -> IO()
 insereDado nome cpf telefone endereco = do
@@ -86,5 +90,5 @@ formataExibicaoCliente = map toString
 
 -- metodo responsavel pela representação dos atributos do Cliente de forma textual.
 toString :: Cliente -> String
-toString cliente = "Nome: " ++ nome cliente  ++ ", cpf: " ++ cpf cliente ++ ", telefone: "
-    ++ telefone cliente ++ ", endereco: "  ++ endereco cliente
+toString cliente = "Nome: " ++ nome cliente  ++ "\nCpf: " ++ cpf cliente ++ "\nTelefone: "
+    ++ telefone cliente ++ "\nEndereco: "  ++ endereco cliente

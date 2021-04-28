@@ -4,6 +4,7 @@ import ClienteDB
 import FilmeDB
 import LocacaoDB
 import Locadora
+import Cliente
 
 --------------------------------------------
 
@@ -87,9 +88,7 @@ telaCadastroUsuario = do
             Util.putInfoCadastroEndereco;
             endereco <- Util.lerEntradaString;
 
-            --faz o cadastro
-
-            Util.putResumoCadastroUsuario nome cpf telefone endereco;
+            Util.putResumoCadastroUsuario(Cliente.cadastraCliente nome cpf telefone endereco);
             telaPrincipal
         }
     

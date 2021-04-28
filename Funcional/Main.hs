@@ -107,17 +107,19 @@ telaLocacaoFilme cpfCliente = do
     }
 
 verificaFilme :: String -> String -> IO()
-verificaFilme idFilme cpfCliente
-    | not(FilmeDB.verificaExistenciaFilme (read idFilme)) = do {putStrLn("Erro! Filme não cadastrado") ; telaLocacaoFilme cpfCliente}
-    | (FilmeDB.recuperaEstoqueFilme (read idFilme) < 0) = do {putStrLn("Erro! Filme indisponível") ; telaLocacaoFilme cpfCliente}
-    | otherwise = locaFilme idFilme cpfCliente
+verificaFilme idFilme cpfCliente = do
+    if(not(FilmeDB.verificaExistenciaFilme (read idFilme)))
+        then do {Util.putErroFilmeNaoCadastrado ; telaLocacaoFilme cpfCliente}
+    else if (FilmeDB.recuperaEstoqueFilme (read idFilme) <= 0)
+        then do {Util.putErroFilmeNaoDisponivel ; telaLocacaoFilme cpfCliente}
+    else do {locaFilme idFilme cpfCliente}
 
----- locarFilmeBD: adiciona una locacaO
 locaFilme :: String -> String -> IO()
 locaFilme idFilme cpfCliente = do
---  locarFilmeBD idFilme cpfCliente
+    Util.putData
+    data_locacao <- getLine
+    LocacaoDB.cadastraLocacao (read idFilme) cpfCliente data_locacao
     let alugado = FilmeDB.getTituloFilme (read idFilme)
-    
     Util.putInfoLocaFilme alugado
     telaLogado cpfCliente
 
@@ -129,18 +131,28 @@ telaRecomendacao cpfCliente = do
 
 recomendaFilme:: String -> IO()
 recomendaFilme cpfCliente = do
-    --ClienteDB.getRecomendacao
-    Util.putInfoRecomendacao "\n<<nome>>\n"
+    Util.putGenero
+    genero <- getLine
+    let idFilme = (show (FilmeDB.pesquisaFilmeParaRecomendar genero))
+    verificaRecomendacao cpfCliente idFilme
 
-    Util.putInfoRecomendaLocacao
-    opcao <- Util.lerEntradaString
-    redireciona opcao cpfCliente
+verificaRecomendacao :: String-> String-> IO()
+verificaRecomendacao cpfCliente idFilme = do
+    if(not(Util.ehIdValido idFilme)) 
+        then do {Util.putGeneroInvalido; telaRecomendacao cpfCliente}
+    else do {alugaRecomendado cpfCliente idFilme}
 
-redireciona :: String -> String -> IO()
-redireciona opcao cpfCliente 
-    | opcao == "y" = telaLocacaoFilme cpfCliente
+alugaRecomendado :: String -> String -> IO()
+alugaRecomendado cpfCliente idFilme = do
+        Util.putInfoRecomendacao (FilmeDB.getTituloFilme (read idFilme))
+        Util.putInfoRecomendaLocacao
+        opcao <- Util.lerEntradaString
+        redireciona opcao cpfCliente idFilme
+
+redireciona :: String -> String-> String-> IO()
+redireciona opcao cpfCliente idFilme
+    | opcao == "y" = verificaFilme idFilme cpfCliente
     | otherwise = telaLogado cpfCliente
-
 
 ----------- Sessão Listar Filmes -----------
 telaListaFilmes :: String -> Char -> IO()

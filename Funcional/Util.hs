@@ -215,3 +215,29 @@ queryBD query = do
    conn <- open "./dados/aloka.db"
    let pesquisa = read $ show query :: Query
    query_ conn pesquisa
+
+putGenero:: IO()
+putGenero = do
+   putStrLn("\nInsira o gênero: ")
+
+putGeneroInvalido :: IO()
+putGeneroInvalido = do
+   putStrLn("\nGenêro inválido")
+   threadDelay 200000
+   putStr("")
+
+putData:: IO()
+putData = do
+   putStrLn("Coloque a data da locação (no formato DD/MM/AAAA): ")
+
+putErroFilmeNaoCadastrado::IO()
+putErroFilmeNaoCadastrado = do
+   putStrLn("\nErro! Filme não cadastrado")
+   threadDelay 200000
+   putStr("")
+
+putErroFilmeNaoDisponivel::IO()
+putErroFilmeNaoDisponivel = do
+   putStrLn("\nErro! Filme indisponível")
+   threadDelay 200000
+   putStr("")

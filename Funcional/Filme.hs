@@ -5,7 +5,6 @@ import FilmeDB
 cadastraFilme :: String -> String -> String -> String -> String -> String
 cadastraFilme titulo genero diretor dataLancamento quantidade = "filme ja ta cadastrado"
 
-
 listaFilmes :: String
 listaFilmes = Filme.formataFilmes FilmeDB.recuperaFilmes
 

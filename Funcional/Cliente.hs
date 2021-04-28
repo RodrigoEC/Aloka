@@ -12,12 +12,6 @@ cadastraCliente nome cpf telefone endereco = do
     else "Usuário cadastrado com sucesso!\n" ++ 
         ClienteDB.cadastraCliente nome cpf telefone endereco
 
---getRecomendacao :: String -> String
---getRecomendacao cpf
-    --genero <- ClienteDB.pesquisaGeneroMaisFrequenteCliente cpfCliente
-    --let idFilme = FilmeDB.pesquisaFilmeParaRecomendar genero
-    --let recomendacao = FilmeDB.formataFilme idFilme 
-
 --listaLocacoes :: String -> String
 --listaLocacoes cpf = 
 

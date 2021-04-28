@@ -6,6 +6,7 @@ import           Control.Applicative
 import qualified Data.Text as T
 import           Database.SQLite.Simple
 import           Database.SQLite.Simple.FromRow
+import System.Random
 
 import Data.Typeable
 import qualified Data.Text.IO as T

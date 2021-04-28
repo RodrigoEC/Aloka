@@ -99,6 +99,9 @@ recuperaFilmes = fromIO (queryBD "SELECT * FROM filmes")
 recuperaFilmeID :: Int -> [Filme]
 recuperaFilmeID id_filme = fromIO (queryBD ("SELECT * FROM filmes WHERE id_filme = " ++ show id_filme))
 
+recuperaFilmeTitulo :: String -> [Filme]
+recuperaFilmeTitulo titulo = fromIO (queryBD ("SELECT * FROM filmes WHERE titulo = '" ++ titulo ++ "'"))
+
 -- Metodo retornar uma lista contendo todos os filmes do gênero passado como parâmetro da função
 recuperaFilmesPorGenero :: String -> [Filme]
 recuperaFilmesPorGenero genero = fromIO (queryBD ("SELECT * FROM filmes WHERE genero = '" ++ genero ++ "'"))
@@ -108,6 +111,13 @@ recuperaFilmesPorGenero genero = fromIO (queryBD ("SELECT * FROM filmes WHERE ge
 verificaExistenciaFilme :: Int -> Bool
 verificaExistenciaFilme id_filme
     | null (recuperaFilmeID (read $ show id_filme)) = False
+    | otherwise = True
+
+-- Metodo que verifica existência de um filme no Banco de dados e retorna um valor booleano
+-- True se ele existir e False se ele não existir
+verificaExistenciaFilmePorTitulo :: String -> Bool
+verificaExistenciaFilmePorTitulo titulo
+    | null (recuperaFilmeTitulo titulo) = False
     | otherwise = True
 
 -- Metodo que retorna o estoque atual de um filme a partir de um id cadastrado.

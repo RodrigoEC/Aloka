@@ -143,7 +143,20 @@ formataFilmes indice filmes@(filme:resto) = ("[" ++ show indice ++ "] " ++ forma
 formataFilme :: Filme -> String
 formataFilme filme = "titulo: " ++ titulo filme ++ ", Genero: " ++ genero filme
 
+--- pesdquisa um id de filme para aquele genero, se tiver filmes daquele genero
 pesquisaFilmeParaRecomendar:: String -> Int
 pesquisaFilmeParaRecomendar genero
-    | length (recuperaFilmesPorGenero genero) > 0 = id_filme (head (recuperaFilmesPorGenero genero))
+    | length (recuperaFilmesPorGeneroDisp genero) > 0 = randomizaIndice (recuperaFilmesPorGeneroDisp genero)
     | otherwise = -1
+
+--método auxiliar que randomiza o id do filme
+randomizaFilme:: [Filme] -> Int
+randomizaFilme filmes = (id_filme (filmes!!(randomInt 0 (length filmes-1))))
+
+-- randomiza o inteiro, recebe o i que é o inicio do range e o j que eh o final do range
+randomInt :: Int-> Int -> Int
+randomInt i j = fromIO(getStdRandom(randomR (i, j)) :: IO Int)
+
+-- recupera filmes que estão disponiveis de acordo com seu genero
+recuperaFilmesPorGeneroDisp :: String -> [Filme]
+recuperaFilmesPorGeneroDisp genero = fromIO (queryBD ("SELECT * FROM filmes WHERE estoque > 0 AND genero = '" ++ genero ++ "'"))

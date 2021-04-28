@@ -93,6 +93,12 @@ putMsgCpfInvalido = do
    threadDelay 200000
    putStr("")
 
+putMsgUserinvalido :: IO()
+putMsgUserinvalido = do
+   putStrLn("\nErro: usuário não cadastrado!")
+   threadDelay 200000
+   putStr("")
+
 putMsgIdInvalido :: IO()
 putMsgIdInvalido = do
    putStrLn("\nErro: id inválido. Tente novamente!")
@@ -128,7 +134,6 @@ putResumoCadastroUsuario cliente = do
    clrScr
    carregaLogo
    putStrLn("       -------CADASTRO-------")
-   putStrLn("\nUsuário cadastrado com sucesso!")
    putStrLn("\n-----\n")
    putStrLn(cliente)
    putStrLn("\n-----")
@@ -151,10 +156,10 @@ putInfoRecomendacao :: String -> IO()
 putInfoRecomendacao filme = do
    putStrLn("       -HMM VEJAMOS, JÁ SEI!-")
    putStrLn("\nBaseado no seu perfil, recomendamos o seguinte filme:")
-   putStrLn("\n"++ filme ++"\n")
+   putStrLn(filme)
 
-putInfoRecomendaFilme :: IO()
-putInfoRecomendaFilme = do
+putInfoRecomendaLocacao :: IO()
+putInfoRecomendaLocacao = do
    putStrLn("Você deseja fazer a locação desse filme? [y/n]")
 
 putInfoListaFilmes :: IO()

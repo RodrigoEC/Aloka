@@ -43,24 +43,19 @@ telaLoginCliente = do
 
     cpfCliente <- Util.lerEntradaString
     if Util.ehCpfValido cpfCliente
-        then do telaLogado cpfCliente
+        then if Cliente.ehCliente cpfCliente
+                then do telaLogado cpfCliente
+            else do {Util.putMsgUserinvalido; telaLoginCliente}
     else do {Util.putMsgCpfInvalido; telaLoginCliente}
    
-    verificaUserLogin cpfCliente
-
---verificaClienteBD cpfCliente (verifica se o cpf digitado existe no bd e retorna um bolean)    
-verificaUserLogin :: String -> IO()
-verificaUserLogin cpfCliente = if(not(ClienteDB.verificaExistenciaCliente cpfCliente)) 
-                                 then do {putStrLn("Erro! Usuário não cadastrado") ; telaLoginCliente}
-                               else(telaLogado cpfCliente)
+    
 
 telaLogado :: String -> IO()
 telaLogado cpfCliente = do
     Util.carregaLogo
-
     let cliente = ClienteDB.recuperaNomeCliente cpfCliente
-
     Util.listaOpcoesMenuLogin cliente
+    
     opcao <- Util.lerEntradaString
     mudaTelaLogado opcao cpfCliente
 
@@ -134,10 +129,10 @@ telaRecomendacao cpfCliente = do
 
 recomendaFilme:: String -> IO()
 recomendaFilme cpfCliente = do
---  genero <- ClienteDB.pesquisaGeneroMaisFrequenteCliente cpfCliente
---  let idFilme = FilmeDB.pesquisaFilmeParaRecomendar genero
---  let recomendacao = FilmeDB.formataFilme idFilme 
---  Util.putInfoRecomendacao recomendacao
+    --ClienteDB.getRecomendacao
+    Util.putInfoRecomendacao "\n<<nome>>\n"
+
+    Util.putInfoRecomendaLocacao
     opcao <- Util.lerEntradaString
     redireciona opcao cpfCliente
 
@@ -159,6 +154,7 @@ telaListaFilmes cpfCliente telaAnterior = do
     if (telaAnterior == 'L')
         then telaLocacaoFilme cpfCliente
     else telaLogado cpfCliente
+
 
 ----------- Sessão Devolucao -----------
 telaDevolucao :: String -> IO()

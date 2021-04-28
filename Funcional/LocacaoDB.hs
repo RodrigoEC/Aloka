@@ -36,15 +36,7 @@ instance ToRow Locacao where
 -- OBS: Verificar formato da data antes de fazer a adição no BD
 cadastraLocacao :: Int ->String ->String -> IO()
 cadastraLocacao id_filme cpf_cliente data_locacao = do
-    executeBD "CREATE TABLE IF NOT EXISTS locacao (\
-                 \ id_locacao INTEGER PRIMARY KEY, \
-                 \ id_filme INTEGER, \
-                 \ cpf_cliente TEXT, \
-                 \ data_locacao DATE, \
-                 \ status TEXT, \
-                 \ CONSTRAINT fk_filme FOREIGN KEY (id_filme) REFERENCES filme(id),\
-                 \ CONSTRAINT fk_cliente FOREIGN KEY (cpf_cliente) REFERENCES cliente(cpf)\
-                 \);"()
+    criaBD
 
     let id = geraId
 
@@ -60,6 +52,18 @@ cadastraLocacao id_filme cpf_cliente data_locacao = do
                 \" ++ cpf_cliente ++ "','\
                 \" ++ data_locacao ++ "',\
                 \"++ "'em andamento'" ++")")()
+
+criaBD :: IO()
+criaBD = do executeBD "CREATE TABLE IF NOT EXISTS locacao (\
+                 \ id_locacao INTEGER PRIMARY KEY, \
+                 \ id_filme INTEGER, \
+                 \ cpf_cliente TEXT, \
+                 \ data_locacao DATE, \
+                 \ status TEXT, \
+                 \ CONSTRAINT fk_filme FOREIGN KEY (id_filme) REFERENCES filme(id),\
+                 \ CONSTRAINT fk_cliente FOREIGN KEY (cpf_cliente) REFERENCES cliente(cpf)\
+                 \);"()
+
 
 -- Metodo que gera um id da tabela a partir da quantidade de locacoes cadastradas
 geraId :: Int

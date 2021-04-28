@@ -10,6 +10,7 @@ import Control.Concurrent
 import Database.SQLite.Simple
 
 
+
 clrScr = if os == "mingw32"
             then system "cls" 
          else system "clear"

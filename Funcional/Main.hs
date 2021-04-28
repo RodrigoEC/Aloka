@@ -10,6 +10,7 @@ import Cliente
 
 main :: IO()
 main = do
+    Locadora.criaBDs
     Util.carregaLogoInicial
     telaPrincipal
 

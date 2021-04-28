@@ -1,5 +1,9 @@
-import qualified Util as Util
-import qualified Admin
+import Util
+import Admin
+import Cliente
+import Filme
+import Locacao
+import Locadora
 
 --------------------------------------------
 

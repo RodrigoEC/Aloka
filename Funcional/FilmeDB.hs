@@ -50,17 +50,15 @@ cadastraFilme titulo diretor dataLancamento genero estoque =
 -- OBS: Verificar formato da data antes de fazer a adição no BD
 addFilme :: String -> String -> String -> String -> Int -> IO Filme
 addFilme titulo diretor dataLancamento genero estoque = do
-    let id = geraId
-    criaBD
-    insereDado id titulo diretor dataLancamento genero estoque
-
+    let id = geraId;
+    insereDado id titulo diretor dataLancamento genero estoque;
     return (head (recuperaFilmeID id))
     
 
 insereDado :: Int -> String -> String -> String -> String -> Int -> IO()
 insereDado id titulo diretor dataLancamento genero estoque = do
+    criaBD
     executeBD ("INSERT INTO filmes (id_filme,\
-
                 \ titulo,\
                 \ diretor,\
                 \ dataLancamento,\

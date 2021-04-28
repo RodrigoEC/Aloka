@@ -1,8 +1,8 @@
 import Util
 import Admin
-import ClienteBD
-import FilmeBD
-import LocacaoBD
+import ClienteDB
+import FilmeDB
+import LocacaoDB
 import Locadora
 
 --------------------------------------------
@@ -47,15 +47,15 @@ telaLoginCliente = do
 
 --verificaClienteBD cpfCliente (verifica se o cpf digitado existe no bd e retorna um bolean)    
 verificaUserLogin :: String -> IO()
-verificaUserLogin cpfCliente = if(not(Cliente.verificaExistenciaCliente cpfCliente)) 
-                                 then do {putStrLn("Erro! Usuário não cadastrado") ; telaLogin}
+verificaUserLogin cpfCliente = if(not(ClienteDB.verificaExistenciaCliente cpfCliente)) 
+                                 then do {putStrLn("Erro! Usuário não cadastrado") ; telaLoginCliente}
                                else(telaLogado cpfCliente)
 
 telaLogado :: String -> IO()
 telaLogado cpfCliente = do
     Util.carregaLogo
 
-    cliente <- Cliente.recuperaNomeCliente cpfCliente
+    let cliente = ClienteDB.recuperaNomeCliente cpfCliente
 
     Util.listaOpcoesMenuLogin cliente
     opcao <- Util.lerEntradaString
@@ -111,15 +111,15 @@ telaLocacaoFilme cpfCliente = do
 
 verificaFilme :: String -> String -> IO()
 verificaFilme idFilme cpfCliente
-    | not(Filme.verificaExistenciaFilme idFilme) = do {putStrLn("Erro! Filme não cadastrado") ; telaFazerLocacao cpfCliente}
-    | (Filme.recuperaEstoqueFilme idFilme < 0) = do {putStrLn("Erro! Filme indisponível") ; telaFazerLocacao cpfCliente}
+    | not(FilmeDB.verificaExistenciaFilme (read idFilme)) = do {putStrLn("Erro! Filme não cadastrado") ; telaLocacaoFilme cpfCliente}
+    | (FilmeDB.recuperaEstoqueFilme (read idFilme) < 0) = do {putStrLn("Erro! Filme indisponível") ; telaLocacaoFilme cpfCliente}
     | otherwise = locaFilme idFilme cpfCliente
 
 ---- locarFilmeBD: adiciona una locacaO
 locaFilme :: String -> String -> IO()
 locaFilme idFilme cpfCliente = do
 --  locarFilmeBD idFilme cpfCliente
-    let alugado = Filme.recuperaTituloFilme idFilme
+    let alugado = FilmeDB.getTituloFilme (read idFilme)
     
     Util.putInfoLocaFilme alugado
     telaLogado cpfCliente
@@ -132,9 +132,9 @@ telaRecomendacao cpfCliente = do
 
 recomendaFilme:: String -> IO()
 recomendaFilme cpfCliente = do
---  genero <- Cliente.pesquisaGeneroMaisFrequenteCliente cpfCliente
---  let idFilme = Filme.pesquisaFilmeParaRecomendar genero
---  let recomendacao = Filme.formataFilme idFilme 
+--  genero <- ClienteDB.pesquisaGeneroMaisFrequenteCliente cpfCliente
+--  let idFilme = FilmeDB.pesquisaFilmeParaRecomendar genero
+--  let recomendacao = FilmeDB.formataFilme idFilme 
 --  Util.putInfoRecomendacao recomendacao
     opcao <- Util.lerEntradaString
     redireciona opcao cpfCliente

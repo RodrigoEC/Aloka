@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module FilmeBD where
+module FilmeDB where
 
 import           Control.Applicative
 import qualified Data.Text as T

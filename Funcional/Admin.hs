@@ -1,6 +1,7 @@
 module Admin where
 
 import qualified Util
+import Filme
 
 
 opcoesMenuAdministrador =
@@ -9,10 +10,9 @@ opcoesMenuAdministrador =
     "\n----" ++
     "\nComo deseja prosseguir?" ++
     "\n[1] Cadastrar filme" ++
-    "\n[2] Cadastrar locação" ++
-    "\n[3] Exibir histórico de locações" ++
-    "\n[4] Gerenciar estoque" ++
-    "\n[5] Sair" ++
+    "\n[2] Exibir histórico de locações" ++
+    "\n[3] Gerenciar estoque" ++
+    "\n[4] Sair" ++
     "\n"
 
 
@@ -25,20 +25,17 @@ menuAdmistrador = do
 
 processaOpcao :: String -> IO()
 processaOpcao opcao 
-    | opcao == "1" = cadastrarFilme
-    | opcao == "2" = cadastrarLocacao
-    | opcao == "3" = exibirLocacoes
-    | opcao == "4" = gerenciarEstoque
-    | opcao == "5" = Util.putMsgSaida -- pelo figma aqui ficaria pra voltar pra tela inicial, só que fiquei meio na dúvida sobre o aumento do acoplamento...
+    | opcao == "1" = Admin.cadastraFilme
+    | opcao == "2" = exibirLocacoes
+    | opcao == "3" = gerenciarEstoque
+    | opcao == "4" = Util.putMsgSaida -- pelo figma aqui ficaria pra voltar pra tela inicial, só que fiquei meio na dúvida sobre o aumento do acoplamento...
     | otherwise = menuAdmistrador
 
 
 ----------- Sessão Cadastrar Filme -----------
-cadastrarFilme :: IO()
-cadastrarFilme = do
+cadastraFilme :: IO()
+cadastraFilme = do
     putStrLn("\n----Cadastro de Filme----")
-    putStrLn("Identificador: ")
-    id <- Util.lerEntradaString
     putStrLn("Título: ")
     titulo <- Util.lerEntradaString
     putStrLn("Gênero: ")
@@ -51,27 +48,9 @@ cadastrarFilme = do
     quantidade <- Util.lerEntradaString
     putStrLn("----")
 
-    -- TODO: cadastra o filme aqui
+    let filme = Filme.cadastraFilme titulo genero diretor dataLancamento quantidade
 
-    putStrLn("Filme - " ++ titulo ++ " cadastrado com sucesso!")
-    putStrLn("----")
-
-    menuAdmistrador
-
-
------------ Sessão Cadastrar Locação -----------
-cadastrarLocacao :: IO()
-cadastrarLocacao = do
-    putStrLn("\n----Cadastro de Locação----")
-    putStrLn("\nIdentificador do filme: ")
-    filmeId <- Util.lerEntradaString
-    putStrLn("Identificador do cliente: ")
-    clienteID <- Util.lerEntradaString
-    putStrLn("----")
-
-    -- TODO: faz a locação aqui
-
-    putStrLn("Locação do filme - " ++ filmeId ++ " - para o cliente " ++ clienteID ++ " feita com sucesso")
+    putStrLn(filme)
     putStrLn("----")
 
     menuAdmistrador

@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module ClienteBD  where
+module ClienteDB  where
 import Database.SQLite.Simple
 import Database.SQLite.Simple.FromRow
 import Database.SQLite.Simple.ToField

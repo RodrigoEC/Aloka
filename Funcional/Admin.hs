@@ -48,9 +48,9 @@ cadastraFilme = do
     quantidade <- Util.lerEntradaString
     putStrLn("----")
 
-    let filme = Filme.cadastraFilme titulo genero diretor dataLancamento (read quantidade)
+    let msg = Filme.cadastraFilme titulo genero diretor dataLancamento (read quantidade)
 
-    putStrLn("Filme - " ++ filme ++ " cadastrado com sucesso!")
+    putStrLn(msg)
     putStrLn("----")
 
     menuAdmistrador

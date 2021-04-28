@@ -1,8 +1,8 @@
 import Util
 import Admin
-import Cliente
-import Filme
-import Locacao
+import ClienteBD
+import FilmeBD
+import LocacaoBD
 import Locadora
 
 --------------------------------------------

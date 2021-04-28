@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Locacao where
+module LocacaoBD where
 import           Control.Applicative
 import qualified Data.Text as T
 import           Database.SQLite.Simple

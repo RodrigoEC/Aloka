@@ -2,6 +2,7 @@ module Admin where
 
 import qualified Util
 import Filme
+import Locacao
 
 
 opcoesMenuAdministrador =
@@ -85,8 +86,8 @@ exibirLocacoes = do
 
 getHistoricoLocacoes :: IO()
 getHistoricoLocacoes = do
-    -- TODO: faz a busca no bd
-    putStrLn("histórico geral")
+    let msg = Locacao.recuperaHistoricoLocacoes
+    putStrLn(msg)
     exibirLocacoes
 
 

@@ -26,3 +26,15 @@ verificaDisponibilidade idFilme
     where
         quantidade = FilmeDB.recuperaEstoqueFilme idFilme
         tituloFilme = titulo (head (FilmeDB.recuperaFilmeID idFilme))
+
+
+recuperaFilmes :: String
+recuperaFilmes
+    | not (null filmes) = "\nFilmes:\n" ++ filmes
+    | otherwise = "\nSem filmes para mostrar\n"
+    where filmes = concatenaToStringsFilmes (FilmeDB.recuperaFilmes)
+
+
+concatenaToStringsFilmes :: [Filme] -> String
+concatenaToStringsFilmes [] = ""
+concatenaToStringsFilmes (filme:outros) = "id: " ++ show (id_filme filme) ++ " - " ++ (FilmeDB.formataFilme filme) ++ "\n" ++ (concatenaToStringsFilmes outros)

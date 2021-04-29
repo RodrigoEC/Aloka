@@ -150,6 +150,9 @@ addFilmeAoEstoque = do
 
 verificarDisponibilidade :: IO()
 verificarDisponibilidade = do
+    let filmes = Filme.recuperaFilmes
+    putStrLn("\n" ++ filmes)
+
     putStrLn("\nIdentificador: ")
     id <- Util.lerEntradaString
     putStrLn("----")

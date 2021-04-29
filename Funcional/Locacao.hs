@@ -4,25 +4,25 @@ import LocacaoDB
 
 recuperaHistoricoLocacoes :: String
 recuperaHistoricoLocacoes
-    | not (null historico) = historico
-    | otherwise = "Sem locações para mostrar"
-    where historico = concatenaToStringsLocacoes LocacaoDB.recuperaLocacoes
+    | not (null locacoes) = "\nLocações:\n" ++ locacoes
+    | otherwise = "\nSem locações para mostrar\n"
+    where locacoes = concatenaToStringsLocacoes LocacaoDB.recuperaLocacoes
 
 
 recuperaHistoricoLocacoesCliente :: String -> String
 recuperaHistoricoLocacoesCliente cpfCliente
-    | not (null historico) = historico
-    | otherwise = "Sem locações para mostrar"
-    where historico = concatenaToStringsLocacoes (LocacaoDB.recuperaLocacaoIdCliente cpfCliente)
+    | not (null locacoes) = "\nLocações:\n" ++ locacoes
+    | otherwise = "\nSem locações para mostrar\n"
+    where locacoes = concatenaToStringsLocacoes (LocacaoDB.recuperaLocacaoIdCliente cpfCliente)
 
 
 recuperaLocacoesEmAndamento :: String
 recuperaLocacoesEmAndamento
-    | not (null locacoes) = locacoes
-    | otherwise = "Sem locações para mostrar"
+    | not (null locacoes) = "\nLocações:\n" ++ locacoes
+    | otherwise = "\nSem locações para mostrar\n"
     where locacoes = concatenaToStringsLocacoes (LocacaoDB.recuperaLocacoesEmAndamento)
 
 
 concatenaToStringsLocacoes :: [Locacao] -> String
 concatenaToStringsLocacoes [] = ""
-concatenaToStringsLocacoes (locacao:outras) = (LocacaoDB.toString locacao) ++ (concatenaToStringsLocacoes outras)
+concatenaToStringsLocacoes (locacao:outras) = (LocacaoDB.toString locacao) ++ "\n" ++ (concatenaToStringsLocacoes outras)

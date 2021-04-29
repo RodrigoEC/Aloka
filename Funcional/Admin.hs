@@ -88,17 +88,19 @@ getHistoricoLocacoes :: IO()
 getHistoricoLocacoes = do
     let result = Locacao.recuperaHistoricoLocacoes
     putStrLn(result)
+    putStrLn("----\n")
     exibirLocacoes
 
 
 getHistoricoLocacoesCliente :: IO()
 getHistoricoLocacoesCliente = do
-    putStrLn("Digite o id do cliente: ")
+    putStrLn("\nDigite o cpf do cliente: ")
     cpfCliente <- getLine
 
     let result = Locacao.recuperaHistoricoLocacoesCliente cpfCliente
 
     putStrLn(result)
+    putStrLn("----\n")
     exibirLocacoes
 
 
@@ -106,6 +108,7 @@ getLocacoesEmAndamento :: IO()
 getLocacoesEmAndamento = do
     let result = Locacao.recuperaLocacoesEmAndamento
     putStrLn(result)
+    putStrLn("----\n")
     exibirLocacoes
 
 ----------- Sessão Gerenciar Estoque -----------

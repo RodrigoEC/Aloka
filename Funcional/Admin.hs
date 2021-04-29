@@ -150,8 +150,8 @@ verificarDisponibilidade = do
     id <- Util.lerEntradaString
     putStrLn("----")
 
-    -- TODO: verifica a disponibilidade aqui
+    let msg = Filme.verificaDisponibilidade (read id)
 
-    putStrLn(" Há no estoque " ++ "<<quantidade>>" ++ " filme(s) " ++ "<<nome do filme>>" ++ " disponível para locação.")
+    putStrLn(msg)
     putStrLn("----\n")
     gerenciarEstoque

@@ -53,4 +53,4 @@ recuperaFilmes
 
 concatenaToStringsFilmes :: [Filme] -> String
 concatenaToStringsFilmes [] = ""
-concatenaToStringsFilmes (filme:outros) = "id: " ++ show (id_filme filme) ++ " - " ++ (FilmeDB.formataFilme filme) ++ "\n" ++ (concatenaToStringsFilmes outros
+concatenaToStringsFilmes (filme:outros) = "id: " ++ show (id_filme filme) ++ " - " ++ (FilmeDB.formataFilme filme) ++ "\n" ++ (concatenaToStringsFilmes outros)

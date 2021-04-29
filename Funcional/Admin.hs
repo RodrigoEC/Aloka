@@ -94,11 +94,11 @@ getHistoricoLocacoes = do
 getHistoricoLocacoesCliente :: IO()
 getHistoricoLocacoesCliente = do
     putStrLn("Digite o id do cliente: ")
-    clienteID <- getLine
+    cpfCliente <- getLine
 
-    -- TODO: Faz a busca pelo id do cliente
+    let msg = Locacao.recuperaHistoricoLocacoesCliente cpfCliente
 
-    putStrLn("histórico do cliente" ++ clienteID)
+    putStrLn(msg)
     exibirLocacoes
 
 

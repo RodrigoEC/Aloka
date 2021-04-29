@@ -127,8 +127,6 @@ putMsgGeneroInvalido = do
    threadDelay 200000
    putStr("")
 
-
-
 putMsgLoginCliente :: IO() 
 putMsgLoginCliente = do
     putLogo

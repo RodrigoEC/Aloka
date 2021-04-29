@@ -5,6 +5,9 @@ import ClienteDB
 ehCliente :: String -> Bool
 ehCliente cpf = ClienteDB.verificaExistenciaCliente cpf
 
+getNome :: String -> String
+getNome cpf = ClienteDB.recuperaNomeCliente cpf
+
 cadastraCliente :: String -> String -> String -> String -> String
 cadastraCliente nome cpf telefone endereco = do
     if ehCliente cpf

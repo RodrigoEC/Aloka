@@ -42,14 +42,14 @@ telaLoginCliente = do
 
     cpfCliente <- Util.lerEntradaString
     if Util.ehCpfValido cpfCliente
-        then if Cliente.ehCliente cpfCliente
+        then if Locadora.ehCliente cpfCliente
                 then do telaLogado cpfCliente
             else do {Info.putMsgUserInvalido; telaLoginCliente}
     else do {Info.putMsgCpfInvalido; telaLoginCliente}
 
 telaLogado :: String -> IO()
 telaLogado cpfCliente = do
-    let nome = ClienteDB.recuperaNomeCliente cpfCliente
+    let nome = Locadora.getNomeCliente cpfCliente
     Info.putMsgOpcoesMenuCliente nome
     
     opcao <- Util.lerEntradaString
@@ -80,7 +80,7 @@ telaCadastroUsuario = do
             Info.putMsgCadastroEndereco;
             endereco <- Util.lerEntradaString;
 
-            Util.putResumoCadastroUsuario(Cliente.cadastraCliente nome cpf telefone endereco);
+            Util.putResumoCadastroUsuario(Locadora.cadastraCliente nome cpf telefone endereco);
             opcao <- Util.lerEntradaString;
             telaPrincipal
         }
@@ -97,6 +97,12 @@ telaLocacaoFilme cpfCliente = do
     else if not(Util.ehIdValido idFilme)
         then do {Info.putMsgIdInvalido; telaLocacaoFilme cpfCliente}
     else do {
+        if Locadora.filmeExiste(read idFilme)
+            then if Locadora.filmeDisponivel(read idFilme)
+                then locaFilme(read idFilme) cpfCliente
+            else {Util.putErroFilmeNaoDisponivel ; telaLocacaoFilme cpfCliente}
+        else {Util.putErroFilmeNaoCadastrado ; telaLocacaoFilme cpfCliente}
+       
         verificaFilme idFilme cpfCliente
     }
 

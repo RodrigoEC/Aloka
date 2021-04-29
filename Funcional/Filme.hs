@@ -15,3 +15,9 @@ formataFilmes (x:xs) = geraString (FilmeDB.formataFilmes 1 (x:xs))  ""
 geraString :: [String] -> String -> String
 geraString [] txt = txt
 geraString (x:xs) txt = geraString xs (txt ++ "\n" ++ x)
+
+ehFilme :: Int -> Bool
+ehFilme id = FilmeDB.verificaExistenciaFilme id
+
+estaDisponivel :: Int -> Bool
+estaDisponivel id = FilmeDB.recuperaEstoqueFilme id <= 0

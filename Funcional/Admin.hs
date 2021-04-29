@@ -2,6 +2,7 @@ module Admin where
 
 import qualified Util
 import Filme
+import Locacao
 
 
 opcoesMenuAdministrador =
@@ -48,9 +49,9 @@ cadastraFilme = do
     quantidade <- Util.lerEntradaString
     putStrLn("----")
 
-    let filme = Filme.cadastraFilme titulo genero diretor dataLancamento quantidade
+    let msg = Filme.cadastraFilme titulo genero diretor dataLancamento (read quantidade)
 
-    putStrLn(filme)
+    putStrLn(msg)
     putStrLn("----")
 
     menuAdmistrador
@@ -85,33 +86,36 @@ exibirLocacoes = do
 
 getHistoricoLocacoes :: IO()
 getHistoricoLocacoes = do
-    -- TODO: faz a busca no bd
-    putStrLn("histórico geral")
+    let result = Locacao.recuperaHistoricoLocacoes
+    putStrLn(result)
+    putStrLn("----\n")
     exibirLocacoes
 
 
 getHistoricoLocacoesCliente :: IO()
 getHistoricoLocacoesCliente = do
-    putStrLn("Digite o id do cliente: ")
-    clienteID <- getLine
+    putStrLn("\nDigite o cpf do cliente: ")
+    cpfCliente <- getLine
 
-    -- TODO: Faz a busca pelo id do cliente
+    let result = Locacao.recuperaHistoricoLocacoesCliente cpfCliente
 
-    putStrLn("histórico do cliente" ++ clienteID)
+    putStrLn(result)
+    putStrLn("----\n")
     exibirLocacoes
 
 
 getLocacoesEmAndamento :: IO()
 getLocacoesEmAndamento = do
-    -- TODO: faz a busca no bd
-    putStrLn("locações em andamento aqui")
+    let result = Locacao.recuperaLocacoesEmAndamento
+    putStrLn(result)
+    putStrLn("----\n")
     exibirLocacoes
 
 ----------- Sessão Gerenciar Estoque -----------
 opcoesGerenciarEstoque = 
     "\nComo deseja prosseguir?" ++
     "\n[1] Adicionar estoque ao filme" ++
-    "\n[2] Verificar disponibilidade dos filmes" ++
+    "\n[2] Verificar disponibilidade de filmes" ++
     "\n[3] Voltar ao menu inicial" ++
     "\n"
 
@@ -121,7 +125,6 @@ gerenciarEstoque = do
     putStrLn(opcoesGerenciarEstoque)
     opcao <- Util.lerEntradaString
 
-    -- esses ifs encadeados estão tenebrosos mas estava dando erro de compilação se eu n fizesse assim :'(
     if opcao == "1" then addFilmeAoEstoque
     else if opcao == "2" then 
         verificarDisponibilidade
@@ -138,21 +141,24 @@ addFilmeAoEstoque = do
     quantidade <- Util.lerEntradaString
     putStrLn("----")
 
-    -- TODO: atualiza o estoque aqui
+    let msg = Filme.addEstoqueFilme (read id) (read quantidade)
 
-    putStrLn(quantidade ++ " filme(s) " ++ "<<nome do filme>>" ++ " adicionado(s) ao estoque com sucesso!")
+    putStrLn(msg)
     putStrLn("----\n")
     gerenciarEstoque
 
 
 verificarDisponibilidade :: IO()
 verificarDisponibilidade = do
+    let filmes = Filme.recuperaFilmes
+    putStrLn("\n" ++ filmes)
+
     putStrLn("\nIdentificador: ")
     id <- Util.lerEntradaString
     putStrLn("----")
 
-    -- TODO: verifica a disponibilidade aqui
+    let msg = Filme.verificaDisponibilidade (read id)
 
-    putStrLn(" Há no estoque " ++ "<<quantidade>>" ++ " filme(s) " ++ "<<nome do filme>>" ++ " disponível para locação.")
+    putStrLn(msg)
     putStrLn("----\n")
     gerenciarEstoque

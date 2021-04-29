@@ -86,8 +86,8 @@ exibirLocacoes = do
 
 getHistoricoLocacoes :: IO()
 getHistoricoLocacoes = do
-    let msg = Locacao.recuperaHistoricoLocacoes
-    putStrLn(msg)
+    let result = Locacao.recuperaHistoricoLocacoes
+    putStrLn(result)
     exibirLocacoes
 
 
@@ -96,16 +96,16 @@ getHistoricoLocacoesCliente = do
     putStrLn("Digite o id do cliente: ")
     cpfCliente <- getLine
 
-    let msg = Locacao.recuperaHistoricoLocacoesCliente cpfCliente
+    let result = Locacao.recuperaHistoricoLocacoesCliente cpfCliente
 
-    putStrLn(msg)
+    putStrLn(result)
     exibirLocacoes
 
 
 getLocacoesEmAndamento :: IO()
 getLocacoesEmAndamento = do
-    -- TODO: faz a busca no bd
-    putStrLn("locações em andamento aqui")
+    let result = Locacao.recuperaLocacoesEmAndamento
+    putStrLn(result)
     exibirLocacoes
 
 ----------- Sessão Gerenciar Estoque -----------

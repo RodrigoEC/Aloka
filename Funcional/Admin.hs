@@ -121,7 +121,6 @@ gerenciarEstoque = do
     putStrLn(opcoesGerenciarEstoque)
     opcao <- Util.lerEntradaString
 
-    -- esses ifs encadeados estão tenebrosos mas estava dando erro de compilação se eu n fizesse assim :'(
     if opcao == "1" then addFilmeAoEstoque
     else if opcao == "2" then 
         verificarDisponibilidade
@@ -138,9 +137,9 @@ addFilmeAoEstoque = do
     quantidade <- Util.lerEntradaString
     putStrLn("----")
 
-    -- TODO: atualiza o estoque aqui
+    let msg = Filme.addEstoqueFilme (read id) (read quantidade)
 
-    putStrLn(quantidade ++ " filme(s) " ++ "<<nome do filme>>" ++ " adicionado(s) ao estoque com sucesso!")
+    putStrLn(msg)
     putStrLn("----\n")
     gerenciarEstoque
 

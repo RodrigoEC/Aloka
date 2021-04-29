@@ -42,9 +42,9 @@ instance ToRow Filme where
 getTituloFilme :: Int -> String
 getTituloFilme idFilme = titulo (head(recuperaFilmeID idFilme))
 
-cadastraFilme :: String -> String -> String -> String -> Int -> String
+cadastraFilme :: String -> String -> String -> String -> Int -> Filme
 cadastraFilme titulo diretor dataLancamento genero estoque =
-    formataFilme(fromIO(addFilme titulo diretor dataLancamento genero estoque))
+    fromIO(addFilme titulo diretor dataLancamento genero estoque)
 
 -- Adiciona filme a partir de título, diretor, dataLancamento, genero, estoque
 -- OBS: Verificar formato da data antes de fazer a adição no BD

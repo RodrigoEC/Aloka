@@ -115,7 +115,7 @@ getLocacoesEmAndamento = do
 opcoesGerenciarEstoque = 
     "\nComo deseja prosseguir?" ++
     "\n[1] Adicionar estoque ao filme" ++
-    "\n[2] Verificar disponibilidade dos filmes" ++
+    "\n[2] Verificar disponibilidade de filmes" ++
     "\n[3] Voltar ao menu inicial" ++
     "\n"
 

@@ -13,7 +13,9 @@ cadastraFilme titulo diretor dataLancamento genero quantidade
 addEstoqueFilme :: Int -> Int -> String
 addEstoqueFilme idFilme quantidade
     | not(FilmeDB.verificaExistenciaFilme idFilme) = "Erro: Filme com id " ++ show idFilme ++ " não cadastrado!"
-    | otherwise = show quantidade ++ " filme(s) " ++ tituloFilme ++ " adicionado(s) ao estoque com sucesso!"
+    | otherwise = do 
+        let qtd = FilmeDB.addEstoqueFilme idFilme quantidade
+        "Agora temos " ++ qtd ++ " filme(s) " ++ tituloFilme ++ " no estoque!"
     where tituloFilme = titulo (head (FilmeDB.recuperaFilmeID idFilme))
 
 

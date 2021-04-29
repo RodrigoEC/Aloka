@@ -127,21 +127,24 @@ recuperaEstoqueFilme idFilme
     | otherwise = -1
 
 -- Metodo que altera o estoque de um filme, a partir do parâmetro novoEstoque passado.
-alteraEstoqueFilme :: Int -> Int -> IO ()
-alteraEstoqueFilme idFilme novoEstoque = executeBD ("UPDATE filmes SET estoque = '" ++ show novoEstoque ++ "' WHERE id_filme = " ++ show idFilme) ()
+alteraEstoqueFilme :: Int -> Int -> IO String
+alteraEstoqueFilme idFilme novoEstoque = do 
+    executeBD ("UPDATE filmes SET estoque = " ++ show novoEstoque ++ " WHERE id_filme = " ++ show idFilme) ()
+    return (show novoEstoque)
 
 -- Metodo que adiciona ao estoque de um filme o valor do parâmetro qtd que é passado
-addEstoqueFilme :: Int -> Int -> IO ()
-addEstoqueFilme idFilme qtd = do
-    let estoque = recuperaEstoqueFilme idFilme
+addEstoqueFilme :: Int -> Int -> String
+addEstoqueFilme idFilme qtd
+    | estoque + qtd >= 0 = fromIO (alteraEstoqueFilme idFilme (estoque + qtd))
+    | otherwise = show qtd
+    where
+        estoque = recuperaEstoqueFilme idFilme
 
-    if estoque + qtd >= 0
-        then alteraEstoqueFilme idFilme (estoque + qtd)
-        else T.putStrLn "Não temos essa quantidade de DVDs disponíveis! Nao dê aLoka, loke menos filmes."
+
 
 -- Metodo que remove do estoque de um filme o valor do parâmetro qtd que é passado
 -- Caso esse valor seja maior do que a quantidade do estoque atual, uma mensagem é mostrada na tela.
-removeEstoqueFilme :: Int -> Int -> IO ()
+removeEstoqueFilme :: Int -> Int -> String
 removeEstoqueFilme idFilme qtd = addEstoqueFilme idFilme (-qtd)
 
 -- Metodo que serve para formatar uma lista de filmes para exibição.
@@ -152,3 +155,4 @@ formataFilmes indice filmes@(filme:resto) = ("[" ++ show indice ++ "] " ++ forma
 -- Metodo que serve para formatar um filme específico para exibição.
 formataFilme :: Filme -> String
 formataFilme filme = "titulo: " ++ titulo filme ++ ", Genero: " ++ genero filme
+

@@ -45,7 +45,7 @@ getTituloFilme idFilme = titulo (head(recuperaFilmeID idFilme))
 
 cadastraFilme :: String -> String -> String -> String -> Int -> Filme
 cadastraFilme titulo diretor dataLancamento genero estoque =
-    fromIO (addFilme titulo diretor dataLancamento genero estoque)
+    fromIO(addFilme titulo diretor dataLancamento genero estoque)
 
 -- Adiciona filme a partir de título, diretor, dataLancamento, genero, estoque
 -- OBS: Verificar formato da data antes de fazer a adição no BD
@@ -78,12 +78,12 @@ insereDado id titulo diretor dataLancamento genero estoque = do
 
 criaBD :: IO ()
 criaBD = do executeBD "CREATE TABLE IF NOT EXISTS filmes (\
-                 \ id_filme INTEGER PRIMARY KEY, \
+                 \ id_filme INT PRIMARY KEY, \
                  \ titulo TEXT, \
                  \ diretor TEXT, \
                  \ dataLancamento DATE, \
                  \ genero TEXT, \
-                 \ estoque INTEGER \
+                 \ estoque INT \
                  \);" ()
 
 -- Metodo que cria um id para o Banco de dados dos filmes
@@ -100,6 +100,9 @@ recuperaFilmes = fromIO (queryBD "SELECT * FROM filmes")
 recuperaFilmeID :: Int -> [Filme]
 recuperaFilmeID id_filme = fromIO (queryBD ("SELECT * FROM filmes WHERE id_filme = " ++ show id_filme))
 
+recuperaFilmeTitulo :: String -> [Filme]
+recuperaFilmeTitulo titulo = fromIO (queryBD ("SELECT * FROM filmes WHERE titulo = '" ++ titulo ++ "'"))
+
 -- Metodo retornar uma lista contendo todos os filmes do gênero passado como parâmetro da função
 recuperaFilmesPorGenero :: String -> [Filme]
 recuperaFilmesPorGenero genero = fromIO (queryBD ("SELECT * FROM filmes WHERE genero = '" ++ genero ++ "'"))
@@ -111,6 +114,13 @@ verificaExistenciaFilme id_filme
     | null (recuperaFilmeID (read $ show id_filme)) = False
     | otherwise = True
 
+-- Metodo que verifica existência de um filme no Banco de dados e retorna um valor booleano
+-- True se ele existir e False se ele não existir
+verificaExistenciaFilmePorTitulo :: String -> Bool
+verificaExistenciaFilmePorTitulo titulo
+    | null (recuperaFilmeTitulo titulo) = False
+    | otherwise = True
+
 -- Metodo que retorna o estoque atual de um filme a partir de um id cadastrado.
 recuperaEstoqueFilme :: Int -> Int
 recuperaEstoqueFilme idFilme
@@ -118,25 +128,26 @@ recuperaEstoqueFilme idFilme
     | otherwise = -1
 
 -- Metodo que altera o estoque de um filme, a partir do parâmetro novoEstoque passado.
-alteraEstoqueFilme :: Int -> Int -> IO ()
-alteraEstoqueFilme idFilme novoEstoque = executeBD ("UPDATE filmes SET estoque = '" ++ show novoEstoque ++ "' WHERE id_filme = " ++ show idFilme) ()
+alteraEstoqueFilme :: Int -> Int -> IO String
+alteraEstoqueFilme idFilme novoEstoque = do 
+    executeBD ("UPDATE filmes SET estoque = " ++ show novoEstoque ++ " WHERE id_filme = " ++ show idFilme) ()
+    return (show novoEstoque)
 
 -- Metodo que adiciona ao estoque de um filme o valor do parâmetro qtd que é passado
-addEstoqueFilme :: Int -> Int -> IO ()
-addEstoqueFilme idFilme qtd = do
-    let estoque = recuperaEstoqueFilme idFilme
-
-    if estoque + qtd >= 0
-        then alteraEstoqueFilme idFilme (estoque + qtd)
-        else T.putStrLn "Não temos essa quantidade de DVDs disponíveis! Nao dê aLoka, loke menos filmes."
+addEstoqueFilme :: Int -> Int -> String
+addEstoqueFilme idFilme qtd
+    | estoque + qtd >= 0 = fromIO (alteraEstoqueFilme idFilme (estoque + qtd))
+    | otherwise = show qtd
+    where
+        estoque = recuperaEstoqueFilme idFilme
 
 -- Metodo que remove do estoque de um filme o valor do parâmetro qtd que é passado
 -- Caso esse valor seja maior do que a quantidade do estoque atual, uma mensagem é mostrada na tela.
-removeEstoqueFilme :: Int -> Int -> IO ()
+removeEstoqueFilme :: Int -> Int -> String
 removeEstoqueFilme idFilme qtd = addEstoqueFilme idFilme (-qtd)
 
 -- Metodo que serve para formatar uma lista de filmes para exibição.
-formataFilmes :: Integer -> [Filme] -> [String]
+formataFilmes :: Int -> [Filme] -> [String]
 formataFilmes _ [] = []
 formataFilmes indice filmes@(filme:resto) = ("[" ++ show indice ++ "] " ++ formataFilme filme) : formataFilmes (indice + 1) resto
 

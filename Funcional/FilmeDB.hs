@@ -6,6 +6,7 @@ import           Control.Applicative
 import qualified Data.Text as T
 import           Database.SQLite.Simple
 import           Database.SQLite.Simple.FromRow
+import System.Random
 
 import Data.Typeable
 import qualified Data.Text.IO as T
@@ -140,8 +141,6 @@ addEstoqueFilme idFilme qtd
     where
         estoque = recuperaEstoqueFilme idFilme
 
-
-
 -- Metodo que remove do estoque de um filme o valor do parâmetro qtd que é passado
 -- Caso esse valor seja maior do que a quantidade do estoque atual, uma mensagem é mostrada na tela.
 removeEstoqueFilme :: Int -> Int -> String
@@ -156,3 +155,20 @@ formataFilmes indice filmes@(filme:resto) = ("[" ++ show indice ++ "] " ++ forma
 formataFilme :: Filme -> String
 formataFilme filme = "titulo: " ++ titulo filme ++ ", Genero: " ++ genero filme
 
+--- pesdquisa um id de filme para aquele genero, se tiver filmes daquele genero
+pesquisaFilmeParaRecomendar:: String -> Int
+pesquisaFilmeParaRecomendar genero
+    | length (recuperaFilmesPorGeneroDisp genero) > 0 = randomizaFilme (recuperaFilmesPorGeneroDisp genero)
+    | otherwise = -1
+
+--método auxiliar que randomiza o id do filme
+randomizaFilme:: [Filme] -> Int
+randomizaFilme filmes = (id_filme (filmes!!(randomInt 0 (length filmes-1))))
+
+-- randomiza o inteiro, recebe o i que é o inicio do range e o j que eh o final do range
+randomInt :: Int-> Int -> Int
+randomInt i j = fromIO(getStdRandom(randomR (i, j)) :: IO Int)
+
+-- recupera filmes que estão disponiveis de acordo com seu genero
+recuperaFilmesPorGeneroDisp :: String -> [Filme]
+recuperaFilmesPorGeneroDisp genero = fromIO (queryBD ("SELECT * FROM filmes WHERE estoque > 0 AND genero = '" ++ genero ++ "'"))

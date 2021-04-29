@@ -5,13 +5,15 @@ import FilmeDB
 import LocacaoDB
 import Locadora
 import Cliente
+import Filme
+import Info
 
 --------------------------------------------
 
 main :: IO()
 main = do
     Locadora.criaBDs
-    Util.carregaLogoInicial
+    Info.putLogoInicial
     telaPrincipal
 
 --------------------------------------------
@@ -20,8 +22,7 @@ main = do
 ------------- Tela Principal -------------
 telaPrincipal :: IO()
 telaPrincipal = do
-    Util.carregaLogo
-    Util.listaOpcoesMenuInicial
+    Info.putMsgOpcoesMenuInicial
 
     opcao <- Util.lerEntradaString
     mudaTelaPrincipal opcao
@@ -30,36 +31,27 @@ mudaTelaPrincipal :: String -> IO()
 mudaTelaPrincipal opcao | opcao == "1" = telaLoginCliente
                         | opcao == "2" = Admin.menuAdmistrador
                         | opcao == "3" = telaCadastroUsuario
-                        | opcao == "4" = Util.putMsgSaida
-                        | otherwise = do {Util.putMsgOpcaoInvalida; telaPrincipal}
+                        | opcao == "4" = Info.putMsgSaida
+                        | otherwise = do {Info.putMsgOpcaoInvalida; telaPrincipal}
 
 
--------------- Sessão de Login -------------
+------------ Sessão de Login Cliente -----------
 telaLoginCliente :: IO()
 telaLoginCliente = do
-    Util.carregaLogo
-    Util.putInfoLoginCliente
+    Info.putMsgLoginCliente
 
     cpfCliente <- Util.lerEntradaString
     if Util.ehCpfValido cpfCliente
-        then do telaLogado cpfCliente
-    else do {Util.putMsgCpfInvalido; telaLoginCliente}
-   
-    verificaUserLogin cpfCliente
-
---verificaClienteBD cpfCliente (verifica se o cpf digitado existe no bd e retorna um bolean)    
-verificaUserLogin :: String -> IO()
-verificaUserLogin cpfCliente = if(not(ClienteDB.verificaExistenciaCliente cpfCliente)) 
-                                 then do {putStrLn("Erro! Usuário não cadastrado") ; telaLoginCliente}
-                               else(telaLogado cpfCliente)
+        then if Locadora.ehCliente cpfCliente
+                then do telaLogado cpfCliente
+            else do {Info.putMsgUserInvalido; telaLoginCliente}
+    else do {Info.putMsgCpfInvalido; telaLoginCliente}
 
 telaLogado :: String -> IO()
 telaLogado cpfCliente = do
-    Util.carregaLogo
-
-    let cliente = ClienteDB.recuperaNomeCliente cpfCliente
-
-    Util.listaOpcoesMenuLogin cliente
+    let nome = Locadora.getNomeCliente cpfCliente
+    Info.putMsgOpcoesMenuCliente nome
+    
     opcao <- Util.lerEntradaString
     mudaTelaLogado opcao cpfCliente
 
@@ -70,26 +62,26 @@ mudaTelaLogado opcao cpfCliente
     | opcao == "3" = telaRecomendacao cpfCliente
     | opcao == "4" = telaDevolucao cpfCliente
     | opcao == "5" = telaPrincipal
-    | otherwise = do {Util.putMsgOpcaoInvalida; telaLogado cpfCliente}
+    | otherwise = do {Info.putMsgOpcaoInvalida; telaLogado cpfCliente}
 
 
 ----------- Sessão Cadastro de Usuario -----------
 telaCadastroUsuario :: IO()
 telaCadastroUsuario = do
-    Util.carregaLogo
-    Util.putInfoCadastroNome
+    Info.putMsgCadastroNome
     nome <- Util.lerEntradaString
-    Util.putInfoCadastroCpf
+    Info.putMsgCadastroCpf
     cpf <- Util.lerEntradaString
     if not(Util.ehCpfValido cpf) 
-        then do {Util.putMsgCpfInvalido; telaCadastroUsuario}
+        then do {Info.putMsgCpfInvalido; telaCadastroUsuario}
     else do {
-            Util.putInfoCadastroTelefone;
+            Info.putMsgCadastroTelefone;
             telefone <- Util.lerEntradaString;
-            Util.putInfoCadastroEndereco;
+            Info.putMsgCadastroEndereco;
             endereco <- Util.lerEntradaString;
 
-            Util.putResumoCadastroUsuario(Cliente.cadastraCliente nome cpf telefone endereco);
+            Util.putResumoCadastroUsuario(Locadora.cadastraCliente nome cpf telefone endereco);
+            opcao <- Util.lerEntradaString;
             telaPrincipal
         }
     
@@ -97,71 +89,84 @@ telaCadastroUsuario = do
 -------------- Sessão Fazer Locação -------------
 telaLocacaoFilme :: String -> IO()
 telaLocacaoFilme cpfCliente = do
-    Util.carregaLogo
-    Util.putInfoLocacaoFilme
+    Info.putMsgLocacaoFilme
     
     idFilme <- Util.lerEntradaString
     if idFilme == "L"
         then do telaListaFilmes cpfCliente 'L'
     else if not(Util.ehIdValido idFilme)
-        then do {Util.putMsgIdInvalido; telaLocacaoFilme cpfCliente}
+        then do {Info.putMsgIdInvalido; telaLocacaoFilme cpfCliente}
     else do {
+        if Locadora.filmeExiste(read idFilme)
+            then if Locadora.filmeDisponivel(read idFilme)
+                then locaFilme(read idFilme) cpfCliente
+            else {Util.putErroFilmeNaoDisponivel ; telaLocacaoFilme cpfCliente}
+        else {Util.putErroFilmeNaoCadastrado ; telaLocacaoFilme cpfCliente}
+       
         verificaFilme idFilme cpfCliente
     }
 
 verificaFilme :: String -> String -> IO()
-verificaFilme idFilme cpfCliente
-    | not(FilmeDB.verificaExistenciaFilme (read idFilme)) = do {putStrLn("Erro! Filme não cadastrado") ; telaLocacaoFilme cpfCliente}
-    | (FilmeDB.recuperaEstoqueFilme (read idFilme) < 0) = do {putStrLn("Erro! Filme indisponível") ; telaLocacaoFilme cpfCliente}
-    | otherwise = locaFilme idFilme cpfCliente
+verificaFilme idFilme cpfCliente = do
+    if(not(FilmeDB.verificaExistenciaFilme (read idFilme)))
+        then do {Util.putErroFilmeNaoCadastrado ; telaLocacaoFilme cpfCliente}
+    else if (FilmeDB.recuperaEstoqueFilme (read idFilme) <= 0)
+        then do {Util.putErroFilmeNaoDisponivel ; telaLocacaoFilme cpfCliente}
+    else do {locaFilme idFilme cpfCliente}
 
----- locarFilmeBD: adiciona una locacaO
 locaFilme :: String -> String -> IO()
 locaFilme idFilme cpfCliente = do
---  locarFilmeBD idFilme cpfCliente
+    Util.putData
+    data_locacao <- getLine
+    LocacaoDB.cadastraLocacao (read idFilme) cpfCliente data_locacao
     let alugado = FilmeDB.getTituloFilme (read idFilme)
-    
     Util.putInfoLocaFilme alugado
     telaLogado cpfCliente
+
 
 -------- Sessão Recomendação da Locadora ---------
 telaRecomendacao :: String -> IO()
 telaRecomendacao cpfCliente = do
-    Util.carregaLogo 
+    Info.putMsgRecomendacaoGenero
     recomendaFilme cpfCliente
 
 recomendaFilme:: String -> IO()
 recomendaFilme cpfCliente = do
---  genero <- ClienteDB.pesquisaGeneroMaisFrequenteCliente cpfCliente
---  let idFilme = FilmeDB.pesquisaFilmeParaRecomendar genero
---  let recomendacao = FilmeDB.formataFilme idFilme 
---  Util.putInfoRecomendacao recomendacao
-    opcao <- Util.lerEntradaString
-    redireciona opcao cpfCliente
+    genero <- getLine
+    let idFilme = (show (FilmeDB.pesquisaFilmeParaRecomendar genero))
+    verificaRecomendacao cpfCliente idFilme
 
-redireciona :: String -> String -> IO()
-redireciona opcao cpfCliente 
-    | opcao == "y" = telaLocacaoFilme cpfCliente
+verificaRecomendacao :: String -> String -> IO()
+verificaRecomendacao cpfCliente idFilme = do
+    if(not(Util.ehIdValido idFilme)) 
+        then do {Info.putMsgGeneroInvalido; telaRecomendacao cpfCliente}
+    else do {alugaRecomendado cpfCliente idFilme}
+
+alugaRecomendado :: String -> String -> IO()
+alugaRecomendado cpfCliente idFilme = do
+        Info.putMsgRecomendacao (FilmeDB.getTituloFilme (read idFilme))
+        Info.putMsgRecomendaLocacao
+
+        opcao <- Util.lerEntradaString
+        redireciona opcao cpfCliente idFilme
+
+redireciona :: String -> String -> String -> IO()
+redireciona opcao cpfCliente idFilme
+    | opcao == "y" = verificaFilme idFilme cpfCliente
     | otherwise = telaLogado cpfCliente
 
 
 ----------- Sessão Listar Filmes -----------
 telaListaFilmes :: String -> Char -> IO()
 telaListaFilmes cpfCliente telaAnterior = do
-    Util.putInfoListaFilmes
-    listaFilmes --listando os dados
+    Info.putMsgListaFilmes
+    putStrLn("\n" ++ Filme.listaFilmes ++ "\n")
+    Info.putMsgTeclaEnter
 
-    Util.putInfoListaFilmesBottom
     opcao <- Util.lerEntradaString
     if (telaAnterior == 'L')
         then telaLocacaoFilme cpfCliente
     else telaLogado cpfCliente
-
-listaFilmes :: IO()
-listaFilmes = do
-    putStrLn("---")
-    putStrLn("\n<<Lista de filmes>>\n")
-    putStrLn("---")
 
 
 ----------- Sessão Devolucao -----------
@@ -169,8 +174,7 @@ telaDevolucao :: String -> IO()
 telaDevolucao cpfCliente = do
     Util.putInfoDevolucaoTop
 
-    -- consulta dados
-    listaFilmes
+    --listaFilmes
 
     Util.putInfoDevolucaoBottom
 

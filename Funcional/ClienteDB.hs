@@ -9,7 +9,7 @@ import Util (queryBD, fromIO, executeBD)
 
 -- definição do tipo Cliente, este será o objeto a ser armazenado no banco de dados.
 data Cliente = Cliente{
-  id :: Integer,
+  id :: Int,
   nome :: String,
   cpf :: String,
   telefone :: String,
@@ -58,7 +58,7 @@ insereDado id nome cpf telefone endereco = do
 
 criaBD :: IO ()
 criaBD = do executeBD "CREATE TABLE IF NOT EXISTS clientes (\
-                   \ id INTEGER PRIMARY KEY, \
+                   \ id INT PRIMARY KEY, \
                    \ nome TEXT,\
                    \ cpf TEXT,\
                    \ telefone TEXT,\

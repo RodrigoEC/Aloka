@@ -93,6 +93,12 @@ putMsgCpfInvalido = do
    threadDelay 200000
    putStr("")
 
+putMsgUserinvalido :: IO()
+putMsgUserinvalido = do
+   putStrLn("\nErro: usuário não cadastrado!")
+   threadDelay 200000
+   putStr("")
+
 putMsgIdInvalido :: IO()
 putMsgIdInvalido = do
    putStrLn("\nErro: id inválido. Tente novamente!")
@@ -126,12 +132,12 @@ putInfoCadastroEndereco = do
 putResumoCadastroUsuario :: String -> IO()
 putResumoCadastroUsuario cliente = do
    clrScr
-   putStrLn("---\n")
-   putStrLn("Usuário cadastrado com sucesso!")
-   putStrLn("\n--- RESUMO ---\n")
+   carregaLogo
+   putStrLn("       -------CADASTRO-------")
+   putStrLn("\n-----\n")
    putStrLn(cliente)
-   putStrLn("\n---")
-   threadDelay 1000000
+   putStrLn("\n-----")
+   putInfoTeclaEnter
 
 putInfoLocacaoFilme :: IO()
 putInfoLocacaoFilme = do
@@ -150,10 +156,10 @@ putInfoRecomendacao :: String -> IO()
 putInfoRecomendacao filme = do
    putStrLn("       -HMM VEJAMOS, JÁ SEI!-")
    putStrLn("\nBaseado no seu perfil, recomendamos o seguinte filme:")
-   putStrLn("\n"++ filme ++"\n")
+   putStrLn(filme)
 
-putInfoRecomendaFilme :: IO()
-putInfoRecomendaFilme = do
+putInfoRecomendaLocacao :: IO()
+putInfoRecomendaLocacao = do
    putStrLn("Você deseja fazer a locação desse filme? [y/n]")
 
 putInfoListaFilmes :: IO()
@@ -161,8 +167,8 @@ putInfoListaFilmes = do
    clrScr
    putStrLn("-----DA SÓ UMA OLHADA NA NOSSA LISTA DE FILMES!-----")
 
-putInfoListaFilmesBottom :: IO()
-putInfoListaFilmesBottom = do
+putInfoTeclaEnter :: IO()
+putInfoTeclaEnter = do
    putStrLn("\nPressione a tecla ENTER para voltar")
 
 putInfoDevolucaoTop :: IO()
@@ -209,3 +215,29 @@ queryBD query = do
    conn <- open "./dados/aloka.db"
    let pesquisa = read $ show query :: Query
    query_ conn pesquisa
+
+putGenero:: IO()
+putGenero = do
+   putStrLn("\nInsira o gênero: ")
+
+putGeneroInvalido :: IO()
+putGeneroInvalido = do
+   putStrLn("\nGenêro inválido")
+   threadDelay 200000
+   putStr("")
+
+putData:: IO()
+putData = do
+   putStrLn("Coloque a data da locação (no formato DD/MM/AAAA): ")
+
+putErroFilmeNaoCadastrado::IO()
+putErroFilmeNaoCadastrado = do
+   putStrLn("\nErro! Filme não cadastrado")
+   threadDelay 200000
+   putStr("")
+
+putErroFilmeNaoDisponivel::IO()
+putErroFilmeNaoDisponivel = do
+   putStrLn("\nErro! Filme indisponível")
+   threadDelay 200000
+   putStr("")

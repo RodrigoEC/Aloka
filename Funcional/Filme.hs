@@ -2,6 +2,22 @@ module Filme where
 
 import FilmeDB
 
+listaFilmes :: String
+listaFilmes = Filme.formataFilmes FilmeDB.recuperaFilmes
+
+formataFilmes :: [Filme] -> String
+formataFilmes [] = "<<vazio>>"
+formataFilmes (x:xs) = geraString (FilmeDB.formataFilmes 1 (x:xs))  ""
+
+geraString :: [String] -> String -> String
+geraString [] txt = txt
+geraString (x:xs) txt = geraString xs (txt ++ "\n" ++ x)
+
+ehFilme :: Int -> Bool
+ehFilme id = FilmeDB.verificaExistenciaFilme id
+
+estaDisponivel :: Int -> Bool
+estaDisponivel id = FilmeDB.recuperaEstoqueFilme id <= 0
 
 cadastraFilme :: String -> String -> String -> String -> Int -> String
 cadastraFilme titulo diretor dataLancamento genero quantidade
@@ -37,4 +53,4 @@ recuperaFilmes
 
 concatenaToStringsFilmes :: [Filme] -> String
 concatenaToStringsFilmes [] = ""
-concatenaToStringsFilmes (filme:outros) = "id: " ++ show (id_filme filme) ++ " - " ++ (FilmeDB.formataFilme filme) ++ "\n" ++ (concatenaToStringsFilmes outros)
+concatenaToStringsFilmes (filme:outros) = "id: " ++ show (id_filme filme) ++ " - " ++ (FilmeDB.formataFilme filme) ++ "\n" ++ (concatenaToStringsFilmes outros

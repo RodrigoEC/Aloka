@@ -61,7 +61,7 @@ Um usu√°rio novo pode desejar se cadastrar no sistema do *ALOKA*, dessa forma, √
 
 ## :arrow_forward: Como executar o ALOKA?
 
-[Acesse o passo a passo para executar o projeto na linguagem Haskell](https://github.com/RodrigoEC/Aloka/blob/main/Funcional/README.md)
+- [Acesse o passo a passo para executar o projeto na linguagem Haskell](https://github.com/RodrigoEC/Aloka/blob/main/Funcional/README.md)
 
 ## :pushpin: Equipe do ALOKA(H)
 

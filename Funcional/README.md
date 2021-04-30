@@ -1,4 +1,4 @@
-# :arrow_forward: Como executar o projeto?
+# :arrow_forward: Como executar o ALOKA?
   
 ### Inicialmente será necessário instalar: 
 

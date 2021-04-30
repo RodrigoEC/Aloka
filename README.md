@@ -11,7 +11,7 @@
   - [Gerenciamento de estoque](#bar_chart-gerenciamento-de-estoque)
 - [Cliente](#-cliente)
 - [Cadastro de novos clientes](#clipboard-cadastro-de-novos-clientes)
-- [Como executar o projeto?](#arrow_forward-como-executar-o-projeto)
+- [Como executar o ALOKA?](#arrow_forward-como-executar-o-ALOKA)
 - [Equipe do ALOKA(H)](#pushpin-equipe-do-alokah)
 
 O *ALOKA* é um sistema criado como projeto final da disciplina de Paradigmas de Linguagens de Programação com a finalidade de fixar os conhecimentos adquiridos na disciplina.
@@ -61,7 +61,7 @@ Um usuário novo pode desejar se cadastrar no sistema do *ALOKA*, dessa forma, �
 
 ## :arrow_forward: Como executar o ALOKA?
 
-[Acesse o passo a passo para executar o projeto na linguagem Haskell](https://github.com/RodrigoEC/Aloka/blob/main/Funcional/README.md)
+- [Acesse o passo a passo para executar o projeto na linguagem Haskell](https://github.com/RodrigoEC/Aloka/blob/main/Funcional/README.md)
 
 ## :pushpin: Equipe do ALOKA(H)
 

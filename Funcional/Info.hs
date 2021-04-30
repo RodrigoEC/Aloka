@@ -212,13 +212,15 @@ putMsgFilmeQuantidade = do
     putStrLn("Quantidade: ")
 
 putMsgResumoCadastroFilme :: String -> IO()
-putMsgResumoCadastroFilme msg = do
+putMsgResumoCadastroFilme filme = do
     putLogo
     putStrLn("       -------CADASTRO-------")
     putStrLn("\n-----\n")
-    putStrLn(msg)
+    putStrLn(filme)
     putStrLn("\n-----")
     putMsgTeclaEnter
+    opcao <- Util.lerEntradaString
+    putStr("")
 
 putMsgFilmeIdentificador :: IO()
 putMsgFilmeIdentificador = do

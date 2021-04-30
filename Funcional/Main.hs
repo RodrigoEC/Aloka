@@ -1,12 +1,7 @@
 import Util
-import ClienteDB
-import FilmeDB
-import LocacaoDB
-import Locadora
-import Cliente
-import Filme
 import Info
-import Locacao
+import Locadora
+
 
 --------------------------------------------
 
@@ -98,8 +93,7 @@ telaCadastraFilme = do
     if not(Util.ehNumero quantidade)
        then do {Info.putMsgQuantidadeInvalida; telaCadastraFilme}
     else do {
-        Info.putMsgResumoCadastroFilme(Filme.cadastraFilme titulo diretor dataLancamento genero (read quantidade));
-        opcao <- Util.lerEntradaString;
+        Info.putMsgResumoCadastroFilme (Locadora.cadastraFilme titulo diretor dataLancamento genero (read quantidade));
         telaLoginAdmin
     }
 
@@ -124,7 +118,7 @@ getHistoricoLocacoes :: IO()
 getHistoricoLocacoes = do
     Info.putMsgHistoricoLocacoes
 
-    putStr(Locacao.recuperaHistoricoLocacoes)
+    putStr(Locadora.recuperaHistoricoLocacoes)
    
     Info.putMsgTeclaEnter
     opcao <- Util.lerEntradaString
@@ -136,7 +130,7 @@ getHistoricoLocacoesCliente = do
     Info.putMsgHistoricoLocacoesCpf
     
     cpfCliente <- Util.lerEntradaString
-    let msg = Locacao.recuperaHistoricoLocacoesCliente cpfCliente
+    let msg = Locadora.recuperaHistoricoLocacoesCliente cpfCliente
     putStr(msg)
     
     Info.putMsgTeclaEnter
@@ -148,7 +142,7 @@ getLocacoesEmAndamento :: IO()
 getLocacoesEmAndamento = do 
     Info.putMsgHistoricoLocacoesAndamento
     
-    putStr(Locacao.recuperaLocacoesEmAndamento)
+    putStr(Locadora.recuperaLocacoesEmAndamento)
     
     Info.putMsgTeclaEnter
     opcao <- Util.lerEntradaString
@@ -182,7 +176,7 @@ addFilmeAoEstoque = do
         if not(Util.ehNumero quantidade)
             then do {Info.putMsgQuantidadeInvalida; addFilmeAoEstoque}
         else do {
-            putStrLn("\n" ++ Filme.addEstoqueFilme (read idFilme) (read quantidade));
+            putStrLn("\n" ++ Locadora.addEstoqueFilme (read idFilme) (read quantidade));
             Info.putMsgTeclaEnter;
             opcao <- Util.lerEntradaString;
             telaGerenciarEstoque 
@@ -193,14 +187,14 @@ verificarDisponibilidade :: IO()
 verificarDisponibilidade = do
     Info.putMsgDisponibilidadeFilmes
 
-    putStrLn(Filme.recuperaFilmes)
+    putStrLn(Locadora.recuperaFilmes)
 
     Info.putMsgFilmeIdentificador
     idFilme <- Util.lerEntradaString
     if not(Util.ehNumero idFilme)
         then do {Info.putMsgIdInvalido; addFilmeAoEstoque}
     else do {
-        putStrLn("\n"  ++ Filme.verificaDisponibilidade(read idFilme));
+        putStrLn("\n"  ++ Locadora.verificaDisponibilidade(read idFilme));
         Info.putMsgTeclaEnter;
         opcao <- Util.lerEntradaString;
         telaGerenciarEstoque
@@ -288,7 +282,7 @@ redireciona opcao cpfCliente idFilme
 telaListaFilmes :: String -> Char -> IO()
 telaListaFilmes cpfCliente telaAnterior = do
     Info.putMsgListaFilmes
-    putStrLn("\n" ++ Filme.listaFilmes ++ "\n")
+    putStrLn("\n" ++ Locadora.listaFilmes ++ "\n")
     Info.putMsgTeclaEnter
 
     opcao <- Util.lerEntradaString

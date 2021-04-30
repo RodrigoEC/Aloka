@@ -52,3 +52,29 @@ encerraLocacao id = Locacao.encerraLocacao id
 
 devolveFilme :: Int -> String
 devolveFilme idLocacao = Filme.devolucao(Locacao.getIdFilme idLocacao)
+
+cadastraFilme :: String -> String -> String -> String -> Int -> String
+cadastraFilme titulo diretor dataLancamento genero quantidade =
+    Filme.cadastraFilme titulo diretor dataLancamento genero quantidade
+
+recuperaHistoricoLocacoes :: String
+recuperaHistoricoLocacoes = Locacao.recuperaHistoricoLocacoes
+
+recuperaHistoricoLocacoesCliente :: String -> String
+recuperaHistoricoLocacoesCliente cpf = 
+    Locacao.recuperaHistoricoLocacoesCliente cpf
+
+recuperaLocacoesEmAndamento :: String
+recuperaLocacoesEmAndamento = Locacao.recuperaLocacoesEmAndamento
+
+addEstoqueFilme :: Int -> Int -> String
+addEstoqueFilme id quantidade = Filme.addEstoqueFilme id quantidade
+
+recuperaFilmes :: String
+recuperaFilmes = Filme.recuperaFilmes
+
+verificaDisponibilidade :: Int -> String 
+verificaDisponibilidade id = Filme.verificaDisponibilidade id
+
+listaFilmes :: String
+listaFilmes = Filme.listaFilmes

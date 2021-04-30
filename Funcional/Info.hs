@@ -157,15 +157,19 @@ putMsgFilmeNaoDisponivel = do
 putMsgLoginCliente :: IO() 
 putMsgLoginCliente = do
     putLogo
-    putStrLn("       -----LOGIN CLIENTE----")
-    putStrLn("\nOlá, cinéfilo! :)")
+    putStrLn("       -----LOGIN CLIENTE----\n")
+    putStrLn ("\nOBS: Para voltar ao menu basta digitar 'S'!\n")
+    putStrLn("\nOlá, cinéfilo! :)\n")
+
     putStrLn("Informe o seu CPF para continuar.")
     putStrLn("\nCPF (apenas números): ")
+
 
 putMsgCadastroNome :: IO()
 putMsgCadastroNome = do
     putLogo
     putStrLn("       -------CADASTRO-------")
+    putStrLn ("\nOBS: Para voltar ao menu basta digitar 'S'!\n")   
     putStrLn("\nNome do usuário: ")
 
 putMsgCadastroCpf :: IO()
@@ -193,6 +197,8 @@ putMsgCadastroFilmeTitulo :: IO()
 putMsgCadastroFilmeTitulo = do
     putLogo
     putStrLn("       -------CADASTRO-------")
+    putStrLn ("\nOBS: Para voltar ao menu basta digitar 'S'!\n")
+    putStr ("")
     putStrLn("\nTítulo: ")
 
 putMsgCadastroFilmeGenero :: IO()
@@ -231,11 +237,13 @@ putMsgLocacaoFilme = do
     putLogo
     putStrLn("       -VAI UM FILMINHO AI?-")
     putStrLn("\nOBS: Para verificar a lista de filmes basta digitar 'L'!")
+    putStrLn ("     Para voltar ao menu basta digitar 'S'!\n")
     putStrLn("\nID do filme: ")
 
 putMsgDataLocacao :: IO()
 putMsgDataLocacao = do
    putStrLn("Insira a data da locação (dd/mm/aaaa): ")
+
 
 putMsgLocaFilme :: String -> String -> IO()
 putMsgLocaFilme nomeFilme qtd = do
@@ -251,6 +259,7 @@ putMsgHistoricoLocacoes :: IO()
 putMsgHistoricoLocacoes = do
     putLogo
     putStrLn("       --HISTÓRICO LOCAÇÕES--")
+    putStrLn ("\nOBS: Para voltar ao menu basta digitar 'S'!\n")
 
 putMsgHistoricoLocacoesCpf :: IO()
 putMsgHistoricoLocacoesCpf = do
@@ -265,22 +274,26 @@ putMsgEstoqueFilmes :: IO()
 putMsgEstoqueFilmes = do
     putLogo
     putStrLn("       ---ADICIONA ESTOQUE---")
+    putStrLn ("\nOBS: Para voltar ao menu basta digitar 'S'!\n")
 
 putMsgDisponibilidadeFilmes :: IO()
 putMsgDisponibilidadeFilmes = do
     putLogo
     putStrLn("       ----DISPONIBILIDADE---")
+    putStrLn ("\nOBS: Para voltar ao menu basta digitar 'S'!\n")
 
 putMsgRecomendacaoGenero :: IO()
 putMsgRecomendacaoGenero = do
     putLogo
     putStrLn("       -----RECOMENDAÇÃO-----")
+    putStrLn ("\nOBS: Para voltar ao menu basta digitar 'S'!\n")   
     putStrLn("\nInsira o gênero: ")
 
 putMsgRecomendacao :: String -> IO()
 putMsgRecomendacao filme = do
     putLogo
     putStrLn("       -HMM VEJAMOS, JÁ SEI!-")
+    putStrLn ("\nOBS: Para voltar ao menu basta digitar 'S'!\n")   
     putStrLn("\nBaseado no seu perfil, recomendamos o seguinte filme:")
     putStrLn("\n"++ filme ++"\n")
 
@@ -307,7 +320,7 @@ putMsgDevolucaoTop = do
 putMsgDevolucaoBottom :: IO()
 putMsgDevolucaoBottom = do
     putStrLn("Qual locação você deseja encerrar?")
-    putStrLn("Para voltar ao menu basta digitar 'M'!")
+    putStrLn("OBS: Para voltar ao menu basta digitar 'S'!")
     putStrLn("\nID da locação: ")
 
 putMsgDevolveFilme :: String -> IO()

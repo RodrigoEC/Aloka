@@ -31,12 +31,17 @@ mudaTelaPrincipal opcao | opcao == "1" = telaLoginCliente
 
 
 ------------ Sessão de Login Cliente -----------
+
+-- Adicionei a opção de sair do cadastro ao digitar a letra S
+-- Mudei a tela também
+
 telaLoginCliente :: IO()
 telaLoginCliente = do
     Info.putMsgLoginCliente
-
     cpfCliente <- Util.lerEntradaString
-    if Util.ehCpfValido cpfCliente
+    if cpfCliente == "S"
+        then do telaPrincipal
+    else if Util.ehCpfValido cpfCliente
         then if Locadora.ehCliente cpfCliente
                 then do telaLogado cpfCliente
             else do {Info.putMsgUserInvalido; telaLoginCliente}
@@ -78,24 +83,42 @@ mudaTelaLoginAdmin opcao
 
 
 ----------- Sessão Cadastrar Filme -----------
+
+-- Adicionei a opção de sair do cadastro ao digitar a letra S
+-- mudei na tela 
 telaCadastraFilme :: IO()
 telaCadastraFilme = do
     Info.putMsgCadastroFilmeTitulo
     titulo <- Util.lerEntradaString
-    Info.putMsgCadastroFilmeGenero
-    genero <- Util.lerEntradaString
-    Info.putMsgCadastroFilmeDiretor
-    diretor <- Util.lerEntradaString
-    Info.putMsgCadastroFilmeData
-    dataLancamento <- Util.lerEntradaString
-    Info.putMsgFilmeQuantidade
-    quantidade <- Util.lerEntradaString
-    if not(Util.ehNumero quantidade)
-       then do {Info.putMsgQuantidadeInvalida; telaCadastraFilme}
-    else do {
-        Info.putMsgResumoCadastroFilme (Locadora.cadastraFilme titulo diretor dataLancamento genero (read quantidade));
-        telaLoginAdmin
-    }
+    if titulo == "S"
+        then do telaLoginAdmin
+    else do 
+        Info.putMsgCadastroFilmeGenero
+        genero <- Util.lerEntradaString
+        if genero == "S"
+        then do telaLoginAdmin
+        else do 
+            Info.putMsgCadastroFilmeDiretor
+            diretor <- Util.lerEntradaString
+            if diretor == "S"
+            then do telaLoginAdmin
+            else do 
+                Info.putMsgCadastroFilmeData
+                dataLancamento <- Util.lerEntradaString
+                if dataLancamento == "S"
+                    then do telaLoginAdmin
+                else do
+                Info.putMsgFilmeQuantidade
+                quantidade <- Util.lerEntradaString
+                if quantidade == "S"
+                    then do telaLoginAdmin
+                else do
+                if not(Util.ehNumero quantidade)
+                then do {Info.putMsgQuantidadeInvalida; telaCadastraFilme}
+                else do {
+                    Info.putMsgResumoCadastroFilme (Locadora.cadastraFilme titulo diretor dataLancamento genero (read quantidade));
+                    telaLoginAdmin
+        }
 
 
 ----------- Sessão Exibir locações -----------
@@ -124,18 +147,24 @@ getHistoricoLocacoes = do
     opcao <- Util.lerEntradaString
     telaExibirLocacoes
 
+-- adicionei a opcao de sair
+-- mudei a tela também
+
 getHistoricoLocacoesCliente :: IO()
 getHistoricoLocacoesCliente = do
     Info.putMsgHistoricoLocacoes
     Info.putMsgHistoricoLocacoesCpf
     
     cpfCliente <- Util.lerEntradaString
-    let msg = Locadora.recuperaHistoricoLocacoesCliente cpfCliente
-    putStr(msg)
-    
-    Info.putMsgTeclaEnter
-    opcao <- Util.lerEntradaString
-    telaExibirLocacoes
+    if cpfCliente == "S"
+        then do telaExibirLocacoes
+    else do
+        let msg = Locadora.recuperaHistoricoLocacoesCliente cpfCliente
+        putStr(msg)
+        
+        Info.putMsgTeclaEnter
+        opcao <- Util.lerEntradaString
+        telaExibirLocacoes
 
 
 getLocacoesEmAndamento :: IO()
@@ -163,25 +192,34 @@ mudaTelaGerenciarEstoque opcao
     | opcao == "3" = telaLoginAdmin
     | otherwise = do {Info.putMsgOpcaoInvalida; telaGerenciarEstoque}
 
+-- Adicionei a opção de sair ao digitar a letra S
+-- mudei a tela 
 addFilmeAoEstoque :: IO()
 addFilmeAoEstoque = do
     Info.putMsgEstoqueFilmes
     Info.putMsgFilmeIdentificador
     idFilme <- Util.lerEntradaString
-    if not(Util.ehNumero idFilme)
+    if idFilme == "S"
+        then do telaGerenciarEstoque
+    else if not(Util.ehNumero idFilme)
         then do {Info.putMsgIdInvalido; addFilmeAoEstoque}
     else do {
         Info.putMsgFilmeQuantidade;
         quantidade <- Util.lerEntradaString;
-        if not(Util.ehNumero quantidade)
-            then do {Info.putMsgQuantidadeInvalida; addFilmeAoEstoque}
-        else do {
-            putStrLn("\n" ++ Locadora.addEstoqueFilme (read idFilme) (read quantidade));
-            Info.putMsgTeclaEnter;
-            opcao <- Util.lerEntradaString;
-            telaGerenciarEstoque 
-        }
+        if quantidade == "S"
+            then do telaGerenciarEstoque
+            else if not(Util.ehNumero quantidade)
+                then do {Info.putMsgQuantidadeInvalida; addFilmeAoEstoque}
+            else do {
+                putStrLn("\n" ++ Locadora.addEstoqueFilme (read idFilme) (read quantidade));
+                Info.putMsgTeclaEnter;
+                opcao <- Util.lerEntradaString;
+                telaGerenciarEstoque 
+            }
     }
+
+-- Adicionei a opção da verificação de disponibilidade ao digitar a letra S
+-- mudei a tela tambem
 
 verificarDisponibilidade :: IO()
 verificarDisponibilidade = do
@@ -191,72 +229,107 @@ verificarDisponibilidade = do
 
     Info.putMsgFilmeIdentificador
     idFilme <- Util.lerEntradaString
-    if not(Util.ehNumero idFilme)
-        then do {Info.putMsgIdInvalido; addFilmeAoEstoque}
-    else do {
-        putStrLn("\n"  ++ Locadora.verificaDisponibilidade(read idFilme));
-        Info.putMsgTeclaEnter;
-        opcao <- Util.lerEntradaString;
-        telaGerenciarEstoque
-    }
+    if idFilme == "S"
+        then do telaGerenciarEstoque
+    else if not(Util.ehNumero idFilme)
+            then do {Info.putMsgIdInvalido; addFilmeAoEstoque}
+        else do {
+            putStrLn("\n"  ++ Locadora.verificaDisponibilidade(read idFilme));
+            Info.putMsgTeclaEnter;
+            opcao <- Util.lerEntradaString;
+            telaGerenciarEstoque
+        }
 
 ----------- Sessão Cadastro de Usuario -----------
+
+-- Adicionei a opção de sair do cadastro ao digitar a letra S
+-- mudei a tela
+
 telaCadastroUsuario :: IO()
 telaCadastroUsuario = do
     Info.putMsgCadastroNome
     nome <- Util.lerEntradaString
-    Info.putMsgCadastroCpf
-    cpf <- Util.lerEntradaString
-    if not(Util.ehCpfValido cpf) 
-        then do {Info.putMsgCpfInvalido; telaCadastroUsuario}
-    else do {
-            Info.putMsgCadastroTelefone;
-            telefone <- Util.lerEntradaString;
-            Info.putMsgCadastroEndereco;
-            endereco <- Util.lerEntradaString;
-
-            Info.putMsgResumoCadastroUsuario(Locadora.cadastraCliente nome cpf telefone endereco);
-            opcao <- Util.lerEntradaString;
-            telaPrincipal
-        }
+    if nome == "S"
+        then do telaPrincipal
+    else do 
+        Info.putMsgCadastroCpf
+        cpf <- Util.lerEntradaString
+        if cpf == "S"
+            then do telaPrincipal
+        else if not(Util.ehCpfValido cpf) 
+            then do {Info.putMsgCpfInvalido; telaCadastroUsuario}
+            else do {
+                    Info.putMsgCadastroTelefone;
+                    telefone <- Util.lerEntradaString;
+                    if telefone == "S"
+                        then do telaPrincipal
+                    else do
+                        Info.putMsgCadastroEndereco;
+                        endereco <- Util.lerEntradaString;
+                        if endereco == "S"
+                            then do telaPrincipal
+                        else do 
+                        Info.putMsgResumoCadastroUsuario(Locadora.cadastraCliente nome cpf telefone endereco);
+                        opcao <- Util.lerEntradaString;
+                        telaPrincipal
+                }
     
-
 -------------- Sessão Fazer Locação -------------
+
+-- Adicionei a opção de sair da locacao ao digitar a letra S
+-- mudei a tela 
+
 telaLocacaoFilme :: String -> IO()
 telaLocacaoFilme cpfCliente = do
     Info.putMsgLocacaoFilme
     
     idFilme <- Util.lerEntradaString
-    if idFilme == "L"
-        then do telaListaFilmes cpfCliente 'L'
-    else if not(Util.ehNumero idFilme)
-        then do {Info.putMsgIdInvalido; telaLocacaoFilme cpfCliente}
-    else do {
-        if Locadora.filmeExiste(read idFilme)
-            then if Locadora.filmeDisponivel(read idFilme)
-                then do locaFilme idFilme cpfCliente
-            else do {Info.putMsgFilmeNaoDisponivel ; telaLocacaoFilme cpfCliente}
-        else do {Info.putMsgFilmeNaoCadastrado ; telaLocacaoFilme cpfCliente}
-    }
+    if idFilme == "S"
+        then do telaLogado cpfCliente
+    else do
+        if idFilme == "L"
+            then do telaListaFilmes cpfCliente 'L'
+        else if not(Util.ehNumero idFilme)
+            then do {Info.putMsgIdInvalido; telaLocacaoFilme cpfCliente}
+        else do {
+            if Locadora.filmeExiste(read idFilme)
+                then if Locadora.filmeDisponivel(read idFilme)
+                    then do locaFilme idFilme cpfCliente
+                else do {Info.putMsgFilmeNaoDisponivel ; telaLocacaoFilme cpfCliente}
+            else do {Info.putMsgFilmeNaoCadastrado ; telaLocacaoFilme cpfCliente}
+        }
+
+-- adicionei a opcao de sair
+--mudei a tela
 
 locaFilme :: String -> String -> IO()
 locaFilme idFilme cpfCliente = do
     Info.putMsgDataLocacao
     
     dataLocacao <- Util.lerEntradaString
-    Locadora.addLocacao (read idFilme) cpfCliente dataLocacao 
-    let qtd = Locadora.decrementaFilme (read idFilme)
+    if dataLocacao == "S"
+        then do telaLogado cpfCliente
+    else do
+        Locadora.addLocacao (read idFilme) cpfCliente dataLocacao 
+        let qtd = Locadora.decrementaFilme (read idFilme)
 
-    Info.putMsgLocaFilme(Locadora.recuperaNomeFilme (read idFilme)) qtd
-    telaLogado cpfCliente
+        Info.putMsgLocaFilme(Locadora.recuperaNomeFilme (read idFilme)) qtd
+        telaLogado cpfCliente
 
 
 -------- Sessão Recomendação da Locadora ---------
+
+-- Adicionei a opção de sair da tela de recomendação ao digitar a letra S
+
+
 telaRecomendacao :: String -> IO()
 telaRecomendacao cpfCliente = do
     Info.putMsgRecomendacaoGenero
     genero <- Util.lerEntradaString
-    recomendaFilme genero cpfCliente
+    if genero == "S"
+        then do telaLogado cpfCliente
+    else do
+        recomendaFilme genero cpfCliente
 
 recomendaFilme:: String -> String -> IO()
 recomendaFilme genero cpfCliente = do
@@ -292,6 +365,8 @@ telaListaFilmes cpfCliente telaAnterior = do
 
 
 ----------- Sessão Devolucao -----------
+-- alterei a letra
+-- mudei na tela também
 telaDevolucao :: String -> IO()
 telaDevolucao cpfCliente = do
     Info.putMsgDevolucaoTop 
@@ -299,7 +374,7 @@ telaDevolucao cpfCliente = do
     Info.putMsgDevolucaoBottom 
 
     idLocacao <- Util.lerEntradaString
-    if idLocacao == "M"
+    if idLocacao == "S"
         then do telaLogado cpfCliente
     else if not(Util.ehNumero idLocacao)
         then do {Info.putMsgIdInvalido; telaDevolucao cpfCliente}

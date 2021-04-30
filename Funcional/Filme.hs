@@ -22,9 +22,8 @@ estaDisponivel id = FilmeDB.recuperaEstoqueFilme id <= 0
 cadastraFilme :: String -> String -> String -> String -> Int -> String
 cadastraFilme titulo diretor dataLancamento genero quantidade
     | FilmeDB.verificaExistenciaFilmePorTitulo titulo = "Erro: filme já cadastrado!"
-    | otherwise = "Filme - " ++ titulo ++ " - com id " ++ show idFilme ++ " cadastrado com sucesso!"
-    where idFilme = id_filme (FilmeDB.cadastraFilme titulo genero diretor dataLancamento quantidade)
-
+    | otherwise = "Filme cadastrado com sucesso!\n" ++ toString titulo diretor dataLancamento genero quantidade
+    where idFilme = id_filme (FilmeDB.cadastraFilme titulo diretor dataLancamento genero quantidade)
 
 addEstoqueFilme :: Int -> Int -> String
 addEstoqueFilme idFilme quantidade
@@ -34,7 +33,6 @@ addEstoqueFilme idFilme quantidade
         tituloFilme = titulo (head (FilmeDB.recuperaFilmeID idFilme))
         qtd = FilmeDB.addEstoqueFilme idFilme quantidade
 
-
 verificaDisponibilidade :: Int -> String
 verificaDisponibilidade idFilme 
     | not(FilmeDB.verificaExistenciaFilme idFilme) = "Erro: Filme com id " ++ show idFilme ++ " não cadastrado!"
@@ -43,14 +41,23 @@ verificaDisponibilidade idFilme
         quantidade = FilmeDB.recuperaEstoqueFilme idFilme
         tituloFilme = titulo (head (FilmeDB.recuperaFilmeID idFilme))
 
-
 recuperaFilmes :: String
 recuperaFilmes
     | not (null filmes) = "\nFilmes:\n" ++ filmes
     | otherwise = "\nSem filmes para mostrar\n"
     where filmes = concatenaToStringsFilmes (FilmeDB.recuperaFilmes)
 
-
 concatenaToStringsFilmes :: [Filme] -> String
 concatenaToStringsFilmes [] = ""
 concatenaToStringsFilmes (filme:outros) = "id: " ++ show (id_filme filme) ++ " - " ++ (FilmeDB.formataFilme filme) ++ "\n" ++ (concatenaToStringsFilmes outros)
+
+devolucao :: Int -> String
+devolucao id = FilmeDB.addEstoqueFilme id 1
+
+decrementa :: Int -> String
+decrementa id = FilmeDB.removeEstoqueFilme id 1
+
+toString ::  String -> String -> String -> String -> Int -> String
+toString titulo diretor dataLancamento genero quantidade =
+    "Titulo: " ++ titulo  ++ "\nGênero: " ++ genero ++ "\nDiretor: " ++ diretor 
+    ++ "\nData de lançamento: "  ++ dataLancamento ++ "\nQuantidade: " ++ show quantidade

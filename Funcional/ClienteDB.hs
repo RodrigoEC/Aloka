@@ -98,6 +98,6 @@ formataExibicaoCliente = map toString
 
 -- metodo responsavel pela representação dos atributos do Cliente de forma textual.
 toString :: Cliente -> String
-toString cliente = "Nome: " ++ nome cliente  ++ ", CPF: " ++ cpf cliente ++ ", Telefone: "
-    ++ telefone cliente ++ ", Endereco: "  ++ endereco cliente
+toString cliente = "Nome: " ++ nome cliente  ++ "\nCPF: " ++ cpf cliente ++ "\nTelefone: "
+    ++ telefone cliente ++ "\nEndereco: "  ++ endereco cliente
     

@@ -3,34 +3,23 @@ module Admin where
 import qualified Util
 import Filme
 import Locacao
+import Info
 
 
-opcoesMenuAdministrador =
-    "\n----" ++
-    "\nBem-vindo ao Aloka, Administrador!" ++
-    "\n----" ++
-    "\nComo deseja prosseguir?" ++
-    "\n[1] Cadastrar filme" ++
-    "\n[2] Exibir histórico de locações" ++
-    "\n[3] Gerenciar estoque" ++
-    "\n[4] Sair" ++
-    "\n"
-
-
-menuAdmistrador :: IO()
-menuAdmistrador = do
-    putStrLn(opcoesMenuAdministrador)
+telaLoginAdmin :: IO()
+telaLoginAdmin = do
+    Info.putMsgOpcoesMenuAdmin
     opcao <- Util.lerEntradaString
-    processaOpcao opcao
+    mudaTelaLoginAdmin opcao
 
 
-processaOpcao :: String -> IO()
-processaOpcao opcao 
+mudaTelaLoginAdmin :: String -> IO()
+mudaTelaLoginAdmin opcao 
     | opcao == "1" = Admin.cadastraFilme
     | opcao == "2" = exibirLocacoes
     | opcao == "3" = gerenciarEstoque
-    | opcao == "4" = Util.putMsgSaida -- pelo figma aqui ficaria pra voltar pra tela inicial, só que fiquei meio na dúvida sobre o aumento do acoplamento...
-    | otherwise = menuAdmistrador
+    | opcao == "4" = telaLoginAdmin
+    | otherwise = Info.putMsgOpcaoInvalida
 
 
 ----------- Sessão Cadastrar Filme -----------
@@ -49,12 +38,12 @@ cadastraFilme = do
     quantidade <- Util.lerEntradaString
     putStrLn("----")
 
-    let msg = Filme.cadastraFilme titulo genero diretor dataLancamento (read quantidade)
+    let msg = Filme.cadastraFilme titulo diretor dataLancamento genero (read quantidade)
 
     putStrLn(msg)
     putStrLn("----")
 
-    menuAdmistrador
+    telaLoginAdmin
 
 
 ----------- Sessão Exibir locações -----------
@@ -79,7 +68,7 @@ exibirLocacoes = do
     else if opcao == "3" then do
         getLocacoesEmAndamento
     else if opcao == "4" then do
-        menuAdmistrador
+        telaLoginAdmin
     else
         exibirLocacoes
 
@@ -129,7 +118,7 @@ gerenciarEstoque = do
     else if opcao == "2" then 
         verificarDisponibilidade
     else if opcao == "3" then 
-        menuAdmistrador
+        telaLoginAdmin
     else gerenciarEstoque
 
 

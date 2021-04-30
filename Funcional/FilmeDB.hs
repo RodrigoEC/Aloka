@@ -172,3 +172,4 @@ randomInt i j = fromIO(getStdRandom(randomR (i, j)) :: IO Int)
 -- recupera filmes que estão disponiveis de acordo com seu genero
 recuperaFilmesPorGeneroDisp :: String -> [Filme]
 recuperaFilmesPorGeneroDisp genero = fromIO (queryBD ("SELECT * FROM filmes WHERE estoque > 0 AND genero = '" ++ genero ++ "'"))
+

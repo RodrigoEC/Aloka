@@ -73,6 +73,12 @@ geraId = length recuperaLocacoes + 1
 recuperaLocacoes :: [Locacao]
 recuperaLocacoes = fromIO (queryBD "SELECT * FROM locacao")
 
+recuperaIDFilme :: Int -> Int
+recuperaIDFilme id_locacao
+  | null locacao = -1
+  | otherwise = id_filme (head locacao)
+  where locacao = fromIO (queryBD ("SELECT * FROM locacao WHERE id_locacao = " ++ show id_locacao))
+
 -- Método responsavel por retornar a locação  que possui o id passado como parametro
 recuperaLocacaoId :: Int -> [Locacao]
 recuperaLocacaoId id_locacao = fromIO (queryBD ("SELECT * FROM locacao WHERE id_locacao = " ++ show id_locacao))
@@ -89,6 +95,9 @@ recuperaLocacaoStatus status = fromIO (queryBD ("SELECT * FROM locacao WHERE sta
 recuperaLocacoesEmAndamento :: [Locacao]
 recuperaLocacoesEmAndamento  = fromIO (queryBD "SELECT * FROM locacao WHERE status = 'em andamento'")
 
+recuperaLocacaoAndamentoCliente :: String -> [Locacao]
+recuperaLocacaoAndamentoCliente cpf_cliente = fromIO (queryBD ("SELECT * FROM locacao WHERE cpf_cliente = '" ++ cpf_cliente ++ "' and status = 'em andamento'"))
+
 -- Metodo que altera o status da locacao para finalizado
 finalizaLocacao :: Int -> IO ()
 finalizaLocacao id_locacao = do
@@ -102,5 +111,5 @@ formataExibicaoLocacao = map toString
 
 -- metodo responsavel pela representação dos atributos de locações de forma textual.
 toString :: Locacao -> String
-toString locacao = "(Id locacao: " ++ show (id_locacao locacao)  ++ ", Id filme: " ++ show(id_filme locacao) ++ ", CPF cliente: ,"
-  ++ cpf_cliente locacao ++ ", Data locacao: "  ++ data_locacao locacao ++ ", Status: " ++ status locacao ++ ")"
+toString locacao = "Id locacao: " ++ show (id_locacao locacao)  ++ "\nId filme: " ++ show(id_filme locacao) ++ "\nCPF cliente: "
+  ++ cpf_cliente locacao ++ "\nData locacao: "  ++ data_locacao locacao ++ "\nStatus: " ++ status locacao ++ "\n---"

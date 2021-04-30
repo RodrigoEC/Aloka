@@ -304,7 +304,7 @@ telaDevolucao cpfCliente = do
     else if not(Util.ehNumero idLocacao)
         then do {Info.putMsgIdInvalido; telaDevolucao cpfCliente}
     else if not(Locadora.locacaoExite(read idLocacao))
-        then do putStrLn("Locacao nao existe")
+        then do putStrLn("Locação não existe!")
     else do {
         Locadora.encerraLocacao(read idLocacao);
         Info.putMsgDevolveFilme(Locadora.devolveFilme(read idLocacao));

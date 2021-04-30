@@ -36,7 +36,7 @@ addEstoqueFilme idFilme quantidade
 verificaDisponibilidade :: Int -> String
 verificaDisponibilidade idFilme 
     | not(FilmeDB.verificaExistenciaFilme idFilme) = "Erro: Filme com id " ++ show idFilme ++ " não cadastrado!"
-    | otherwise = "Há no estoque " ++ show quantidade ++ " filme(s) " ++ tituloFilme ++ " disponível para locação."
+    | otherwise = "Há no estoque " ++ show quantidade ++ " filme(s) " ++ tituloFilme ++ " disponível(is) para locação."
     where
         quantidade = FilmeDB.recuperaEstoqueFilme idFilme
         tituloFilme = titulo (head (FilmeDB.recuperaFilmeID idFilme))
@@ -44,7 +44,7 @@ verificaDisponibilidade idFilme
 recuperaFilmes :: String
 recuperaFilmes
     | not (null filmes) = "\nFilmes:\n" ++ filmes
-    | otherwise = "\nSem filmes para mostrar\n"
+    | otherwise = "\nNão há filmes para exibir!\n"
     where filmes = concatenaToStringsFilmes (FilmeDB.recuperaFilmes)
 
 concatenaToStringsFilmes :: [Filme] -> String

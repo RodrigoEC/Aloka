@@ -111,5 +111,5 @@ formataExibicaoLocacao = map toString
 
 -- metodo responsavel pela representação dos atributos de locações de forma textual.
 toString :: Locacao -> String
-toString locacao = "Id locacao: " ++ show (id_locacao locacao)  ++ "\nId filme: " ++ show(id_filme locacao) ++ "\nCPF cliente: "
-  ++ cpf_cliente locacao ++ "\nData locacao: "  ++ data_locacao locacao ++ "\nStatus: " ++ status locacao ++ "\n---"
+toString locacao = "Id locação: " ++ show (id_locacao locacao)  ++ "\nId filme: " ++ show(id_filme locacao) ++ "\nCPF cliente: "
+  ++ cpf_cliente locacao ++ "\nData locação: "  ++ data_locacao locacao ++ "\nStatus: " ++ status locacao ++ "\n---"

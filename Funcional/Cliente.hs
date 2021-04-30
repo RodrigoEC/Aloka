@@ -15,6 +15,4 @@ cadastraCliente nome cpf telefone endereco = do
     else "Usuário cadastrado com sucesso!\n" ++ 
         ClienteDB.cadastraCliente nome cpf telefone endereco
 
---listaLocacoes :: String -> String
---listaLocacoes cpf = 
 

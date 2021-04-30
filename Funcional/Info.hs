@@ -42,7 +42,7 @@ putMsgSaida = do
     carregaLogoInicial (reverse listaLoading) "            SAINDO DO"
     clrScr
     putStrLn(unsafeDupablePerformIO(readFile "arquivos/corta.txt"))
-    threadDelay 200000
+    threadDelay 1000000
     clrScr
     putStr("")
 
@@ -62,7 +62,7 @@ putMsgOpcoesMenuCliente nome = do
     putStrLn("       --LUZ, CÂMERA, AÇÃO!--")
     putStrLn("\nOlá, " ++ nome ++ "!")
     putStrLn("\nComo deseja prosseguir?")
-    putStrLn("[1] Listar Filmes")
+    putStrLn("[1] Listar filmes")
     putStrLn("[2] Fazer locação")
     putStrLn("[3] Recomendação da locadora")
     putStrLn("[4] Devolução da locação")
@@ -107,7 +107,7 @@ putMsgOpcaoInvalida = do
 
 putMsgCpfInvalido :: IO()
 putMsgCpfInvalido = do
-    putStrLn("\nErro: cpf inválido!")
+    putStrLn("\nErro: CPF inválido!")
     putMsgTeclaEnter
     opcao <- Util.lerEntradaString
     putStr("")
@@ -128,7 +128,7 @@ putMsgIdInvalido = do
 
 putMsgGeneroInvalido :: IO()
 putMsgGeneroInvalido = do
-   putStrLn("\nErro: genêro inválido!")
+   putStrLn("\nErro: gênero inválido!")
    putMsgTeclaEnter
    opcao <- Util.lerEntradaString
    putStr("")
@@ -170,7 +170,7 @@ putMsgCadastroNome = do
 
 putMsgCadastroCpf :: IO()
 putMsgCadastroCpf = do
-    putStrLn("--- \nCPF (apenas numeros): ")
+    putStrLn("--- \nCPF (apenas números): ")
 
 putMsgCadastroTelefone :: IO()
 putMsgCadastroTelefone = do
@@ -301,7 +301,7 @@ putMsgDevolucaoTop :: IO()
 putMsgDevolucaoTop = do
     putLogo
     putStrLn("       -------DEVOLUÇÃO------")
-    putStrLn("\nUau, Já assistiu?!")
+    putStrLn("\nUau, já assistiu?!")
     putStrLn("Você tem a(s) seguinte(s) locação(ões) em andamento:")
 
 putMsgDevolucaoBottom :: IO()

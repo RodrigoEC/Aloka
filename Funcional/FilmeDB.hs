@@ -153,7 +153,7 @@ formataFilmes indice filmes@(filme:resto) = ("[" ++ show indice ++ "] " ++ forma
 
 -- Metodo que serve para formatar um filme específico para exibição.
 formataFilme :: Filme -> String
-formataFilme filme = "titulo: " ++ titulo filme ++ ", Genero: " ++ genero filme
+formataFilme filme = "Título: " ++ titulo filme ++ ", Gênero: " ++ genero filme
 
 --- pesdquisa um id de filme para aquele genero, se tiver filmes daquele genero
 pesquisaFilmeParaRecomendar:: String -> Int

@@ -1,11 +1,10 @@
 module Info where
 
-import System.IO 
 import System.IO.Unsafe
-import System.IO.Error 
 import System.Process
 import System.Info
 import Control.Concurrent
+import Util
 
 clrScr = if os == "mingw32"
             then system "cls" 
@@ -71,6 +70,7 @@ putMsgOpcoesMenuCliente nome = do
 
 putMsgOpcoesMenuAdmin :: IO()
 putMsgOpcoesMenuAdmin = do
+    putLogo
     putStrLn("       -----ADMINISTRADOR----")
     putStrLn("\nOlá, Administrador!")
     putStrLn("\nComo deseja prosseguir?")
@@ -81,6 +81,7 @@ putMsgOpcoesMenuAdmin = do
 
 putMsgOpcoesExibirLocacoes :: IO()
 putMsgOpcoesExibirLocacoes = do
+    putLogo
     putStrLn("       -----ADMINISTRADOR----")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Exibir histórico geral")
@@ -90,41 +91,67 @@ putMsgOpcoesExibirLocacoes = do
 
 putMsgOpcoesGerenciarEstoque :: IO()
 putMsgOpcoesGerenciarEstoque = do
+    putLogo
     putStrLn("       -----ADMINISTRADOR----")
     putStrLn("\nComo deseja prosseguir?")
     putStrLn("[1] Adicionar estoque ao filme")
     putStrLn("[2] Verificar disponibilidade de filmes")
-    putStrLn("[3] Voltar ao menu inicial")
-    putStrLn("[4] Voltar\n")
+    putStrLn("[3] Voltar ao menu inicial\n")
 
 putMsgOpcaoInvalida :: IO()
 putMsgOpcaoInvalida = do
-    putStrLn("\nErro: opção inválida. Tente novamente!")
-    threadDelay 200000
+    putStrLn("\nErro: opção inválida!")
+    putMsgTeclaEnter
+    opcao <- Util.lerEntradaString
     putStr("")
 
 putMsgCpfInvalido :: IO()
 putMsgCpfInvalido = do
-    putStrLn("\nErro: cpf inválido. Tente novamente!")
-    threadDelay 200000
+    putStrLn("\nErro: cpf inválido!")
+    putMsgTeclaEnter
+    opcao <- Util.lerEntradaString
     putStr("")
 
 putMsgUserInvalido :: IO()
 putMsgUserInvalido = do
     putStrLn("\nErro: usuário não cadastrado!")
-    threadDelay 200000
+    putMsgTeclaEnter
+    opcao <- Util.lerEntradaString
     putStr("")
 
 putMsgIdInvalido :: IO()
 putMsgIdInvalido = do
-    putStrLn("\nErro: id inválido. Tente novamente!")
-    threadDelay 200000
+    putStrLn("\nErro: id inválido!")
+    putMsgTeclaEnter
+    opcao <- Util.lerEntradaString
     putStr("")
 
 putMsgGeneroInvalido :: IO()
 putMsgGeneroInvalido = do
-   putStrLn("\nErro: genêro inválido. Tente novamente!")
-   threadDelay 200000
+   putStrLn("\nErro: genêro inválido!")
+   putMsgTeclaEnter
+   opcao <- Util.lerEntradaString
+   putStr("")
+
+putMsgQuantidadeInvalida :: IO()
+putMsgQuantidadeInvalida = do
+   putStrLn("\nErro: quantidade inválida!")
+   putMsgTeclaEnter
+   opcao <- Util.lerEntradaString
+   putStr("")
+
+putMsgFilmeNaoCadastrado :: IO()
+putMsgFilmeNaoCadastrado  = do
+   putStrLn("\nErro: filme não cadastrado!")
+   putMsgTeclaEnter
+   opcao <- Util.lerEntradaString
+   putStr("")
+
+putMsgFilmeNaoDisponivel::IO()
+putMsgFilmeNaoDisponivel = do
+   putStrLn("\nErro: filme indisponível!")
+   putMsgTeclaEnter
+   opcao <- Util.lerEntradaString
    putStr("")
 
 putMsgLoginCliente :: IO() 
@@ -155,7 +182,6 @@ putMsgCadastroEndereco = do
 
 putMsgResumoCadastroUsuario :: String -> IO()
 putMsgResumoCadastroUsuario cliente = do
-    clrScr
     putLogo
     putStrLn("       -------CADASTRO-------")
     putStrLn("\n-----\n")
@@ -165,8 +191,9 @@ putMsgResumoCadastroUsuario cliente = do
 
 putMsgCadastroFilmeTitulo :: IO()
 putMsgCadastroFilmeTitulo = do
+    putLogo
     putStrLn("       -------CADASTRO-------")
-    putStrLn("Título: ")
+    putStrLn("\nTítulo: ")
 
 putMsgCadastroFilmeGenero :: IO()
 putMsgCadastroFilmeGenero = do
@@ -185,18 +212,19 @@ putMsgFilmeQuantidade = do
     putStrLn("Quantidade: ")
 
 putMsgResumoCadastroFilme :: String -> IO()
-putMsgResumoCadastroFilme msg = do
-    clrScr
+putMsgResumoCadastroFilme filme = do
     putLogo
     putStrLn("       -------CADASTRO-------")
-    putStrLn("-----\n")
-    putStrLn(msg)
+    putStrLn("\n-----\n")
+    putStrLn(filme)
     putStrLn("\n-----")
     putMsgTeclaEnter
+    opcao <- Util.lerEntradaString
+    putStr("")
 
 putMsgFilmeIdentificador :: IO()
 putMsgFilmeIdentificador = do
-    putStrLn("\nIdentificador: ")
+    putStrLn("\nID do filme: ")
 
 putMsgLocacaoFilme :: IO()
 putMsgLocacaoFilme = do
@@ -205,12 +233,43 @@ putMsgLocacaoFilme = do
     putStrLn("\nOBS: Para verificar a lista de filmes basta digitar 'L'!")
     putStrLn("\nID do filme: ")
 
-putMsgLocaFilme :: String -> IO()
-putMsgLocaFilme nomeFilme = do
+putMsgDataLocacao :: IO()
+putMsgDataLocacao = do
+   putStrLn("Insira a data da locação (dd/mm/aaaa): ")
+
+putMsgLocaFilme :: String -> String -> IO()
+putMsgLocaFilme nomeFilme qtd = do
     putStrLn("\nJá pode ir preparando a pipoca...")
     putStrLn("Filme " ++ nomeFilme ++ " alugado com sucesso!")
+    putStrLn("Agora só temos: " ++ qtd ++ " unidade(s) disponivel(is).")
     putStrLn("---")
-    threadDelay 1000000
+    putMsgTeclaEnter
+    opcao <- Util.lerEntradaString
+    putStr("")
+
+putMsgHistoricoLocacoes :: IO()
+putMsgHistoricoLocacoes = do
+    putLogo
+    putStrLn("       --HISTÓRICO LOCAÇÕES--")
+
+putMsgHistoricoLocacoesCpf :: IO()
+putMsgHistoricoLocacoesCpf = do
+    putStrLn("\nDigite o CPF do cliente: ")
+
+putMsgHistoricoLocacoesAndamento :: IO()
+putMsgHistoricoLocacoesAndamento = do
+    putLogo
+    putStrLn("       --LOCAÇÕES ANDAMENTO--")
+
+putMsgEstoqueFilmes :: IO()
+putMsgEstoqueFilmes = do
+    putLogo
+    putStrLn("       ---ADICIONA ESTOQUE---")
+
+putMsgDisponibilidadeFilmes :: IO()
+putMsgDisponibilidadeFilmes = do
+    putLogo
+    putStrLn("       ----DISPONIBILIDADE---")
 
 putMsgRecomendacaoGenero :: IO()
 putMsgRecomendacaoGenero = do
@@ -220,6 +279,7 @@ putMsgRecomendacaoGenero = do
 
 putMsgRecomendacao :: String -> IO()
 putMsgRecomendacao filme = do
+    putLogo
     putStrLn("       -HMM VEJAMOS, JÁ SEI!-")
     putStrLn("\nBaseado no seu perfil, recomendamos o seguinte filme:")
     putStrLn("\n"++ filme ++"\n")
@@ -250,8 +310,11 @@ putMsgDevolucaoBottom = do
     putStrLn("Para voltar ao menu basta digitar 'M'!")
     putStrLn("\nID da locação: ")
 
-putMsgDevolveFilme :: IO()
-putMsgDevolveFilme = do
+putMsgDevolveFilme :: String -> IO()
+putMsgDevolveFilme qtd = do
     putStrLn("\nDevolução realizada, esperamos que tenha gostado!")
+    putStrLn("Agora temos: " ++ qtd ++ " unidade(s) disponivel(is).")
     putStrLn("---")
-    threadDelay 2000000
+    putMsgTeclaEnter
+    opcao <- Util.lerEntradaString
+    putStr("")

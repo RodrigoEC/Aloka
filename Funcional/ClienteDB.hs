@@ -4,6 +4,7 @@ import Database.SQLite.Simple
 import Database.SQLite.Simple.FromRow
 import Database.SQLite.Simple.ToField
 import Database.SQLite.Simple.Types
+import System.Random
 
 import Util (queryBD, fromIO, executeBD)
 
@@ -38,7 +39,7 @@ cadastraCliente nome cpf telefone endereco =
 addCliente :: String -> String -> String -> String -> IO Cliente
 addCliente nome cpf telefone endereco = do
     criaBD
-    let id = geraId
+    let id = fromIO geraId
     insereDado id nome cpf telefone endereco
     return (head (recuperaClienteViaCpf cpf))
 
@@ -66,8 +67,8 @@ criaBD = do executeBD "CREATE TABLE IF NOT EXISTS clientes (\
                    \);" ()
                    
 -- Metodo que cria um id para o Banco de dados dos filmes
-geraId :: Int
-geraId = length recuperaClientes + 1
+geraId :: IO Int
+geraId = getStdRandom(randomR (0, 1000)) :: IO Int
 
 -- metodo responsavel por deletar o cliente que possui o cpf passado como parametro 
 deletaCliente :: String -> IO()

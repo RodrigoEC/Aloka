@@ -51,7 +51,7 @@ cadastraFilme titulo diretor dataLancamento genero estoque =
 -- OBS: Verificar formato da data antes de fazer a adição no BD
 addFilme :: String -> String -> String -> String -> Int -> IO Filme
 addFilme titulo diretor dataLancamento genero estoque = do
-    let id = geraId
+    let id = fromIO geraId
     criaBD
     insereDado id titulo diretor dataLancamento genero estoque
 
@@ -87,13 +87,17 @@ criaBD = do executeBD "CREATE TABLE IF NOT EXISTS filmes (\
                  \);" ()
 
 -- Metodo que cria um id para o Banco de dados dos filmes
-geraId :: Int
-geraId = length recuperaFilmes + 1
-
+geraId :: IO Int
+geraId = getStdRandom(randomR (0, 1000)) :: IO Int
 
 -- Metodo que retorna uma lista com todos os filmes cadastrados no BD de ALOKA.
 recuperaFilmes :: [Filme]
-recuperaFilmes = fromIO (queryBD "SELECT * FROM filmes")
+recuperaFilmes = do
+    let resultado = queryBD "SELECT * FROM filmes LIMIT 0, 100"
+    let filmes = fromIO resultado
+    filmes
+
+    
 
 -- Metodo que retorna uma lista contendo o filme do 
 -- id passado se ele existir, caso contrário uma lista vazia é retornada.
@@ -149,7 +153,7 @@ removeEstoqueFilme idFilme qtd = addEstoqueFilme idFilme (-qtd)
 -- Metodo que serve para formatar uma lista de filmes para exibição.
 formataFilmes :: Int -> [Filme] -> [String]
 formataFilmes _ [] = []
-formataFilmes indice filmes@(filme:resto) = ("[" ++ show indice ++ "] " ++ formataFilme filme) : formataFilmes (indice + 1) resto
+formataFilmes indice filmes@(filme:resto) = ("[" ++ show (id_filme filme) ++ "] " ++ formataFilme filme) : formataFilmes (indice + 1) resto
 
 -- Metodo que serve para formatar um filme específico para exibição.
 formataFilme :: Filme -> String

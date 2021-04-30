@@ -22,7 +22,7 @@ estaDisponivel id = FilmeDB.recuperaEstoqueFilme id <= 0
 cadastraFilme :: String -> String -> String -> String -> Int -> String
 cadastraFilme titulo diretor dataLancamento genero quantidade
     | FilmeDB.verificaExistenciaFilmePorTitulo titulo = "Erro: filme já cadastrado!"
-    | otherwise = "Filme cadastrado com sucesso!\n" ++ toString titulo diretor dataLancamento genero quantidade
+    | otherwise = "Filme de id: " ++ show idFilme ++ " cadastrado com sucesso!\n" ++ toString titulo diretor dataLancamento genero quantidade
     where idFilme = id_filme (FilmeDB.cadastraFilme titulo diretor dataLancamento genero quantidade)
 
 addEstoqueFilme :: Int -> Int -> String

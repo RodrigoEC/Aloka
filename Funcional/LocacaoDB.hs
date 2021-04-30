@@ -4,6 +4,8 @@ import           Control.Applicative
 import qualified Data.Text as T
 import           Database.SQLite.Simple
 import           Database.SQLite.Simple.FromRow
+import System.Random
+
 import Data.Typeable
 import qualified Data.Text.IO as T
 import Util(queryBD, executeBD, fromIO)
@@ -38,7 +40,7 @@ cadastraLocacao :: Int ->String ->String -> IO()
 cadastraLocacao id_filme cpf_cliente data_locacao = do
     criaBD
 
-    let id = geraId
+    let id = fromIO geraId
 
     executeBD ("INSERT INTO locacao (\
                 \ id_locacao, \
@@ -66,8 +68,8 @@ criaBD = do executeBD "CREATE TABLE IF NOT EXISTS locacao (\
 
 
 -- Metodo que gera um id da tabela a partir da quantidade de locacoes cadastradas
-geraId :: Int
-geraId = length recuperaLocacoes + 1
+geraId :: IO Int
+geraId = getStdRandom(randomR (0, 1000)) :: IO Int
 
 -- Método responsavel por retornar todas as locacoes de um cliente
 recuperaLocacoes :: [Locacao]

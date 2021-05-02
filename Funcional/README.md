@@ -17,6 +17,7 @@
 #### Após a etapa de instalação, basta apenas executar os comandos abaixo e o ALOKA estará à sua disposição.
 
   ```
-  $ cd Funcional
+  $ git clone https://github.com/RodrigoEC/Aloka.git
+  $ cd Aloka/Funcional
   $ runhaskell Main.hs
   ```

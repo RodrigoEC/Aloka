@@ -43,6 +43,7 @@ addCliente nome cpf telefone endereco = do
     insereDado id nome cpf telefone endereco
     return (head (recuperaClienteViaCpf cpf))
 
+-- Método responsável por inserir o cliente no banco de dados
 insereDado :: Int -> String -> String -> String -> String -> IO()
 insereDado id nome cpf telefone endereco = do
     executeBD ("INSERT INTO clientes(nome,\
@@ -56,7 +57,8 @@ insereDado id nome cpf telefone endereco = do
                 \ '" ++ cpf ++ "',\
                 \ '" ++ telefone ++ "',\
                 \ '" ++ endereco ++ "');") ()
-
+                
+--Método responsável por criar o banco de dados de cliente
 criaBD :: IO ()
 criaBD = do executeBD "CREATE TABLE IF NOT EXISTS clientes (\
                    \ id INT PRIMARY KEY, \
@@ -66,7 +68,7 @@ criaBD = do executeBD "CREATE TABLE IF NOT EXISTS clientes (\
                    \ endereco INTEGER\
                    \);" ()
                    
--- Metodo que cria um id para o Banco de dados dos filmes
+-- Metodo que cria um id randomico.
 geraId :: IO Int
 geraId = getStdRandom(randomR (0, 1000)) :: IO Int
 

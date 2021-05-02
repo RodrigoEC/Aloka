@@ -44,8 +44,8 @@ getIdFilmeRecomendado genero = (show (FilmeDB.pesquisaFilmeParaRecomendar genero
 listaLocacoesCliente :: String -> String
 listaLocacoesCliente = Locacao.listaLocacoes
 
-locacaoExite :: Int -> Bool
-locacaoExite id = Locacao.locacaoExiste id
+locacaoExiste :: Int -> Bool
+locacaoExiste id = Locacao.locacaoExiste id
 
 encerraLocacao :: Int -> IO()
 encerraLocacao id = Locacao.encerraLocacao id

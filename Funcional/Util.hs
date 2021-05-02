@@ -14,9 +14,14 @@ ehCpfValido cpfCliente
    | otherwise = all (`elem` ['0'..'9']) cpfCliente
 
 ehNumero :: String -> Bool
-ehNumero id
-   | length id == 0 = False
-   | otherwise = all (`elem` ['0'..'9']) id
+ehNumero valor
+   | length valor == 0 = False
+   | otherwise = all (`elem` ['0'..'9']) valor
+
+ehQuantidadeValida :: String -> Bool
+ehQuantidadeValida valor
+   |valor == "0" = False
+   | otherwise = ehNumero valor
 
 fromIO :: IO a -> a
 fromIO = unsafePerformIO

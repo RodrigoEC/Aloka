@@ -207,7 +207,7 @@ putMsgCadastroFilmeGenero = do
 
 putMsgCadastroFilmeDiretor :: IO()
 putMsgCadastroFilmeDiretor = do
-    putStrLn("Diretor: ")
+    putStrLn("Diretor(a): ")
 
 putMsgCadastroFilmeData :: IO()
 putMsgCadastroFilmeData = do

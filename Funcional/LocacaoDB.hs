@@ -54,7 +54,7 @@ cadastraLocacao id_filme cpf_cliente data_locacao = do
                 \" ++ cpf_cliente ++ "','\
                 \" ++ data_locacao ++ "',\
                 \"++ "'em andamento'" ++")")()
-
+-- Método responsável por criar o banco de dados.
 criaBD :: IO()
 criaBD = do executeBD "CREATE TABLE IF NOT EXISTS locacao (\
                  \ id_locacao INTEGER PRIMARY KEY, \
@@ -104,7 +104,7 @@ recuperaLocacaoAndamentoCliente cpf_cliente = fromIO (queryBD ("SELECT * FROM lo
 finalizaLocacao :: Int -> IO ()
 finalizaLocacao id_locacao = do
     conn <- open "./dados/aloka.db"
-    executeNamed conn "UPDATE locacao SET status = :str WHERE id_locacao = :id" [":str" := ("'finalizado'" :: T.Text), ":id" := id_locacao]
+    executeNamed conn "UPDATE locacao SET status = :str WHERE id_locacao = :id" [":str" := ("finalizado" :: T.Text), ":id" := id_locacao]
     close conn 
 
 -- metodo responsavel por formatar a lista de locações em uma string mais organizada.

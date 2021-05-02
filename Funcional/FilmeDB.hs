@@ -35,7 +35,7 @@ instance FromRow Filme where
                     <*> field
 
 -- Código que serve para o Haskell saber como transformar o objeto Filme em uma linha do BD
--- Os atributos do filme são passados para o metodo "toRow" que permite que esse filme seja inserido no BD
+-- Os atributos do filme são passados para o metodo "toRow" que permite que esse filme seja inserido no BD.
 instance ToRow Filme where
   toRow (Filme id_filme titulo diretor dataLancamento genero estoque) = toRow (id_filme, titulo, diretor, dataLancamento, genero, estoque)
 
@@ -57,7 +57,7 @@ addFilme titulo diretor dataLancamento genero estoque = do
 
     return (head (recuperaFilmeID id))
     
-
+-- Método responsável por inserir os dados no banco de dados.
 insereDado :: Int -> String -> String -> String -> String -> Int -> IO()
 insereDado id titulo diretor dataLancamento genero estoque = do
     executeBD ("INSERT INTO filmes (id_filme,\
@@ -75,7 +75,7 @@ insereDado id titulo diretor dataLancamento genero estoque = do
                 \ '" ++ genero ++ "',\
                 \ " ++ show estoque ++ ");") ()
 
-
+-- Método responsável por criar o banco de dados.
 criaBD :: IO ()
 criaBD = do executeBD "CREATE TABLE IF NOT EXISTS filmes (\
                  \ id_filme INT PRIMARY KEY, \
@@ -93,17 +93,16 @@ geraId = getStdRandom(randomR (0, 1000)) :: IO Int
 -- Metodo que retorna uma lista com todos os filmes cadastrados no BD de ALOKA.
 recuperaFilmes :: [Filme]
 recuperaFilmes = do
-    let resultado = queryBD "SELECT * FROM filmes LIMIT 0, 100"
+    let resultado = queryBD "SELECT * FROM filmes WHERE estoque > 0"
     let filmes = fromIO resultado
     filmes
-
-    
 
 -- Metodo que retorna uma lista contendo o filme do 
 -- id passado se ele existir, caso contrário uma lista vazia é retornada.
 recuperaFilmeID :: Int -> [Filme]
 recuperaFilmeID id_filme = fromIO (queryBD ("SELECT * FROM filmes WHERE id_filme = " ++ show id_filme))
 
+-- Método que retorno o filme através do seu título passado como parâmetro.
 recuperaFilmeTitulo :: String -> [Filme]
 recuperaFilmeTitulo titulo = fromIO (queryBD ("SELECT * FROM filmes WHERE titulo = '" ++ titulo ++ "'"))
 
@@ -159,7 +158,7 @@ formataFilmes indice filmes@(filme:resto) = ("[" ++ show (id_filme filme) ++ "] 
 formataFilme :: Filme -> String
 formataFilme filme = "Título: " ++ titulo filme ++ ", Gênero: " ++ genero filme
 
---- pesdquisa um id de filme para aquele genero, se tiver filmes daquele genero
+--- pesquisa um id de filme para aquele genero, se tiver filmes daquele genero
 pesquisaFilmeParaRecomendar:: String -> Int
 pesquisaFilmeParaRecomendar genero
     | length (recuperaFilmesPorGeneroDisp genero) > 0 = randomizaFilme (recuperaFilmesPorGeneroDisp genero)

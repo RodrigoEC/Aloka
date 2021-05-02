@@ -1,7 +1,7 @@
 import Util
 import Info
 import Locadora
-
+import Control.Concurrent
 
 --------------------------------------------
 
@@ -15,6 +15,7 @@ main = do
 
 
 ------------- Tela Principal -------------
+
 telaPrincipal :: IO()
 telaPrincipal = do
     Info.putMsgOpcoesMenuInicial
@@ -31,9 +32,6 @@ mudaTelaPrincipal opcao | opcao == "1" = telaLoginCliente
 
 
 ------------ Sessão de Login Cliente -----------
-
--- Adicionei a opção de sair do cadastro ao digitar a letra S
--- Mudei a tela também
 
 telaLoginCliente :: IO()
 telaLoginCliente = do
@@ -66,6 +64,7 @@ mudaTelaLogado opcao cpfCliente
 
 
 --------- Sessão de Login Administrador ----------
+
 telaLoginAdmin :: IO()
 telaLoginAdmin = do
     Info.putMsgOpcoesMenuAdmin
@@ -84,8 +83,6 @@ mudaTelaLoginAdmin opcao
 
 ----------- Sessão Cadastrar Filme -----------
 
--- Adicionei a opção de sair do cadastro ao digitar a letra S
--- mudei na tela 
 telaCadastraFilme :: IO()
 telaCadastraFilme = do
     Info.putMsgCadastroFilmeTitulo
@@ -113,15 +110,15 @@ telaCadastraFilme = do
                 if quantidade == "S"
                     then do telaLoginAdmin
                 else do
-                if not(Util.ehNumero quantidade)
-                then do {Info.putMsgQuantidadeInvalida; telaCadastraFilme}
+                if not(Util.ehQuantidadeValida quantidade)
+                    then do {Info.putMsgQuantidadeInvalida; telaCadastraFilme}
                 else do {
                     Info.putMsgResumoCadastroFilme (Locadora.cadastraFilme titulo diretor dataLancamento genero (read quantidade));
                     telaLoginAdmin
         }
 
-
 ----------- Sessão Exibir locações -----------
+
 telaExibirLocacoes :: IO()
 telaExibirLocacoes = do
     Info.putMsgOpcoesExibirLocacoes
@@ -141,14 +138,11 @@ getHistoricoLocacoes :: IO()
 getHistoricoLocacoes = do
     Info.putMsgHistoricoLocacoes
 
-    putStr(Locadora.recuperaHistoricoLocacoes)
+    putStr Locadora.recuperaHistoricoLocacoes
    
     Info.putMsgTeclaEnter
     opcao <- Util.lerEntradaString
     telaExibirLocacoes
-
--- adicionei a opcao de sair
--- mudei a tela também
 
 getHistoricoLocacoesCliente :: IO()
 getHistoricoLocacoesCliente = do
@@ -171,13 +165,14 @@ getLocacoesEmAndamento :: IO()
 getLocacoesEmAndamento = do 
     Info.putMsgHistoricoLocacoesAndamento
     
-    putStr(Locadora.recuperaLocacoesEmAndamento)
+    putStr Locadora.recuperaLocacoesEmAndamento
     
     Info.putMsgTeclaEnter
     opcao <- Util.lerEntradaString
     telaExibirLocacoes
 
 ----------- Sessão Gerenciar Estoque -----------
+
 telaGerenciarEstoque :: IO()
 telaGerenciarEstoque = do
     Info.putMsgOpcoesGerenciarEstoque
@@ -192,8 +187,7 @@ mudaTelaGerenciarEstoque opcao
     | opcao == "3" = telaLoginAdmin
     | otherwise = do {Info.putMsgOpcaoInvalida; telaGerenciarEstoque}
 
--- Adicionei a opção de sair ao digitar a letra S
--- mudei a tela 
+
 addFilmeAoEstoque :: IO()
 addFilmeAoEstoque = do
     Info.putMsgEstoqueFilmes
@@ -218,14 +212,11 @@ addFilmeAoEstoque = do
             }
     }
 
--- Adicionei a opção da verificação de disponibilidade ao digitar a letra S
--- mudei a tela tambem
-
 verificarDisponibilidade :: IO()
 verificarDisponibilidade = do
     Info.putMsgDisponibilidadeFilmes
 
-    putStrLn(Locadora.recuperaFilmes)
+    putStrLn Locadora.recuperaFilmes
 
     Info.putMsgFilmeIdentificador
     idFilme <- Util.lerEntradaString
@@ -241,9 +232,6 @@ verificarDisponibilidade = do
         }
 
 ----------- Sessão Cadastro de Usuario -----------
-
--- Adicionei a opção de sair do cadastro ao digitar a letra S
--- mudei a tela
 
 telaCadastroUsuario :: IO()
 telaCadastroUsuario = do
@@ -276,9 +264,6 @@ telaCadastroUsuario = do
     
 -------------- Sessão Fazer Locação -------------
 
--- Adicionei a opção de sair da locacao ao digitar a letra S
--- mudei a tela 
-
 telaLocacaoFilme :: String -> IO()
 telaLocacaoFilme cpfCliente = do
     Info.putMsgLocacaoFilme
@@ -299,9 +284,6 @@ telaLocacaoFilme cpfCliente = do
             else do {Info.putMsgFilmeNaoCadastrado ; telaLocacaoFilme cpfCliente}
         }
 
--- adicionei a opcao de sair
---mudei a tela
-
 locaFilme :: String -> String -> IO()
 locaFilme idFilme cpfCliente = do
     Info.putMsgDataLocacao
@@ -318,9 +300,6 @@ locaFilme idFilme cpfCliente = do
 
 
 -------- Sessão Recomendação da Locadora ---------
-
--- Adicionei a opção de sair da tela de recomendação ao digitar a letra S
-
 
 telaRecomendacao :: String -> IO()
 telaRecomendacao cpfCliente = do
@@ -359,14 +338,12 @@ telaListaFilmes cpfCliente telaAnterior = do
     Info.putMsgTeclaEnter
 
     opcao <- Util.lerEntradaString
-    if (telaAnterior == 'L')
+    if telaAnterior == 'L'
         then telaLocacaoFilme cpfCliente
     else telaLogado cpfCliente
 
 
 ----------- Sessão Devolucao -----------
--- alterei a letra
--- mudei na tela também
 telaDevolucao :: String -> IO()
 telaDevolucao cpfCliente = do
     Info.putMsgDevolucaoTop 
@@ -378,11 +355,11 @@ telaDevolucao cpfCliente = do
         then do telaLogado cpfCliente
     else if not(Util.ehNumero idLocacao)
         then do {Info.putMsgIdInvalido; telaDevolucao cpfCliente}
-    else if not(Locadora.locacaoExite(read idLocacao))
-        then do putStrLn("Locação não existe!")
+    else if not(Locadora.locacaoExiste(read idLocacao))
+        then do {putStrLn "Locação inexistente!"; threadDelay 800000; telaLogado cpfCliente}
     else do {
         Locadora.encerraLocacao(read idLocacao);
         Info.putMsgDevolveFilme(Locadora.devolveFilme(read idLocacao));
         telaLogado cpfCliente
-    }      
+    }
     

@@ -331,6 +331,7 @@ redireciona opcao cpfCliente idFilme
 
 
 ----------- Sessão Listar Filmes -----------
+
 telaListaFilmes :: String -> Char -> IO()
 telaListaFilmes cpfCliente telaAnterior = do
     Info.putMsgListaFilmes
@@ -344,6 +345,7 @@ telaListaFilmes cpfCliente telaAnterior = do
 
 
 ----------- Sessão Devolucao -----------
+
 telaDevolucao :: String -> IO()
 telaDevolucao cpfCliente = do
     Info.putMsgDevolucaoTop 

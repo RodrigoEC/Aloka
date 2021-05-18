@@ -10,13 +10,10 @@ addCliente(Cpf, Nome, Telefone, Endereco) :-
     writeln(File, (Cpf, Nome, Telefone, Endereco)),                 
     close(File).
 
-% passado um cpf, verifica se ele esta na lista de clientes cadastradas
 clienteExiste(CpfCliente):-
     lerCsvRowList('Clientes.csv', Clientes),
     verificaNaLista(CpfCliente, Clientes).
 
-% verifica se o elemento procurado esta em uma lista porém o código se torna demorado
-% a medida que o arquivo de clientes cresce
 verificaNaLista(_,[], false).
 verificaNaLista(SearchedCpf, [H|T]) :-
      (member(SearchedCpf, H) -> true

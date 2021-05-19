@@ -20,13 +20,13 @@ verificaEstoque(IdFilme):-
 % Retorna o estoque
 getEstoque(IdFilme, Estoque) :-
     lerCsvRowList('Filmes.csv', Filmes),
-    pegaEntidade(IdFilme, Filmes, Filme),
+    getEntidadeId(IdFilme, Filmes, Filme),
     elementByIndex(5, Filme, Estoque).
 
 % Retorna Titulo do Filme a partir do Id
 getTitulo(Id, Titulo):-
     lerCsvRowList('Filmes.csv', Filmes),
-    pegaEntidade(Id, Filmes, Filme),
+    getEntidadeId(Id, Filmes, Filme),
     elementByIndex(1, Filme, Titulo).
 
 listaFilmes(Filme):-
@@ -40,7 +40,7 @@ iteraFilme([H|T], H):-
 % Retorna todos os atributos de filme
 getAll(Id, Titulo, Diretor, Data, Genero, Estoque):-
     lerCsvRowList('Filmes.csv', Filmes),
-    pegaEntidade(Id, Filmes, Filme),
+    getEntidadeId(Id, Filmes, Filme),
     elementByIndex(1, Filme, Titulo),
     elementByIndex(2, Filme, Diretor),
     elementByIndex(3, Filme, Data),

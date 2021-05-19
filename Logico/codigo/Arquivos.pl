@@ -22,7 +22,10 @@ verificaNaLista(SearchedId, [H|T]) :-
      ;verificaNaLista(SearchedId, T)).
 
 % Pega a lista que representa a entidade na lista de entidades a partir o identificador unico
-pegaEntidade(_, [Entidade|_], Entidade):- !.
-pegaEntidade(SearchedId, [H|T], Entidade) :-
-    (member(SearchedId, H) -> H;
-    pegaEntidade(SearchedId, T, Entidade)).
+getEntidadeId(_, [], false).
+getEntidadeId(Id, [H|[]], P):- getEntidade(Id, H, P).
+getEntidadeId(Id, [H|T], P):- getEntidadeId(Id, T, P).
+
+getEntidade(_, [], false).
+getEntidade(Id, [Id|Resto], [Id|Resto]).
+getEntidade(Id, [_|T], R):- getEntidade(Id, T, R).

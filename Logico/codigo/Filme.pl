@@ -12,34 +12,41 @@ filmeExiste(IdFilme):-
     lerCsvRowList('Filmes.csv', Filmes),
     verificaNaLista(IdFilme, Filmes).
 
-% Verifica se o filme está na lista
-verificaNaLista(_,[], false).
-verificaNaLista(SearchedMovie, [H|T]) :-
-     (member(SearchedMovie, H) -> true
-     ;verificaNaLista(SearchedMovie, T)).
-
-% Verifica se o estoque é um estoque disponível, le o arquivo csv, chama o método encontraFilme
-% que vai encontrar o filme na lista, depois chama o estoqueValido passando o filme que foi encontrado, estoqueValido verifica se o estoque é > 0.
-verificaEstoque(IdFilme):-
-    lerCsvRowList('Filmes.csv', Filmes),
-    encontraFilme(IdFilme, Filmes, Filme),
-    estoqueValido(Filme).
-
-% encontra o filme na lista
-encontraFilme(_, [Filme|_], Filme):- !.
-encontraFilme(IdFilme, [H|T], Filme) :-
-    (member(IdFilme, H) -> H;
-    encontraFilme(IdFilme, T, Filme)).
-
 % Verifica se o estoque é > 0
-estoqueValido(Filme):-
-    (getEstoque(Filme, Estoque), Estoque > 0 -> true;
+verificaEstoque(IdFilme):-
+    (getEstoque(IdFilme, Estoque), Estoque > 0 -> true;
     false).
 
 % Retorna o estoque
-getEstoque(Filme, Estoque) :-
+getEstoque(IdFilme, Estoque) :-
+    lerCsvRowList('Filmes.csv', Filmes),
+    pegaEntidade(IdFilme, Filmes, Filme),
     elementByIndex(5, Filme, Estoque).
 
-% Método utilitário que retorna um elemento por seu indice
-elementByIndex(0, [H|_], H):- !.
-elementByIndex(I, [_|T], E):- X is I - 1, elementByIndex(X, T, E).
+% Retorna Titulo do Filme a partir do Id
+getTitulo(Id, Titulo):-
+    lerCsvRowList('Filmes.csv', Filmes),
+    pegaEntidade(Id, Filmes, Filme),
+    elementByIndex(1, Filme, Titulo).
+
+listaFilmes(Filme):-
+    lerCsvRowList('Filmes.csv', Filmes),
+    iteraFilme(Filmes, Filme).
+
+iteraFilme([F|_], F):- !.
+iteraFilme([H|T], H):-
+    iteraFilme(T, Filme).
+
+% Retorna todos os atributos de filme
+getAll(Id, Titulo, Diretor, Data, Genero, Estoque):-
+    lerCsvRowList('Filmes.csv', Filmes),
+    pegaEntidade(Id, Filmes, Filme),
+    elementByIndex(1, Filme, Titulo),
+    elementByIndex(2, Filme, Diretor),
+    elementByIndex(3, Filme, Data),
+    elementByIndex(4, Filme, Genero), 
+    elementByIndex(5, Filme, Estoque).
+
+setEstoque(Id, NovoEstoque):-
+    getAll(Id, Titulo, Diretor, Data, Genero, Estoque),
+    addFilme(Id, Titulo, Diretor, Data, Genero, Estoque+NovoEstoque).

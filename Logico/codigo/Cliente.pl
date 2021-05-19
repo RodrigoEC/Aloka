@@ -12,8 +12,8 @@ clienteExiste(CpfCliente):-
     lerCsvRowList('Clientes.csv', Clientes),
     verificaNaLista(CpfCliente, Clientes).
 
-% Verifica se o cliente está na lista
-verificaNaLista(_,[], false).
-verificaNaLista(SearchedCpf, [H|T]) :-
-     (member(SearchedCpf, H) -> true
-     ;verificaNaLista(SearchedCpf, T)).
+% Retorna nome do cliente a partir do cpf
+getNome(Cpf, Nome):-
+    lerCsvRowList('Clientes.csv', Clientes),
+    pegaEntidade(Cpf, Clientes, Cliente),
+    elementByIndex(1, Cliente, Nome).

@@ -29,13 +29,6 @@ getTitulo(Id, Titulo):-
     getEntidadeId(Id, Filmes, Filme),
     elementByIndex(1, Filme, Titulo).
 
-listaFilmes(Filme):-
-    lerCsvRowList('Filmes.csv', Filmes),
-    iteraFilme(Filmes, Filme).
-
-iteraFilme([F|_], F):- !.
-iteraFilme([H|T], H):-
-    iteraFilme(T, Filme).
 
 % Retorna todos os atributos de filme
 getAll(Id, Titulo, Diretor, Data, Genero, Estoque):-
@@ -46,7 +39,3 @@ getAll(Id, Titulo, Diretor, Data, Genero, Estoque):-
     elementByIndex(3, Filme, Data),
     elementByIndex(4, Filme, Genero), 
     elementByIndex(5, Filme, Estoque).
-
-setEstoque(Id, NovoEstoque):-
-    getAll(Id, Titulo, Diretor, Data, Genero, Estoque),
-    addFilme(Id, Titulo, Diretor, Data, Genero, Estoque+NovoEstoque).

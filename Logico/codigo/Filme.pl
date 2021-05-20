@@ -47,4 +47,4 @@ setEstoque(Id, Valor, FilmesFinal):-
     E is Estoque + Valor,
     remover(Estoque, Filme, FilmeSemEstoque),
     concatenar(FilmeSemEstoque, [E], FilmeFinal),
-    concatenar(Filmes, FilmeFinal, FilmesFinal).
+    concatenar(Filmes, [FilmeFinal], FilmesFinal).

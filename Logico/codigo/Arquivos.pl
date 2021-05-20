@@ -23,9 +23,12 @@ verificaNaLista(SearchedId, [H|T]) :-
 
 % Pega a lista que representa a entidade na lista de entidades a partir o identificador unico
 getEntidadeId(_, [], false).
-getEntidadeId(Id, [H|[]], P):- getEntidade(Id, H, P).
-getEntidadeId(Id, [H|T], P):- getEntidadeId(Id, T, P).
+getEntidadeId(Id, [H|[]], H).
+getEntidadeId(Id, [[Id|T2]|T], [Id|T2]):- !.
+getEntidadeId(Id, [_|T], E):- getEntidadeId(Id, T, E).
 
-getEntidade(_, [], false).
-getEntidade(Id, [Id|Resto], [Id|Resto]).
-getEntidade(Id, [_|T], R):- getEntidade(Id, T, R).
+remover(X, [X|T], T).
+remover(X, [H|T], [H|T1]):- remover(X,T,T1).
+
+concatenar([], L, L).
+concatenar([H|T], L, [H|D]) :- concatenar(T, L, D).

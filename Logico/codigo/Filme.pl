@@ -31,11 +31,20 @@ getTitulo(Id, Titulo):-
 
 
 % Retorna todos os atributos de filme
-getAll(Id, Titulo, Diretor, Data, Genero, Estoque):-
-    lerCsvRowList('Filmes.csv', Filmes),
-    getEntidadeId(Id, Filmes, Filme),
+getAll(Filme, Id, Titulo, Diretor, Data, Genero, Estoque):-
+    elementByIndex(0, Filme, Titulo),
     elementByIndex(1, Filme, Titulo),
     elementByIndex(2, Filme, Diretor),
     elementByIndex(3, Filme, Data),
     elementByIndex(4, Filme, Genero), 
     elementByIndex(5, Filme, Estoque).
+
+setEstoque(Id, Valor, Filmes):-
+    lerCsvRowList('Filmes.csv', Fs),
+    getEntidadeId(Id, Fs, Filme),
+    remover(Filme, Filmes, Filmes2),
+    elementByIndex(5, Filme, Estoque),
+    E is Estoque + Valor,
+    remover(Estoque, Filme, F2),
+    concatenar(F2, [E], F),
+    concatenar(Filmes2, F, Filmes).

@@ -39,12 +39,12 @@ getAll(Filme, Id, Titulo, Diretor, Data, Genero, Estoque):-
     elementByIndex(4, Filme, Genero), 
     elementByIndex(5, Filme, Estoque).
 
-setEstoque(Id, Valor, Filmes):-
-    lerCsvRowList('Filmes.csv', Fs),
-    getEntidadeId(Id, Fs, Filme),
-    remover(Filme, Filmes, Filmes2),
+setEstoque(Id, Valor, FilmesFinal):-
+    lerCsvRowList('Filmes.csv', ArrayFilmes),
+    getEntidadeId(Id, ArrayFilmes, Filme),
+    remover(Filme, ArrayFilmes, Filmes),
     elementByIndex(5, Filme, Estoque),
     E is Estoque + Valor,
-    remover(Estoque, Filme, F2),
-    concatenar(F2, [E], F),
-    concatenar(Filmes2, F, Filmes).
+    remover(Estoque, Filme, FilmeSemEstoque),
+    concatenar(FilmeSemEstoque, [E], FilmeFinal),
+    concatenar(Filmes, FilmeFinal, FilmesFinal).

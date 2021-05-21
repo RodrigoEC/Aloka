@@ -27,8 +27,17 @@ getEntidadeId(Id, [H|[]], H).
 getEntidadeId(Id, [[Id|T2]|T], [Id|T2]):- !.
 getEntidadeId(Id, [_|T], E):- getEntidadeId(Id, T, E).
 
+% Remove elementos de uma lista
 remover(X, [X|T], T).
 remover(X, [H|T], [H|T1]):- remover(X,T,T1).
 
+% Remove um elemento da lista a partir do índice
+removeind(0,[_|T],T):- !.
+removeind(I,[H|T],R):- X is I - 1, removeind(X, T, Y), insereInicio(H, Y, R).
+
+% Insere um elemento no início de uma lista
+insereInicio(H, L, [H|L]):- !.
+
+% Concatena elementos de uma lista
 concatenar([], L, L).
 concatenar([H|T], L, [H|D]) :- concatenar(T, L, D).

@@ -11,8 +11,7 @@ putMsgOpcoesMenuInicial() :-
 putMsgOpcoesMenuCliente(Nome) :-
     %putLogo(),
     writeln('       --LUZ, CÂMERA, AÇÃO!--'),
-    writeln(''),
-    string_concat('             Olá, ', Nome, Return),
+    string_concat('             \nOlá, ', Nome, Return),
     write(''),
     write(Return),
     writeln('!'),
@@ -223,7 +222,9 @@ putMsgRecomendacao(Filme) :-
     writeln('       -HMM VEJAMOS, JÁ SEI!-'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'),   
     writeln('\nBaseado no seu perfil, recomendamos o seguinte filme:'),
-    writeln('\n', string_concat('\n ', Filme, ' \n')), halt().
+    writeln(''),
+    string_concat('\n ', Filme, Return),
+    writeln(''), halt().
 
 putMsgRecomendaLocacao() :-
     writeln('Você deseja fazer a locação desse filme? [y/n]'), halt().

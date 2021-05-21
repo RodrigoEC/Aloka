@@ -32,14 +32,14 @@ getTitulo(Id, Titulo):-
 
 % Retorna todos os atributos de filme
 getAll(Filme, Id, Titulo, Diretor, Data, Genero, Estoque):-
-    elementByIndex(0, Filme, Titulo),
+    elementByIndex(0, Filme, Id),
     elementByIndex(1, Filme, Titulo),
     elementByIndex(2, Filme, Diretor),
     elementByIndex(3, Filme, Data),
     elementByIndex(4, Filme, Genero), 
     elementByIndex(5, Filme, Estoque).
 
-setEstoque(Id, Valor, FilmesFinal):-
+setEstoque(Id, Valor):-
     lerCsvRowList('Filmes.csv', ArrayFilmes),
     getEntidadeId(Id, ArrayFilmes, Filme),
     remover(Filme, ArrayFilmes, Filmes),
@@ -47,4 +47,17 @@ setEstoque(Id, Valor, FilmesFinal):-
     E is Estoque + Valor,
     remover(Estoque, Filme, FilmeSemEstoque),
     concatenar(FilmeSemEstoque, [E], FilmeFinal),
-    concatenar(Filmes, [FilmeFinal], FilmesFinal).
+    concatenar(Filmes, [FilmeFinal], FilmesFinal),
+    limparCsvFilmes,
+    escreverFilmes(FilmesFinal).
+
+limparCsvFilmes:-
+    open('../arquivos/Filmes.csv', write, File),
+    write(File, ''),
+    close(File).
+
+escreverFilmes([]).
+escreverFilmes([H|T]) :-
+    (getAll(H, Id, Titulo, Diretor, Data, Genero, Estoque),
+    addFilme(Id, Titulo, Diretor, Data, Genero, Estoque),
+    escreverFilmes(T)).

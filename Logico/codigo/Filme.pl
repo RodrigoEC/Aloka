@@ -7,6 +7,8 @@ addFilme(Id, Titulo, Diretor, Data, Genero, Estoque) :-
     writeln(File, (Id, Titulo, Diretor, Data, Genero, Estoque)),
     close(File).
 
+% ------------------------------------ Métodos de verificação -------------------------------------------------------
+
 % Verifica se o filme existe, le o arquivo csv e chama o método verificaNaLista que vai ver se o filme está na lista
 filmeExiste(IdFilme):-
     lerCsvRowList('Filmes.csv', Filmes),
@@ -17,6 +19,7 @@ verificaEstoque(IdFilme):-
     (getEstoque(IdFilme, Estoque), Estoque > 0 -> true;
     false).
 
+% ----------------------------------------------- Getters -----------------------------------------------------------
 % Retorna o estoque
 getEstoque(IdFilme, Estoque) :-
     lerCsvRowList('Filmes.csv', Filmes),
@@ -29,7 +32,6 @@ getTitulo(Id, Titulo):-
     getEntidadeId(Id, Filmes, Filme),
     elementByIndex(1, Filme, Titulo).
 
-
 % Retorna todos os atributos de filme
 getAll(Filme, Id, Titulo, Diretor, Data, Genero, Estoque):-
     elementByIndex(0, Filme, Id),
@@ -39,6 +41,8 @@ getAll(Filme, Id, Titulo, Diretor, Data, Genero, Estoque):-
     elementByIndex(4, Filme, Genero), 
     elementByIndex(5, Filme, Estoque).
 
+% -------------------------------------------- Setters --------------------------------------------------------------
+% Adiciona filmes ao estoque
 setEstoque(Id, Valor):-
     lerCsvRowList('Filmes.csv', ArrayFilmes),
     getEntidadeId(Id, ArrayFilmes, Filme),
@@ -51,17 +55,7 @@ setEstoque(Id, Valor):-
     limparCsvFilmes,
     escreverFilmes(FilmesFinal).
 
-limparCsvFilmes:-
-    open('../arquivos/Filmes.csv', write, File),
-    write(File, ''),
-    close(File).
-
-escreverFilmes([]).
-escreverFilmes([H|T]) :-
-    (getAll(H, Id, Titulo, Diretor, Data, Genero, Estoque),
-    addFilme(Id, Titulo, Diretor, Data, Genero, Estoque),
-    escreverFilmes(T)).
-
+% Remove um filme do estoque a medida que ele foi alugado
 aluga(Id):-
     lerCsvRowList('Filmes.csv', ArrayFilmes),
     getEntidadeId(Id, ArrayFilmes, Filme),
@@ -74,6 +68,7 @@ aluga(Id):-
     limparCsvFilmes,
     escreverFilmes(FilmesFinal).
 
+% Acrescenta um filme ao estoque a medida que ele foi devolvido
 devolve(Id):-
     lerCsvRowList('Filmes.csv', ArrayFilmes),
     getEntidadeId(Id, ArrayFilmes, Filme),
@@ -85,3 +80,17 @@ devolve(Id):-
     concatenar(Filmes, [FilmeFinal], FilmesFinal),
     limparCsvFilmes,
     escreverFilmes(FilmesFinal).
+
+% ----------------------------------------- Métodos auxiliares ---------------------------------------------------------
+% Remoce todos os filmes do csv
+limparCsvFilmes:-
+    open('../arquivos/Filmes.csv', write, File),
+    write(File, ''),
+    close(File).
+
+% Escreve no csv todos os filmes do array passado como parâmetro
+escreverFilmes([]).
+escreverFilmes([H|T]) :-
+    (getAll(H, Id, Titulo, Diretor, Data, Genero, Estoque),
+    addFilme(Id, Titulo, Diretor, Data, Genero, Estoque),
+    escreverFilmes(T)).

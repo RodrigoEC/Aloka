@@ -82,7 +82,7 @@ devolve(Id):-
     escreverFilmes(FilmesFinal).
 
 % ----------------------------------------- Métodos auxiliares ---------------------------------------------------------
-% Remoce todos os filmes do csv
+% Remove todos os filmes do csv
 limparCsvFilmes:-
     open('../arquivos/Filmes.csv', write, File),
     write(File, ''),
@@ -94,3 +94,24 @@ escreverFilmes([H|T]) :-
     (getAll(H, Id, Titulo, Diretor, Data, Genero, Estoque),
     addFilme(Id, Titulo, Diretor, Data, Genero, Estoque),
     escreverFilmes(T)).
+
+listarFilmes:-
+    lerCsvRowList('Filmes.csv', Filmes),
+    listarFilmesAux(Filmes).
+
+listarFilmesAux([]).
+listarFilmesAux([H|T]):-
+    toString(H, V), writeln(V), listarFilmesAux(T).
+
+toString(F, S):-
+    getAll(F, Id, Titulo, Diretor, Data, Genero, Estoque),
+    string_concat(Id, ' - ', S1),
+    string_concat(S1, Titulo, S2),
+    string_concat(S2, ' - ', S3),
+    string_concat(S3, Diretor, S4),
+    string_concat(S4, ' - ', S5),
+    string_concat(S5, Data, S6),
+    string_concat(S6, ' - ', S7),
+    string_concat(S7, Genero, S8),
+    string_concat(S8, ' - ', S9),
+    string_concat(S9, Estoque, S).

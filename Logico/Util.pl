@@ -24,10 +24,10 @@ read_file(Stream,[X | L]) :-
 cria_path(NomeArquivo, Path) :- concat_atom(['./arquivos/', NomeArquivo, '.txt'], Path).
 
 cria_animacao([]).
-cria_animacao([NomeArquivo|Resto]) :-
+cria_animacao([NomeArquivo, Tempo|Resto]) :-
     clear,
     cria_path(NomeArquivo, Path),
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas),
-    sleep(0.3),
+    sleep(Tempo),
     cria_animacao(Resto).

@@ -61,3 +61,27 @@ escreverFilmes([H|T]) :-
     (getAll(H, Id, Titulo, Diretor, Data, Genero, Estoque),
     addFilme(Id, Titulo, Diretor, Data, Genero, Estoque),
     escreverFilmes(T)).
+
+aluga(Id):-
+    lerCsvRowList('Filmes.csv', ArrayFilmes),
+    getEntidadeId(Id, ArrayFilmes, Filme),
+    remover(Filme, ArrayFilmes, Filmes),
+    elementByIndex(5, Filme, Estoque),
+    E is Estoque - 1,
+    remover(Estoque, Filme, FilmeSemEstoque),
+    concatenar(FilmeSemEstoque, [E], FilmeFinal),
+    concatenar(Filmes, [FilmeFinal], FilmesFinal),
+    limparCsvFilmes,
+    escreverFilmes(FilmesFinal).
+
+devolve(Id):-
+    lerCsvRowList('Filmes.csv', ArrayFilmes),
+    getEntidadeId(Id, ArrayFilmes, Filme),
+    remover(Filme, ArrayFilmes, Filmes),
+    elementByIndex(5, Filme, Estoque),
+    E is Estoque + 1,
+    remover(Estoque, Filme, FilmeSemEstoque),
+    concatenar(FilmeSemEstoque, [E], FilmeFinal),
+    concatenar(Filmes, [FilmeFinal], FilmesFinal),
+    limparCsvFilmes,
+    escreverFilmes(FilmesFinal).

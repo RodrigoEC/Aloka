@@ -115,3 +115,21 @@ toString(F, S):-
     string_concat(S7, Genero, S8),
     string_concat(S8, ' - ', S9),
     string_concat(S9, Estoque, S).
+
+geraArrayGenero(_, [], []).
+geraArrayGenero(Genero, [H|T], Arr):-
+    (member(Genero, H) -> geraArrayGenero(Genero, T, Arr1), concatenar(Arr1, [H], Arr)
+    ; geraArrayGenero(Genero, T, Arr1), concatenar(Arr1, [], Arr)).
+
+ehGeneroValido(Genero):-
+    (lerCsvRowList('Filmes.csv', Filmes),
+    geraArrayGenero(Genero, Filmes, Arr),
+    length(Arr, L), L > 0 -> true
+    ; false).
+
+recomenda(Genero, Id):-
+    lerCsvRowList('Filmes.csv', Filmes),
+    geraArrayGenero(Genero, Filmes, Arr),
+    length(Arr, L),random(0, L, R),
+    elementByIndex(R, Arr, Filme),
+    elementByIndex(0, Filme, Id).

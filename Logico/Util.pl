@@ -1,5 +1,10 @@
 clear :- writeln('\e[H\e[2J').
 
+putLogo :-
+    cria_path('logo', Path),
+    le_arquivo(Path, Linhas),
+    escreve_lista(Linhas).
+
 le_arquivo(Path, Linhas) :-
     open(Path, read, File),
     read_file(File, Linhas),
@@ -16,10 +21,12 @@ read_file(Stream,[X | L]) :-
     read(Stream,X),
     read_file(Stream, L).
 
+cria_path(NomeArquivo, Path) :- concat_atom(['./arquivos/', NomeArquivo, '.txt'], Path).
+
 cria_animacao([]).
 cria_animacao([NomeArquivo|Resto]) :-
     clear,
-    concat_atom(['./arquivos/', NomeArquivo, '.txt'], Path),
+    cria_path(NomeArquivo, Path),
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas),
     sleep(0.3),

@@ -15,21 +15,21 @@ filmeExiste(IdFilme, Result):-
     verificaNaLista(IdFilme, Filmes, Result).
 
 % Verifica se o estoque é > 0
-verificaEstoque(IdFilme):-
-    (getEstoque(IdFilme, Estoque), Estoque > 0 -> true;
-    false).
+verificaEstoque(IdFilme, Result):-
+    (getEstoque(IdFilme, Estoque), Estoque > 0 -> Result = true;
+    Result = false).
 
 % ----------------------------------------------- Getters -----------------------------------------------------------
 % Retorna o estoque
 getEstoque(IdFilme, Estoque) :-
     lerCsvRowList('Filmes.csv', Filmes),
-    getEntidadeId(IdFilme, Filmes, Filme),
+    getEntidadeById(IdFilme, Filmes, Filme),
     elementByIndex(5, Filme, Estoque).
 
 % Retorna Titulo do Filme a partir do Id
 getTitulo(Id, Titulo):-
     lerCsvRowList('Filmes.csv', Filmes),
-    getEntidadeId(Id, Filmes, Filme),
+    getEntidadeById(Id, Filmes, Filme),
     elementByIndex(1, Filme, Titulo).
 
 % Retorna todos os atributos de filme
@@ -45,7 +45,7 @@ getAll(Filme, Id, Titulo, Diretor, Data, Genero, Estoque):-
 % Adiciona filmes ao estoque
 setEstoque(Id, Valor):-
     lerCsvRowList('Filmes.csv', ArrayFilmes),
-    getEntidadeId(Id, ArrayFilmes, Filme),
+    getEntidadeById(Id, ArrayFilmes, Filme),
     remover(Filme, ArrayFilmes, Filmes),
     elementByIndex(5, Filme, Estoque),
     E is Estoque + Valor,
@@ -58,7 +58,7 @@ setEstoque(Id, Valor):-
 % Remove um filme do estoque a medida que ele foi alugado
 aluga(Id):-
     lerCsvRowList('Filmes.csv', ArrayFilmes),
-    getEntidadeId(Id, ArrayFilmes, Filme),
+    getEntidadeById(Id, ArrayFilmes, Filme),
     remover(Filme, ArrayFilmes, Filmes),
     elementByIndex(5, Filme, Estoque),
     E is Estoque - 1,
@@ -71,7 +71,7 @@ aluga(Id):-
 % Acrescenta um filme ao estoque a medida que ele foi devolvido
 devolve(Id):-
     lerCsvRowList('Filmes.csv', ArrayFilmes),
-    getEntidadeId(Id, ArrayFilmes, Filme),
+    getEntidadeById(Id, ArrayFilmes, Filme),
     remover(Filme, ArrayFilmes, Filmes),
     elementByIndex(5, Filme, Estoque),
     E is Estoque + 1,
@@ -120,15 +120,15 @@ toString(F, S):-
 % vai gerar um array com todos os filmes de um genero passado como parametro
 geraArrayGenero(_, [], []).
 geraArrayGenero(Genero, [H|T], Arr):-
-    (member(Genero, H) -> geraArrayGenero(Genero, T, Arr1), concatenar(Arr1, [H], Arr)
+    (elementByIndex(4, H, G), member(Genero, [G]) -> geraArrayGenero(Genero, T, Arr1), concatenar(Arr1, [H], Arr)
     ; geraArrayGenero(Genero, T, Arr1), concatenar(Arr1, [], Arr)).
 
 % vai verificar se o genero do filme é valido
-ehGeneroValido(Genero):-
+ehGeneroValido(Genero, Result):-
     (lerCsvRowList('Filmes.csv', Filmes),
     geraArrayGenero(Genero, Filmes, Arr),
-    length(Arr, L), L > 0 -> true
-    ; false).
+    length(Arr, L), L > 0 -> Result = true
+    ;Result = false).
 
 % vai pegar um filme no array de filmes
 recomenda(Genero, Id):-
@@ -137,3 +137,7 @@ recomenda(Genero, Id):-
     length(Arr, L),random(0, L, R),
     elementByIndex(R, Arr, Filme),
     elementByIndex(0, Filme, Id).
+
+test(Genero, Arr):-
+    lerCsvRowList('Filmes.csv', Filmes),
+    geraArrayGenero(Genero, Filmes, Arr).

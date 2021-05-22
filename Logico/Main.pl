@@ -17,6 +17,7 @@ escolheOpcoesMenuPrincipal(1) :- write('Login como cliente').
 escolheOpcoesMenuPrincipal(2) :- opcoesMenuAdmin.
 escolheOpcoesMenuPrincipal(3) :- write('Cadastro de usuário').
 escolheOpcoesMenuPrincipal(4) :- cria_outro.
+escolheOpcoesMenuPrincipal(_) :- opcaoInvalida, menu_principal.
 
 % Metodo que recebe uma opção de usuario como parâmetro e é responsável por chamar a função
 % adequada. Caso a opção seja invalida o menuPrincipalAdmin é novamente chamado.
@@ -24,12 +25,7 @@ escolheOpcoesMenuPrincipalAdmin(1) :- cadastrar_filme.
 escolheOpcoesMenuPrincipalAdmin(2) :- exibir_historico.
 escolheOpcoesMenuPrincipalAdmin(3) :- writeln(3).
 escolheOpcoesMenuPrincipalAdmin(4) :- cria_outro.
-escolheOpcoesMenuPrincipalAdmin(_) :- opcaoInvalida.
-
-escolheOpcoesMenuPrincipalAdmin(_) :-
-    opcaoInvalida,
-    sleep(1),
-    menu_principal.
+escolheOpcoesMenuPrincipalAdmin(_) :- opcaoInvalida, menu_principal_admin.
 
 exibir_historico :-
     opcoesHistorico,
@@ -66,7 +62,7 @@ menu_principal :-
     read(Opcao),
     escolheOpcoesMenuPrincipal(Opcao).
 
-% Metodo de exibição do menu principal do sistema.
+% Metodo de exibição do menu principal do perfil de administrador do sistema.
 menu_principal_admin :-
     opcoesMenuAdmin,
     read(Opcao),

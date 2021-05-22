@@ -219,13 +219,12 @@ putMsgRecomendacaoGenero() :-
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'),   
     writeln('\nInsira o gênero: '), halt().
 
-putMsgRecomendacao(Filme) :-
+putMsgRecomendacao(NomeFilme) :-
     putLogo,
     writeln('       -HMM VEJAMOS, JÁ SEI!-'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'),   
-    writeln('\nBaseado no seu perfil, recomendamos o seguinte filme:'),
-    writeln(''),
-    string_concat('\n ', Filme, Return),
+    write('\nBaseado no seu perfil, recomendamos o seguinte filme: '),
+    writeln(NomeFilme),
     writeln(''), halt().
 
 putMsgRecomendaLocacao() :-

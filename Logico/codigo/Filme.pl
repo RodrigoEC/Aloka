@@ -94,7 +94,7 @@ escreverFilmes([H|T]) :-
     (getAll(H, Id, Titulo, Diretor, Data, Genero, Estoque),
     addFilme(Id, Titulo, Diretor, Data, Genero, Estoque),
     escreverFilmes(T)).
-
+% lista todos os filmes, esse método ja printa os filmes pq o '\n' n funciona na concatenação de string
 listarFilmes:-
     lerCsvRowList('Filmes.csv', Filmes),
     listarFilmesAux(Filmes).
@@ -102,7 +102,8 @@ listarFilmes:-
 listarFilmesAux([]).
 listarFilmesAux([H|T]):-
     toString(H, V), writeln(V), listarFilmesAux(T).
-
+    
+% Retorna o toString de filme
 toString(F, S):-
     getAll(F, Id, Titulo, Diretor, Data, Genero, Estoque),
     string_concat(Id, ' - ', S1),
@@ -116,17 +117,20 @@ toString(F, S):-
     string_concat(S8, ' - ', S9),
     string_concat(S9, Estoque, S).
 
+% vai gerar um array com todos os filmes de um genero passado como parametro
 geraArrayGenero(_, [], []).
 geraArrayGenero(Genero, [H|T], Arr):-
     (member(Genero, H) -> geraArrayGenero(Genero, T, Arr1), concatenar(Arr1, [H], Arr)
     ; geraArrayGenero(Genero, T, Arr1), concatenar(Arr1, [], Arr)).
 
+% vai verificar se o genero do filme é valido
 ehGeneroValido(Genero):-
     (lerCsvRowList('Filmes.csv', Filmes),
     geraArrayGenero(Genero, Filmes, Arr),
     length(Arr, L), L > 0 -> true
     ; false).
 
+% vai pegar um filme no array de filmes
 recomenda(Genero, Id):-
     lerCsvRowList('Filmes.csv', Filmes),
     geraArrayGenero(Genero, Filmes, Arr),

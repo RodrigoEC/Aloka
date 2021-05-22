@@ -12,7 +12,7 @@ cria_outro() :-
     NomesArquivos=[logo, 0.3, loading4, 0.3, loading3, 0.3, loading2, 0.3, loading1, 0.3, claquete, 0.5],
     cria_animacao(NomesArquivos).
 
-
+% Método que realiza a seleção e exibição das opções referentes ao menu de funcionalidades do administrador.
 escolheOpcoesMenuPrincipal(1) :- write('Login como cliente').
 escolheOpcoesMenuPrincipal(2) :- opcoesMenuAdmin.
 escolheOpcoesMenuPrincipal(3) :- write('Cadastro de usuário').
@@ -25,7 +25,6 @@ escolheOpcoesMenuPrincipalAdmin(2) :- exibir_historico.
 escolheOpcoesMenuPrincipalAdmin(3) :- writeln(3).
 escolheOpcoesMenuPrincipalAdmin(4) :- cria_outro.
 escolheOpcoesMenuPrincipalAdmin(_) :- opcaoInvalida.
-
 
 escolheOpcoesMenuPrincipalAdmin(_) :-
     opcaoInvalida,
@@ -61,6 +60,7 @@ escolheOpcoesHistorico(_) :-
     sleep(1),
     exibir_historico.
 
+% Exibição do menu principal do sistema.
 menu_principal :-
     opcoesMenuInicial,
     read(Opcao),
@@ -72,6 +72,7 @@ menu_principal_admin :-
     read(Opcao),
     escolheOpcoesMenuPrincipalAdmin(Opcao).
 
+% Método responsável por pedir os dados do filme para que seja possível realizar o cadastro de filme no sistema.
 cadastrar_filme :-
     msgCadastroFilmeTitulo,
     msgCadastroFilmeGenero,

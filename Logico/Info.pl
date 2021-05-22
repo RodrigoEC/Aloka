@@ -1,8 +1,9 @@
 :- include('Util.pl').
+:- include('animacoes.pl').
  
  % Método que faz a exibição das opções destinadas ao histórico.
 opcoesHistorico() :-
-    put_logo_historico(),
+    cria_animacao_historico(),
     writeln('Como deseja prosseguir?'),
     writeln('[1] Exibir histórico geral'),
     writeln('[2] Exibir histórico do cliente'),

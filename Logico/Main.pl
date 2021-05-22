@@ -19,9 +19,20 @@ cria_outro() :-
                      'claquete', 0.5],
     cria_animacao(NomesArquivos).
 
+escolheOpcoes(1) :- writeln(1).
+escolheOpcoes(2) :- writeln(2).
+escolheOpcoes(3) :- writeln(3).
+escolheOpcoes(4) :- cria_outro.
+escolheOpcoes(_) :- 
+    putMsgOpcaoInvalida,
+    sleep(1),
+    menuPrincipal.
+
+menuPrincipal :-
+    putMsgOpcoesMenuInicial,
+    read(Opcao),
+    escolheOpcoes(Opcao).
+
 main :-
-    cria_intro(),
-    putLogo(),
-    cria_outro(),
-    putMsgOpcoesMenuInicial(),
+    menuPrincipal,
     halt.

@@ -2,16 +2,16 @@
 :- include('Util.pl').
 
 putMsgOpcoesMenuInicial() :-
-    putLogo,
+    put_logo,
     writeln('       ----MENU PRINCIPAL----'),
     writeln('\nComo deseja prosseguir?'),
     writeln('[1] Login como cliente'),
     writeln('[2] Login como administrador'),
     writeln('[3] Cadastro de usuário'),
-    writeln('[4] Sair\n'), halt().
+    writeln('[4] Sair\n').
 
 putMsgOpcoesMenuCliente(Nome) :-
-    putLogo,
+    put_logo,
     writeln('       --LUZ, CÂMERA, AÇÃO!--'),
     string_concat('             \nOlá, ', Nome, Return),
     write(''),
@@ -22,10 +22,10 @@ putMsgOpcoesMenuCliente(Nome) :-
     writeln('[2] Fazer locação'),
     writeln('[3] Recomendação da locadora'),
     writeln('[4] Devolução da locação'),
-    writeln('[5] Voltar ao menu principal\n'), halt(0).
+    writeln('[5] Voltar ao menu principal\n').
 
 putMsgOpcoesMenuAdmin() :- 
-    putLogo,
+    put_logo,
     writeln('       -----ADMINISTRADOR----'),
     writeln('\nOlá, Administrador!'),
     writeln('\nComo deseja prosseguir?'),
@@ -35,7 +35,7 @@ putMsgOpcoesMenuAdmin() :-
     writeln('[4] Voltar ao menu principal\n'), halt().
 
 putMsgOpcoesExibirLocacoes() :-
-    putLogo,
+    put_logo,
     writeln('       -----ADMINISTRADOR----'),
     writeln('\nComo deseja prosseguir?'),
     writeln('[1] Exibir histórico geral'),
@@ -44,18 +44,14 @@ putMsgOpcoesExibirLocacoes() :-
     writeln('[4] Voltar\n'), halt().
 
 putMsgOpcoesGerenciarEstoque() :-
-    putLogo,
+    put_logo,
     writeln('       -----ADMINISTRADOR----'),
     writeln('\nComo deseja prosseguir?'),
     writeln('[1] Adicionar estoque ao filme'),
     writeln('[2] Verificar disponibilidade de filmes'),
     writeln('[3] Voltar ao menu inicial\n'), halt().
 
-putMsgOpcaoInvalida() :- 
-    write('\nErro: opção inválida!'),
-    %putMsgTeclaEnter().
-    %opcao = Util.lerEntradaString
-    write(''), halt().
+putMsgOpcaoInvalida() :- writeln('\nErro: opção inválida!').
 
 putMsgCpfInvalido() :- 
     writeln('\nErro: CPF inválido!'),
@@ -100,7 +96,7 @@ putMsgFilmeNaoDisponivel() :-
    write(''), halt().
 
 putMsgLoginCliente() :-
-    putLogo,
+    put_logo,
     writeln('       -----LOGIN CLIENTE----\n'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'),
     writeln('\nOlá, cinéfilo! :)\n'),
@@ -110,7 +106,7 @@ putMsgLoginCliente() :-
 
 
 putMsgCadastroNome() :-
-    putLogo,
+    put_logo,
     writeln('       -------CADASTRO-------'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'),
     writeln('\nNome do usuário: '), halt().
@@ -125,7 +121,7 @@ putMsgCadastroEndereco() :-
     writeln('--- \nEndereço: '), halt().
 
 putMsgResumoCadastroUsuario(cliente) :-
-    putLogo,
+    put_logo,
     writeln('       -------CADASTRO-------'),
     writeln('\n-----\n'),
     writeln(cliente),
@@ -135,7 +131,7 @@ putMsgResumoCadastroUsuario(cliente) :-
     halt().
 
 putMsgCadastroFilmeTitulo() :-
-    putLogo,
+    put_logo,
     writeln('       -------CADASTRO-------'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'),
     write(''),
@@ -154,7 +150,7 @@ putMsgFilmeQuantidade() :-
     writeln('Quantidade: '), halt().
 
 putMsgResumoCadastroFilme(Filme) :-
-    %putLogo()
+    %put_logo()
     writeln('       -------CADASTRO-------'),
     writeln('\n-----\n'),
     writeln(Filme),
@@ -167,7 +163,7 @@ putMsgFilmeIdentificador() :-
     writeln('\nID do filme: '), halt().
 
 putMsgLocacaoFilme() :-
-    putLogo,
+    put_logo,
     writeln('       -VAI UM FILMINHO AI?-'),
     writeln('\nOBS: Para verificar a lista de filmes basta digitar "L"!'),
     writeln('     Para voltar ao menu basta digitar "S"!\n'),
@@ -192,7 +188,7 @@ putMsgLocaFilme(NomeFilme, Qtd) :-
     write(''), halt().
 
 putMsgHistoricoLocacoes() :-
-    putLogo,
+    put_logo,
     writeln('       --HISTÓRICO LOCAÇÕES--'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'), halt().
 
@@ -200,27 +196,27 @@ putMsgHistoricoLocacoesCpf() :-
     writeln('\nDigite o CPF do cliente: '), halt().
 
 putMsgHistoricoLocacoesAndamento() :-
-    putLogo,
+    put_logo,
     writeln('       --LOCAÇÕES ANDAMENTO--'), halt().
 
 putMsgEstoqueFilmes() :-
-    putLogo,
+    put_logo,
     writeln('       ---ADICIONA ESTOQUE---'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'), halt().
 
 putMsgDisponibilidadeFilmes() :-
-    putLogo,
+    put_logo,
     writeln('       ----DISPONIBILIDADE---'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'), halt().
 
 putMsgRecomendacaoGenero() :-
-    putLogo,
+    put_logo,
     writeln('       -----RECOMENDAÇÃO-----'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'),   
     writeln('\nInsira o gênero: '), halt().
 
 putMsgRecomendacao(NomeFilme) :-
-    putLogo,
+    put_logo,
     writeln('       -HMM VEJAMOS, JÁ SEI!-'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'),   
     write('\nBaseado no seu perfil, recomendamos o seguinte filme: '),
@@ -231,14 +227,14 @@ putMsgRecomendaLocacao() :-
     writeln('Você deseja fazer a locação desse filme? [y/n]'), halt().
 
 putMsgListaFilmes() :-
-    putLogo,
+    put_logo,
     writeln('       ----LISTA DE FILMES---'), halt().
 
 putMsgTeclaEnter() :-
     writeln('\nPressione a tecla ENTER para voltar'), halt().
 
 putMsgDevolucaoTop() :-
-    putLogo,
+    put_logo,
     writeln('       -------DEVOLUÇÃO------'),
     writeln('\nUau, já assistiu?!'),
     writeln('Você tem a(s) seguinte(s) locação(ões) em andamento:'), halt().

@@ -1,6 +1,7 @@
-clear() :- writeln('\e[H\e[2J').
+clear :- writeln('\e[H\e[2J').
 
-putLogo() :-
+put_logo :-
+    clear,
     cria_path('logo', Path),
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas).

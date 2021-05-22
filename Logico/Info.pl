@@ -150,6 +150,12 @@ msgResumoCadastroUsuario(Cliente) :-
     writeln(Cliente),
     writeln('\n-----').
 
+%Método que realiza a exibição de mensagem de pedido de título do filme que será cadastrado pelo administrador.
+msgCadastroFilmeTitulo() :-
+    put_logo(),
+    writeln('       -------CADASTRO-------'),
+    writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'),
+    writeln('\nTítulo: ').
 
 % Método que realiza a exibição de resumo do cadastro do cliente.
 msgResumoCadastroFilme(Filme) :-

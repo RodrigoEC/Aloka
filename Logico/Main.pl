@@ -2,6 +2,7 @@
 :- include('Util.pl').
 :- include('Info.pl').
 
+% Metodo que cria a animação de introdução do sistema.
 cria_intro() :-
     NomesArquivos = ['loading1', 0.3,
                      'loading2', 0.3,
@@ -10,6 +11,7 @@ cria_intro() :-
                      'logo', 0.3],
     cria_animacao(NomesArquivos).
 
+% Metodo que cria a animação de saída do sistema
 cria_outro() :-
     NomesArquivos = ['logo', 0.3,
                      'loading4', 0.3,
@@ -19,19 +21,22 @@ cria_outro() :-
                      'claquete', 0.5],
     cria_animacao(NomesArquivos).
 
-escolheOpcoes(1) :- writeln(1).
-escolheOpcoes(2) :- writeln(2).
-escolheOpcoes(3) :- writeln(3).
-escolheOpcoes(4) :- cria_outro.
-escolheOpcoes(_) :- 
+% Metodo que recebe uma opção de usuario como parâmetro e é responsável por chamar a função
+% adequada. Caso a opção seja invalida o menuPrincipal é novamente chamado.
+escolheOpcoesMenu(1) :- writeln(1).
+escolheOpcoesMenu(2) :- writeln(2).
+escolheOpcoesMenu(3) :- writeln(3).
+escolheOpcoesMenu(4) :- cria_outro.
+escolheOpcoesMenu(_) :- 
     putMsgOpcaoInvalida,
     sleep(1),
     menuPrincipal.
 
+% Metodo de exibição do menu principal do sistema.
 menuPrincipal :-
     putMsgOpcoesMenuInicial,
     read(Opcao),
-    escolheOpcoes(Opcao).
+    escolheOpcoesMenu(Opcao).
 
 main :-
     menuPrincipal,

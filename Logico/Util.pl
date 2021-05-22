@@ -51,3 +51,9 @@ cria_animacao([NomeArquivo, Tempo|Resto]) :-
     escreve_lista(Linhas),
     sleep(Tempo),
     cria_animacao(Resto).
+
+exibePorIndex([Elem], 0, Elem).
+exibePorIndex([Elem|_], 0, Elem).
+exibePorIndex([_| Calda], Idx, Elem) :-
+    NovoIdx is Idx - 1,
+    exibePorIndex(Calda, NovoIdx, Elem).

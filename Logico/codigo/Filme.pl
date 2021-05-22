@@ -10,9 +10,9 @@ addFilme(Id, Titulo, Diretor, Data, Genero, Estoque) :-
 % ------------------------------------ Métodos de verificação -------------------------------------------------------
 
 % Verifica se o filme existe, le o arquivo csv e chama o método verificaNaLista que vai ver se o filme está na lista
-filmeExiste(IdFilme):-
+filmeExiste(IdFilme, Result):-
     lerCsvRowList('Filmes.csv', Filmes),
-    verificaNaLista(IdFilme, Filmes).
+    verificaNaLista(IdFilme, Filmes, Result).
 
 % Verifica se o estoque é > 0
 verificaEstoque(IdFilme):-

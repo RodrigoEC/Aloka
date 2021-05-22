@@ -15,5 +15,5 @@ clienteExiste(CpfCliente):-
 % Retorna nome do cliente a partir do cpf
 getNome(Cpf, Nome):-
     lerCsvRowList('Clientes.csv', Clientes),
-    getEntidadeId(Cpf, Clientes, Cliente),
+    getEntidadeById(Cpf, Clientes, Cliente),
     elementByIndex(1, Cliente, Nome).

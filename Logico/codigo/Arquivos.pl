@@ -17,15 +17,31 @@ elementByIndex(I, [_|T], E):- X is I - 1, elementByIndex(X, T, E).
 
 % Verifica se a entidade está na lista, a partir do identificador unico
 verificaNaLista(_,[], false).
-verificaNaLista(SearchedId, [H|T]) :-
-     (member(SearchedId, H) -> true
-     ;verificaNaLista(SearchedId, T)).
+verificaNaLista(SearchedId, [H|T], Result) :-
+     idCadastrado(SearchedId, H, Cadastrado),
+     (Cadastrado -> Result = true
+     ;verificaNaLista(SearchedId, T, R),
+     Result = R).
 
-% Pega a lista que representa a entidade na lista de entidades a partir o identificador unico
-getEntidadeId(_, [], false).
-getEntidadeId(Id, [H|[]], H).
-getEntidadeId(Id, [[Id|T2]|T], [Id|T2]):- !.
-getEntidadeId(Id, [_|T], E):- getEntidadeId(Id, T, E).
+idCadastrado(_,[], false).
+idCadastrado(SearchedId, [H|T], Result) :-
+    H =:= SearchedId -> Result = true
+    ; Result = false.
+
+% Retorna o Id da entidade. É assumido que esse identificador é elemento da cabeça da lista.
+getEntidadeId([], []).
+getEntidadeId([H|T], H).
+
+% Retorna o elemento que possui o ID correspondente ao solicitado.
+getEntidadeById(_, [], []).
+getEntidadeById(Id, [H|T], Result) :-
+    getEntidadeId(H, EntidadeID),
+    (EntidadeID =:= Id 
+        -> Result = H
+        ; getEntidadeById(Id, T, R),
+        Result = R
+    ).
+
 
 % Remove elementos de uma lista
 remover(X, [X|T], T).

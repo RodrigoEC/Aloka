@@ -1,10 +1,20 @@
 % Método que da um clear no console durante a execução.
 clear :- writeln('\e[H\e[2J').
 
+adm_read(Entrada) :-
+    write('administrador>> '),
+    read(Entrada).
+
 % Método que exibe a logo do ALOKA
 put_logo :-
     clear,
     cria_path('logo', Path),
+    le_arquivo(Path, Linhas),
+    escreve_lista(Linhas).
+
+put_logo_historico :-
+    clear,
+    cria_path('logo_historico', Path),
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas).
 

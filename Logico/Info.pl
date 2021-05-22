@@ -1,6 +1,14 @@
 
 :- include('Util.pl').
 
+putOpcoesHistorico :-
+    put_logo_historico,
+    writeln('Como deseja prosseguir?'),
+    writeln('[1] Exibir histórico geral'),
+    writeln('[2] Exibir histórico do cliente'),
+    writeln('[3] Exibir locações em andamento'),
+    writeln('[4] Voltar ao menu inicial').
+
 putMsgOpcoesMenuInicial() :-
     put_logo,
     writeln('       ----MENU PRINCIPAL----'),

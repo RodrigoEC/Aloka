@@ -23,9 +23,32 @@ escolheOpcoesMenuPrincipal(_) :- opcaoInvalida, menu_principal.
 % adequada. Caso a opção seja invalida o menuPrincipalAdmin é novamente chamado.
 escolheOpcoesMenuPrincipalAdmin(1) :- cadastrar_filme.
 escolheOpcoesMenuPrincipalAdmin(2) :- exibir_historico.
-escolheOpcoesMenuPrincipalAdmin(3) :- writeln(3).
+escolheOpcoesMenuPrincipalAdmin(3) :- menu_admin_gerenciar_estoque.
 escolheOpcoesMenuPrincipalAdmin(4) :- cria_outro.
 escolheOpcoesMenuPrincipalAdmin(_) :- opcaoInvalida, menu_principal_admin.
+
+% Metodo responsável por receber uma opção do administrador como parâmetro e chamar a função
+%escolhida. Caso a opção seja invalida o menu_admin_gerenciar_estoque será novamente executada.
+escolheOpcoesGerenciarEstoque(1) :- adicionaFilmeAoEstoque.
+escolheOpcoesGerenciarEstoque(2) :- verificaDisponibilidadeFilme.
+escolheOpcoesGerenciarEstoque(3) :- opcoesMenuAdmin.
+escolheOpcoesGerenciarEstoque(_) :- opcaoInvalida, menu_admin_gerenciar_estoque.
+
+%Método responsável por verificar a disponibilidade de filmes no estoque da locadora.
+verificaDisponibilidadeFilme :-
+    msgDisponibilidadeFilmes,
+    nl,
+    adm_read(Opcao),
+    escolheOpcoesGerenciarEstoque(Opcao).
+
+%Método responsável por adicionar uma quantidade X indicada pelo administrador do sistema, no estoque de filmes da locadora.
+adicionaFilmeAoEstoque :-
+    msgEstoqueFilmes,
+    nl,
+    adm_read(Opcao),
+    escolheOpcoesGerenciarEstoque(Opcao),
+    msgFilmeIdentificador,
+    msgFilmeQuantidade.
 
 exibir_historico :-
     opcoesHistorico,
@@ -63,6 +86,11 @@ menu_principal :-
     escolheOpcoesMenuPrincipal(Opcao).
 
 % Metodo de exibição do menu principal do perfil de administrador do sistema.
+menu_admin_gerenciar_estoque :-
+    opcoesGerenciarEstoque,
+    read(Opcao),
+    escolheOpcoesGerenciarEstoque(Opcao).
+
 menu_principal_admin :-
     opcoesMenuAdmin,
     read(Opcao),

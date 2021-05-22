@@ -209,7 +209,10 @@ msgEstoqueFilmes() :-
     writeln('       ---ADICIONA ESTOQUE---'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n').
 
+msgFilmeIdentificador() :-
+writeln('\nID do filme: ').
 % Método que exibe mensagem inicial em relação a disponibilidade de filmes no estoque.
+
 msgDisponibilidadeFilmes() :-
     put_logo(),
     writeln('       ----DISPONIBILIDADE---'),

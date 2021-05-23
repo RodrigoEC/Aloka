@@ -8,13 +8,13 @@ adm_read(Entrada) :-
 % Método que exibe a logo do ALOKA
 put_logo :-
     clear,
-    cria_path('logo', 'logo/', Path),
+    cria_path_frames('logo', 'logo/', Path),
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas).
 
 logo_historico :-
     clear,
-    cria_path('load_hist10', 'historico/', Path),
+    cria_path_frames('load_hist10', 'historico/', Path),
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas).
 
@@ -39,14 +39,14 @@ read_file(Stream,[X | L]) :-
     read_file(Stream, L).
 
 % Metodo que cria um path para os arquivos txt
-cria_path(NomeArquivo, Pasta, Path) :- concat_atom(['./frames/', Pasta, NomeArquivo, '.txt'], Path).
+cria_path_frames(NomeArquivo, Pasta, Path) :- concat_atom(['../frames/', Pasta, NomeArquivo, '.txt'], Path).
 
 % Metodo que cria a animação dos arquivos txt existentes. O metodo recebe uma lista de nomes
 % de arquivos que serão exibidos e o tempo que cada arquivo será exibido na tela.
 cria_animacao([], _).
 cria_animacao([NomeArquivo, Tempo|Resto], Pasta) :-
     clear,
-    cria_path(NomeArquivo, Pasta, Path),
+    cria_path_frames(NomeArquivo, Pasta, Path),
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas),
     sleep(Tempo),

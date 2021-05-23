@@ -4,10 +4,15 @@
 :- include('animacoes.pl').
 :- include('Locacao.pl').
 
+% Exibição do menu principal do sistema.
+menu_principal :-
+    opcoesMenuInicial,
+    read(Opcao),
+    escolheOpcoesMenuPrincipal(Opcao).
 
 % Método que realiza a seleção e exibição das opções referentes ao menu de funcionalidades do administrador.
 escolheOpcoesMenuPrincipal(1) :- write('Login como cliente').
-escolheOpcoesMenuPrincipal(2) :- opcoesMenuAdmin.
+escolheOpcoesMenuPrincipal(2) :- menu_principal_admin.
 escolheOpcoesMenuPrincipal(3) :- write('Cadastro de usuário').
 escolheOpcoesMenuPrincipal(4) :- cria_outro.
 escolheOpcoesMenuPrincipal(_) :- opcaoInvalida, menu_principal.
@@ -51,12 +56,6 @@ adicionaFilmeAoEstoque :-
     msgEstoqueFilmes,
     adm_read(Opcao),
     escolheOpcoesGerenciarEstoque(Opcao).
-
-% Exibição do menu principal do sistema.
-menu_principal :-
-    opcoesMenuInicial,
-    read(Opcao),
-    escolheOpcoesMenuPrincipal(Opcao).
 
 % Metodo de exibição do menu principal do perfil de administrador do sistema.
 menu_admin_gerenciar_estoque :-
@@ -120,5 +119,4 @@ escolhe_opcoes_historico(_) :-
 main :-
     cria_intro,
     menu_principal,
-    menu_principal_admin,
     halt.

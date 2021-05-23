@@ -14,7 +14,7 @@ put_logo :-
 
 put_logo_historico :-
     clear,
-    cria_path('logo_historico', Path),
+    cria_path('load_hist4', Path),
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas).
 
@@ -52,8 +52,8 @@ cria_animacao([NomeArquivo, Tempo|Resto]) :-
     sleep(Tempo),
     cria_animacao(Resto).
 
-exibePorIndex([Elem], 0, Elem).
-exibePorIndex([Elem|_], 0, Elem).
-exibePorIndex([_| Calda], Idx, Elem) :-
+exibe_por_index([Elem], 0, Elem).
+exibe_por_index([Elem|_], 0, Elem).
+exibe_por_index([_| Calda], Idx, Elem) :-
     NovoIdx is Idx - 1,
-    exibePorIndex(Calda, NovoIdx, Elem).
+    exibe_por_index(Calda, NovoIdx, Elem).

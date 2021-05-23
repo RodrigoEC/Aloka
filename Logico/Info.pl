@@ -1,14 +1,17 @@
 :- include('Util.pl').
 :- include('animacoes.pl').
- 
- % Método que faz a exibição das opções destinadas ao histórico.
+
 opcoesHistorico() :-
-    cria_animacao_historico(),
     writeln('Como deseja prosseguir?'),
     writeln('[1] Exibir histórico geral'),
     writeln('[2] Exibir histórico do cliente'),
     writeln('[3] Exibir locações em andamento'),
     writeln('[4] Voltar ao menu inicial').
+
+% Método que faz a exibição das opções destinadas ao histórico.
+menuHistorico() :-
+    cria_animacao_historico(),
+    opcoesHistorico.
 
 % Método que realiza a exibição das opções relacionadas ao menu inicial.
 opcoesMenuInicial() :-
@@ -191,17 +194,17 @@ msgLocaFilme(NomeFilme, Qtd) :-
 
 % Método que realiza a exibição da logo de histórico de locacoes.
 msgHistoricoLocacoes() :-
-    put_logo_historico(),
+    cria_animacao_historico(),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n').
 
 % Método que realiza o pedido de cpf do cliente para que sua(s) locação(oes) possa(m) ser listada(s).
 msgHistoricoLocacoesCpf() :-
-    put_logo_historico(),
+    cria_animacao_historico(),
     writeln('\nDigite o CPF do cliente: ').
 
 % Método que exibe mensagem inicial da listagem de locações em andamento.
 msgHistoricoLocacoesAndamento() :-
-    put_logo_historico(),
+    cria_animacao_historico(),
     writeln('       --LOCAÇÕES ANDAMENTO--').
 
 % Método que exibe mensagem inicial da adição de filmes ao estoque.

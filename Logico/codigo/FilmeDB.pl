@@ -24,6 +24,10 @@ verificaEstoque(IdFilme, Result):-
 getFilmes(Result) :-
     lerCsvRowList('Filmes.csv', Result).
 
+getFilmeById(IdFilme, Result) :-
+    getFilmes(Filmes),
+    getEntidadeById(IdFilme, Filmes, Result).
+
 % Retorna o estoque
 getEstoque(IdFilme, Estoque) :-
     lerCsvRowList('Filmes.csv', Filmes),
@@ -100,7 +104,7 @@ escreverFilmes([H|T]) :-
     escreverFilmes(T)).
     
 % Retorna o toString de filme
-toString(F, S):-
+toStringFilme(F, S):-
     getAll(F, Id, Titulo, Diretor, Data, Genero, Estoque),
     string_concat(Id, ' - ', S1),
     string_concat(S1, Titulo, S2),

@@ -2,13 +2,15 @@
 :-include('Arquivos.pl').
 
 % Cadastra uma locação ao fim do arquivo Locacoes.csv
-cadastraLocacao(IdFilme, CpfCliente, DataLocacao, Status) :-
+cadastraLocacao(IdFilme, CpfCliente, DataLocacao) :-
+    Status = 'em andamento',
     geraIdLocacao(IdLocacao),
     getLocacaoById(IdLocacao, Locacao),
     (not(member(_,Locacao))
         -> open('../dados/Locacoes.csv', append, File),
         writeln(File, (IdLocacao, IdFilme, CpfCliente, DataLocacao, Status)),
-        close(File)
+        close(File),
+        aluga(IdFilme)
         ; cadastraLocacao(IdFilme, CpfCliente, DataLocacao, Status)
     ).
     
@@ -78,7 +80,6 @@ locacaoToString(Locacao, Result):-
     string_concat(S6, ' - ', S7),
     string_concat(S7, Status, Result).
 
-
 % --------------------- finalizar locação ---------------------
 finalizaLocacao(IdLocacao):-
     getLocacoes(Locacoes),
@@ -88,11 +89,14 @@ finalizaLocacao(IdLocacao):-
     concatenar(LocacaoSemStatus, ["finalizado"], LocacaoFinalizada),
     concatenar(Result, [LocacaoFinalizada], NewLocacoes),
     limpaCsvLocacoes,
-    escreveLocacoes(NewLocacoes).
+    escreveLocacoes(NewLocacoes),
+    getEntidadeId(LocacaoFinalizada, IdLocacaoFinalizada),
+    getLocacaoById(IdLocacaoFinalizada, [_,IdFilme,_,_,_]),
+    setEstoque(IdFilme, 1).
 
 %Limpa os dados do csv Locacoes.csv
 limpaCsvLocacoes:-
-    open('../arquivos/Locacoes.csv', write, File),
+    open('../dados/Locacoes.csv', write, File),
     write(File, ''),
     close(File).
 
@@ -100,9 +104,13 @@ limpaCsvLocacoes:-
 escreveLocacoes([]).
 escreveLocacoes([H|T]) :-
     (getAllAttributesLocacao(H, IdLocacao, IdFilme, Cpf, Data, Status),
-    cadastraLocacao(IdLocacao, IdFilme, Cpf, Data, Status),
+    setLocacao(IdLocacao, IdFilme, Cpf, Data, Status),
     escreveLocacoes(T)).
 
+setLocacao(IdLocacao, IdFilme, CpfCliente, DataLocacao, Status) :-
+    open('../dados/Locacoes.csv', append, File),
+    writeln(File, (IdLocacao, IdFilme, CpfCliente, DataLocacao, Status)),
+    close(File).
 
 % Retorna todos os atributos de locacao
 getAllAttributesLocacao([IdLocacao, IdFilme, CpfCliente, DataLocacao, Status], IdLocacao, IdFilme, CpfCliente, DataLocacao, Status).

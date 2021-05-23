@@ -21,7 +21,7 @@ menu_principal_admin :-
 
 % Metodo que recebe uma opção de usuario como parâmetro e é responsável por chamar a função
 % adequada. Caso a opção seja invalida o menuPrincipalAdmin é novamente chamado.
-escolheOpcoesMenuPrincipalAdmin(1) :- cadastrar_filme.
+escolheOpcoesMenuPrincipalAdmin(1) :- cadastrar_filme, sleep(2), adm_read(Opcao), escolheOpcoesMenuPrincipalAdmin(Opcao).
 escolheOpcoesMenuPrincipalAdmin(2) :- exibir_menu_historico.
 escolheOpcoesMenuPrincipalAdmin(3) :- menu_admin_gerenciar_estoque.
 escolheOpcoesMenuPrincipalAdmin(4) :- menu_principal.
@@ -31,24 +31,26 @@ escolheOpcoesMenuPrincipalAdmin(_) :- opcaoInvalida, menu_principal_admin.
 %escolhida. Caso a opção seja invalida o menu_admin_gerenciar_estoque será novamente executada.
 escolheOpcoesGerenciarEstoque(1) :- adicionaFilmeAoEstoque.
 escolheOpcoesGerenciarEstoque(2) :- verificaDisponibilidadeFilme.
-escolheOpcoesGerenciarEstoque(3) :- opcoesMenuAdmin.
-escolheOpcoesGerenciarEstoque(_) :- opcaoInvalida, menu_admin_gerenciar_estoque.
+escolheOpcoesGerenciarEstoque(3) :- sleep(2),opcoesMenuAdmin, adm_read(Opcao), escolheOpcoesMenuPrincipalAdmin(Opcao).
+escolheOpcoesGerenciarEstoque(_) :- opcaoInvalida, sleep(2), menu_admin_gerenciar_estoque.
 
 % Método responsável por verificar a disponibilidade de filmes no estoque da locadora.
 verificaDisponibilidadeFilme :-
     msgDisponibilidadeFilmes,
-    nl,
+    sleep(2),
+    msgDisponibilidadeFilmes,
     adm_read(Opcao),
-    escolheOpcoesGerenciarEstoque(Opcao).
+    escolheOpcoesGerenciarEstoque(Opcao). 
 
 % Método responsável por adicionar uma quantidade X indicada pelo administrador do sistema, no estoque de filmes da locadora.
 adicionaFilmeAoEstoque :-
     msgEstoqueFilmes,
-    nl,
-    adm_read(Opcao),
-    escolheOpcoesGerenciarEstoque(Opcao),
     msgFilmeIdentificador,
-    msgFilmeQuantidade.
+    msgFilmeQuantidade,
+    sleep(2),
+    msgEstoqueFilmes,
+    adm_read(Opcao),
+    escolheOpcoesGerenciarEstoque(Opcao).
 
 % Exibição do menu principal do sistema.
 menu_principal :-
@@ -59,9 +61,8 @@ menu_principal :-
 % Metodo de exibição do menu principal do perfil de administrador do sistema.
 menu_admin_gerenciar_estoque :-
     opcoesGerenciarEstoque,
-    read(Opcao),
+    adm_read(Opcao),
     escolheOpcoesGerenciarEstoque(Opcao).
-
 
 % Método responsável por pedir os dados do filme para que seja possível realizar o cadastro de filme no sistema.
 cadastrar_filme :-
@@ -69,7 +70,7 @@ cadastrar_filme :-
     msgCadastroFilmeGenero,
     msgCadastroFilmeDiretor,
     msgCadastroFilmeData,
-    msgFilmeQuantidade.
+    msgFilmeQuantidade. 
 
 %  Método de exibição do menu de opções de históricos do admin.
 exibir_menu_historico :-
@@ -120,6 +121,4 @@ main :-
     cria_intro,
     menu_principal,
     menu_principal_admin,
-    % X = [['saratu', 'seu bumbum', 'lururu', 'xururu'], ['saratu', 'seu bumbum', 'lururu', 'xururu'], ['saratu', 'seu bumbum', 'lururu', 'xururu']],
-    % exibeLocacoes(X),
     halt.

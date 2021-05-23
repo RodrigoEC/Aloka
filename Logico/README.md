@@ -2,7 +2,7 @@
   
 ### Inicialmente será necessário instalar: 
 
-:arrows_counterclockwise: Compilador da linguagem ([Prolog](https://wwu-pi.github.io/tutorials/lectures/lsp/010_install_swi_prolog.html))
+:arrows_counterclockwise: Compilador da linguagem [Prolog](https://wwu-pi.github.io/tutorials/lectures/lsp/010_install_swi_prolog.html):
 
   ```
   $ sudo apt-get install swi-prolog

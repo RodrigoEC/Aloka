@@ -41,6 +41,7 @@ exibeLocacao(Locacao) :-
     nl.
 
 % Metodo que exibe as informações de uma lista de Locações que é passada como parâmetro da função.
+exibeLocacoes([]) :- msgCpfInvalido(), sleep(2), clear(), logo_historico(). 
 exibeLocacoes([Locacao]) :- exibeLocacao(Locacao).
 exibeLocacoes([Locacao|Resto]) :-
     exibeLocacao(Locacao),

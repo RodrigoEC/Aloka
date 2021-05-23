@@ -13,7 +13,6 @@ opcoesHistorico() :-
 msgVoltarMenuAnterior() :- 
     writeln('     Para voltar ao menu anterior basta digitar "S"!\n').
 
-
 % Método que faz a exibição do menu de histórico do sistema.
 menuHistorico() :-
     cria_animacao_historico(),

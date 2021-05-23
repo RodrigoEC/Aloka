@@ -20,6 +20,10 @@ verificaEstoque(IdFilme, Result):-
     Result = false).
 
 % ----------------------------------------------- Getters -----------------------------------------------------------
+% Retorna uma lista com todos os filmes cadastrados
+getFilmes(Result) :-
+    lerCsvRowList('Filmes.csv', Result).
+
 % Retorna o estoque
 getEstoque(IdFilme, Estoque) :-
     lerCsvRowList('Filmes.csv', Filmes),
@@ -94,14 +98,6 @@ escreverFilmes([H|T]) :-
     (getAll(H, Id, Titulo, Diretor, Data, Genero, Estoque),
     addFilme(Id, Titulo, Diretor, Data, Genero, Estoque),
     escreverFilmes(T)).
-% lista todos os filmes, esse método ja printa os filmes pq o '\n' n funciona na concatenação de string
-listarFilmes:-
-    lerCsvRowList('Filmes.csv', Filmes),
-    listarFilmesAux(Filmes).
-
-listarFilmesAux([]).
-listarFilmesAux([H|T]):-
-    toString(H, V), writeln(V), listarFilmesAux(T).
     
 % Retorna o toString de filme
 toString(F, S):-
@@ -137,7 +133,3 @@ recomenda(Genero, Id):-
     length(Arr, L),random(0, L, R),
     elementByIndex(R, Arr, Filme),
     elementByIndex(0, Filme, Id).
-
-test(Genero, Arr):-
-    lerCsvRowList('Filmes.csv', Filmes),
-    geraArrayGenero(Genero, Filmes, Arr).

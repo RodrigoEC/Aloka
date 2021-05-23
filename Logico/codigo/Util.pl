@@ -1,6 +1,9 @@
 % Método que da um clear no console durante a execução.
 clear :- writeln('\e[H\e[2J').
 
+% Metodo que costumiza a entrada do sistema. Dessa forma, o read possui um formato diferente.
+% Ex:
+%   administrador >> 
 adm_read(Entrada) :-
     write('administrador>> '),
     read(Entrada).
@@ -12,6 +15,7 @@ put_logo :-
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas).
 
+% Exibe logo do histórico. 
 logo_historico :-
     clear,
     cria_path_frames('load_hist10', 'historico/', Path),
@@ -52,6 +56,7 @@ cria_animacao([NomeArquivo, Tempo|Resto], Pasta) :-
     sleep(Tempo),
     cria_animacao(Resto, Pasta).
 
+% Método que recebe uma lista e um index da lista e é retornado o elemento associado àquele index.
 exibe_por_index([Elem], 0, Elem).
 exibe_por_index([Elem|_], 0, Elem).
 exibe_por_index([_| Calda], Idx, Elem) :-

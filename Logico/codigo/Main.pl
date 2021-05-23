@@ -91,14 +91,17 @@ escolhe_opcoes_historico(1) :-
 escolhe_opcoes_historico(2) :-
     logo_historico(),
 
-    write('Digite o CPF do cliente: '),
-    read(CPF),
+    msgVoltarMenuAnterior(),
+    msgCadastroCpf(),
+    adm_read(CPF),
+    (CPF = 'S' -> exibir_menu_historico();
+
     exibe_historico_cliente(CPF),
     opcoesHistorico,
 
     nl,
     adm_read(Opcao),
-    escolhe_opcoes_historico(Opcao).
+    escolhe_opcoes_historico(Opcao)).
 
 escolhe_opcoes_historico(3) :-
     logo_historico(),

@@ -1,42 +1,42 @@
 :- include('Util.pl').
+:- include('LocacaoDB.pl').
 
 exibe_historico_geral() :- 
-    nl,
-    writeln('Histórico geral ainda não implementado!!'),
-    nl.
+    getLocacoes(Locacoes),
+    exibeLocacoes(Locacoes).
 
 exibe_historico_cliente(CPF) :-
-    nl,
-    writeln('Histórico do cliente ainda não implementado!!'),
-    writeln(CPF),
-    nl.
+    getLocacoesCliente(CPF, Locacoes),
+    exibeLocacoes(Locacoes).
 
 exibe_historico_em_andamento() :-
-    nl,
-    writeln('Histórico das locacoes em andamento ainda não implementado!!'),
-    nl.
+    getLocacoesEmAndamento(Locacoes),
+    exibeLocacoes(Locacoes).
 
 exibeLocacao(Info) :-
-    nl,
-    exibe_por_index(Info, 0, Cliente),
-    write('Cliente: '), writeln(Cliente),
+    writeln('------'),
+    exibe_por_index(Info, 0, IdLocacao),
+    write('Id da locação: '), writeln(IdLocacao),
     writeln('---'),
 
     exibe_por_index(Info, 1, Filme),
-    write('filme: '), writeln(Filme),
+    write('Id do filme: '), writeln(Filme),
     writeln('---'),
 
-    exibe_por_index(Info, 2, DataLocacao),
+    exibe_por_index(Info, 2, Cliente),
+    write('CPF do Cliente: '), writeln(Cliente),
+    writeln('---'),
+
+    exibe_por_index(Info, 3, DataLocacao),
     write('Data de locação: '), writeln(DataLocacao),
     writeln('---'),
 
-    exibe_por_index(Info, 3, Situacao),
+    exibe_por_index(Info, 4, Situacao),
     write('Situação: '), writeln(Situacao),
-    writeln('----'),
+    writeln('------'),
     nl.
 
 exibeLocacoes([Locacao]) :- exibeLocacao(Locacao).
 exibeLocacoes([Locacao|Resto]) :-
     exibeLocacao(Locacao),
-    writeln('<- - - ->'),
     exibeLocacoes(Resto).

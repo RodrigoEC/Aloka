@@ -6,7 +6,11 @@ opcoesHistorico() :-
     writeln('[1] Exibir histórico geral'),
     writeln('[2] Exibir histórico do cliente'),
     writeln('[3] Exibir locações em andamento'),
-    writeln('[4] Voltar ao menu inicial').
+    writeln('[4] Voltar ao menu do administrador').
+
+msgVoltarMenuAnterior() :- 
+    writeln('     Para voltar ao menu anterior basta digitar "S"!\n').
+
 
 % Método que faz a exibição das opções destinadas ao histórico.
 menuHistorico() :-

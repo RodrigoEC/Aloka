@@ -2,13 +2,14 @@
 
 % Metodo que cria a animação de introdução do sistema.
 cria_intro() :-
+    Path = 'logo/',
     NomesArquivos = [loading1, 0.3, loading2, 0.3, loading3, 0.3, loading4, 0.3, logo, 0.3],
-    cria_animacao(NomesArquivos).
+    cria_animacao(NomesArquivos, Path).
 
 % Metodo que cria a animação de saída do sistema
 cria_outro() :-
     NomesArquivos = [logo, 0.3, loading4, 0.3, loading3, 0.3, loading2, 0.3, loading1, 0.3, claquete, 0.5],
-    cria_animacao(NomesArquivos).
+    cria_animacao(NomesArquivos, 'logo/').
 
 cria_animacao_historico() :-
     NomesArquivos = [load_hist1, 0.2, 
@@ -31,5 +32,5 @@ cria_animacao_historico() :-
                      load_hist12, 0.2,
                      load_hist11, 0.2,
                      load_hist10, 0.2],
-    cria_animacao(NomesArquivos).
+    cria_animacao(NomesArquivos, 'historico/').
 

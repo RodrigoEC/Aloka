@@ -6,7 +6,7 @@ cadastraLocacao(IdFilme, CpfCliente, DataLocacao, Status) :-
     geraIdLocacao(IdLocacao),
     getLocacaoById(IdLocacao, Locacao),
     (not(member(_,Locacao))
-        -> open('../arquivos/Locacoes.csv', append, File),
+        -> open('../dados/Locacoes.csv', append, File),
         writeln(File, (IdLocacao, IdFilme, CpfCliente, DataLocacao, Status)),
         close(File)
         ; cadastraLocacao(IdFilme, CpfCliente, DataLocacao, Status)

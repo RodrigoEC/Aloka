@@ -3,7 +3,7 @@
 
 % Adiciona um filme no arquivo
 addFilme(Id, Titulo, Diretor, Data, Genero, Estoque) :-
-    open('../arquivos/Filmes.csv', append, File),
+    open('../dados/Filmes.csv', append, File),
     writeln(File, (Id, Titulo, Diretor, Data, Genero, Estoque)),
     close(File).
 
@@ -84,7 +84,7 @@ devolve(Id):-
 % ----------------------------------------- Métodos auxiliares ---------------------------------------------------------
 % Remove todos os filmes do csv
 limparCsvFilmes:-
-    open('../arquivos/Filmes.csv', write, File),
+    open('../dados/Filmes.csv', write, File),
     write(File, ''),
     close(File).
 

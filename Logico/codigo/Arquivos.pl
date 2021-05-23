@@ -2,7 +2,7 @@
 % Le o arquivo .csv e retorna uma lista de listas, cada lista é uma entidae
 % ex: [[Cpf1, Nome1, Telefone1, Endereco1], [Cpf2, Nome2, Telefone2, Endereco2]].
 lerCsvRowList(Arquivo,Lists):-
-    atom_concat('../arquivos/', Arquivo, Path),
+    atom_concat('../dados/', Arquivo, Path),
     csv_read_file(Path, Rows, []),
     rows_to_lists(Rows, Lists).
 
@@ -41,7 +41,6 @@ getEntidadeById(Id, [H|T], Result) :-
         ; getEntidadeById(Id, T, R),
         Result = R
     ).
-
 
 % Remove elementos de uma lista
 remover(X, [X|T], T).

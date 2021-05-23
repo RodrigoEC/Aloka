@@ -11,6 +11,25 @@ cria_outro() :-
     cria_animacao(NomesArquivos).
 
 cria_animacao_historico() :-
-    NomesArquivos = [load_hist1, 0.2, load_hist2, 0.1, load_hist3, 0.2, load_hist4, 0.1],
+    NomesArquivos = [load_hist1, 0.2, 
+                     load_hist2, 0.2,
+                     load_hist3, 0.2,
+                     load_hist4, 0.2,
+                     load_hist5, 0.2,
+                     load_hist6, 0.2,
+                     load_hist7, 0.2,
+                     load_hist8, 0.2,
+                     load_hist9, 0.2,
+                     load_hist10, 0.2,
+                     load_hist11, 0.2,
+                     load_hist12, 0.2,
+                     load_hist13, 0.2,
+                     load_hist14, 0.2,
+                     load_hist15, 0.2,
+                     load_hist14, 0.2,
+                     load_hist13, 0.2,
+                     load_hist12, 0.2,
+                     load_hist11, 0.2,
+                     load_hist10, 0.2],
     cria_animacao(NomesArquivos).
 

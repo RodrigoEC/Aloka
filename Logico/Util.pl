@@ -12,9 +12,9 @@ put_logo :-
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas).
 
-put_logo_historico :-
+logo_historico :-
     clear,
-    cria_path('load_hist4', Path),
+    cria_path('load_hist10', Path),
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas).
 

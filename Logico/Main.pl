@@ -79,7 +79,7 @@ exibir_menu_historico :-
     escolhe_opcoes_historico(Opcao).
 
 escolhe_opcoes_historico(1) :-
-    cria_animacao_historico(),
+    logo_historico(),
 
     exibe_historico_geral(),
     opcoesHistorico,
@@ -89,7 +89,7 @@ escolhe_opcoes_historico(1) :-
     escolhe_opcoes_historico(Opcao).
 
 escolhe_opcoes_historico(2) :-
-    cria_animacao_historico(),
+    logo_historico(),
 
     write('Digite o CPF do cliente: '),
     read(CPF),
@@ -101,7 +101,7 @@ escolhe_opcoes_historico(2) :-
     escolhe_opcoes_historico(Opcao).
 
 escolhe_opcoes_historico(3) :-
-    cria_animacao_historico(),
+    logo_historico(),
     
     exibe_historico_em_andamento(),
     opcoesHistorico,

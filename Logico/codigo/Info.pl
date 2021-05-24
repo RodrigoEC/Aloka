@@ -152,7 +152,8 @@ msgResumoCadastroUsuario(Cliente) :-
     writeln('       -------CADASTRO-------'),
     writeln('\n-----\n'),
     writeln(Cliente),
-    writeln('\n-----').
+    writeln('\n-----'),
+    msgDigiteS.
 
 %Método que realiza a exibição de mensagem de pedido de título do filme que será cadastrado pelo administrador.
 msgCadastroFilmeTitulo() :-
@@ -247,8 +248,8 @@ msgListaFilmes() :-
     writeln('       ----LISTA DE FILMES---').
 
 % Método que realiza a exibição da mensagem de instrução para voltar alguma operação no sistema.
-msgTeclaEnter() :-
-    writeln('\nPressione a tecla ENTER para voltar').
+msgDigiteS() :-
+    writeln('\nPara voltar basta digitar "S"!').
 
 % Método que exibe a mensagem inicial para a operação de devolução de um dado filme locado juntamente com a mensagem inicial que irá conter todas as locações em andamento.
 msgDevolucaoTop() :-

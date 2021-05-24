@@ -5,6 +5,10 @@ adm_read(Entrada) :-
     write('administrador>> '),
     read(Entrada).
 
+cliente_read(Entrada) :-
+    write('cliente>> '),
+    read(Entrada).
+
 % Método que exibe a logo do ALOKA
 put_logo :-
     clear,

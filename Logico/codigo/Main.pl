@@ -3,6 +3,7 @@
 :- include('Info.pl').
 :- include('animacoes.pl').
 :- include('Locacao.pl').
+:- include('Cliente.pl').
 
 % Exibição do menu principal do sistema.
 menu_principal :-
@@ -13,7 +14,7 @@ menu_principal :-
 % Método que realiza a seleção e exibição das opções referentes ao menu de funcionalidades do administrador.
 escolheOpcoesMenuPrincipal(1) :- write('Login como cliente').
 escolheOpcoesMenuPrincipal(2) :- menu_principal_admin.
-escolheOpcoesMenuPrincipal(3) :- write('Cadastro de usuário').
+escolheOpcoesMenuPrincipal(3) :- cadastro_usuario.
 escolheOpcoesMenuPrincipal(4) :- cria_outro.
 escolheOpcoesMenuPrincipal(_) :- opcaoInvalida, menu_principal.
 
@@ -120,3 +121,40 @@ main :-
     cria_intro,
     menu_principal,
     halt.
+
+
+cadastro_usuario :- 
+    msgCadastroNome,
+    read(Nome),
+    recebeNomeUsuario(Nome).
+
+recebeNomeUsuario("S") :- menu_principal.
+recebeNomeUsuario(Nome) :- 
+    msgCadastroCpf,
+    read(CPF),
+    recebeCpfUsuario(Nome, CPF).
+
+recebeCpfUsuario(_, "S") :- menu_principal.
+recebeCpfUsuario(Nome, CPF) :- 
+    msgCadastroTelefone,
+    read(Telefone),
+    recebeTelefoneUsuario(Nome, CPF, Telefone).
+
+recebeTelefoneUsuario(_, _, "S") :- menu_principal.
+recebeTelefoneUsuario(Nome, CPF, Telefone) :-
+    msgCadastroEndereco,
+    read(Endereco),
+    recebeEnderecoUsuario(Nome, CPF, Telefone, Endereco).
+
+recebeEnderecoUsuario(_, _, _, "S") :- menu_principal.
+recebeEnderecoUsuario(Nome, CPF, Telefone, Endereco) :-
+    cadastra_usuario(Nome, CPF, Telefone, Endereco).
+
+cadastra_usuario(Nome, CPF, Telefone, Endereco) :-
+    adiciona_cliente(Nome, CPF, Telefone, Endereco, Resumo),
+    msgResumoCadastroUsuario(Resumo),
+    read(Opcao),
+    retorna(Opcao).
+
+retorna("S") :- menu_principal.
+retorna(_) :- msgDigiteS, read(Opcao), retorna(Opcao).

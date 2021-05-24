@@ -3,7 +3,7 @@
 
 % Adiciona um cliente no arquivo
 addCliente(Cpf, Nome, Telefone, Endereco) :-
-    open('../dados/Clientes.csv', append, File),
+    open('./dados/Clientes.csv', append, File),
     writeln(File, (Cpf, Nome, Telefone, Endereco)),                 
     close(File).
 

@@ -79,6 +79,7 @@ exibir_menu_historico :-
     adm_read(Opcao),
     escolhe_opcoes_historico(Opcao).
 
+% Opção 01 do histórico. É exibido ao usuário o histórico geral de locações do sistema.
 escolhe_opcoes_historico(1) :-
     logo_historico(),
 
@@ -89,18 +90,23 @@ escolhe_opcoes_historico(1) :-
     adm_read(Opcao),
     escolhe_opcoes_historico(Opcao).
 
+% Opção 02 do histórico. É exibido ao usuário o histórico de locações de um cliente em específico.
 escolhe_opcoes_historico(2) :-
     logo_historico(),
 
-    write('Digite o CPF do cliente: '),
-    read(CPF),
+    msgVoltarMenuAnterior(),
+    msgCadastroCpf(),
+    adm_read(CPF),
+    (CPF = 'S' -> exibir_menu_historico();
+
     exibe_historico_cliente(CPF),
     opcoesHistorico,
 
     nl,
     adm_read(Opcao),
-    escolhe_opcoes_historico(Opcao).
+    escolhe_opcoes_historico(Opcao)).
 
+% Opção 03 do histórico. É exibido ao usuário as locações que estão em andamento no momento.
 escolhe_opcoes_historico(3) :-
     logo_historico(),
     
@@ -111,7 +117,10 @@ escolhe_opcoes_historico(3) :-
     adm_read(Opcao),
     escolhe_opcoes_historico(Opcao).
 
+% Opção 04 do histórico. O usuário é redirecionado para o menu de opções do admin.
 escolhe_opcoes_historico(4) :- menu_principal_admin.
+% Caso o usuário passe uma entrada que não se encaixa nas quatro opções acima uma mensagem de erro é
+% exibida e o sistema volta ao menu de históricos depois de 1 segundo.
 escolhe_opcoes_historico(_) :-
     opcaoInvalida,
     sleep(1),
@@ -121,7 +130,6 @@ main :-
     cria_intro,
     menu_principal,
     halt.
-
 
 % Metodo responsavel por realizar o cadastro de um novo usuario no sitema 
 % com nome, cpf, telefone e endereco.

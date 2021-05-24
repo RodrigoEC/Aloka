@@ -1,6 +1,9 @@
 % Método que da um clear no console durante a execução.
 clear :- writeln('\e[H\e[2J').
 
+% Metodo que costumiza a entrada do sistema. Dessa forma, o read possui um formato diferente.
+% Ex:
+%   administrador >> 
 adm_read(Entrada) :-
     write('administrador>> '),
     read(Entrada).
@@ -16,6 +19,7 @@ put_logo :-
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas).
 
+% Exibe logo do histórico. 
 logo_historico :-
     clear,
     cria_path_frames('load_hist10', 'historico/', Path),
@@ -48,7 +52,7 @@ read_file(Stream,[X | L]) :-
     read_file(Stream, L).
 
 % Metodo que cria um path para os arquivos txt
-cria_path_frames(NomeArquivo, Pasta, Path) :- concat_atom(['../frames/', Pasta, NomeArquivo, '.txt'], Path).
+cria_path_frames(NomeArquivo, Pasta, Path) :- concat_atom(['./frames/', Pasta, NomeArquivo, '.txt'], Path).
 
 % Metodo que cria a animação dos arquivos txt existentes. O metodo recebe uma lista de nomes
 % de arquivos que serão exibidos e o tempo que cada arquivo será exibido na tela.
@@ -61,6 +65,7 @@ cria_animacao([NomeArquivo, Tempo|Resto], Pasta) :-
     sleep(Tempo),
     cria_animacao(Resto, Pasta).
 
+% Método que recebe uma lista e um index da lista e é retornado o elemento associado àquele index.
 exibe_por_index([Elem], 0, Elem).
 exibe_por_index([Elem|_], 0, Elem).
 exibe_por_index([_| Calda], Idx, Elem) :-

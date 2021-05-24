@@ -1,14 +1,19 @@
 :- include('Util.pl').
 :- include('animacoes.pl').
 
+% Método que faz a exibição das opções destinadas ao histórico
 opcoesHistorico() :-
     writeln('Como deseja prosseguir?'),
     writeln('[1] Exibir histórico geral'),
     writeln('[2] Exibir histórico do cliente'),
     writeln('[3] Exibir locações em andamento'),
-    writeln('[4] Voltar ao menu inicial').
+    writeln('[4] Voltar ao menu do administrador').
 
-% Método que faz a exibição das opções destinadas ao histórico.
+% Metodo que faz a exibição da mensagem de retorno a um menu anterior.
+msgVoltarMenuAnterior() :- 
+    writeln('     Para voltar ao menu anterior basta digitar "S"!\n').
+
+% Método que faz a exibição do menu de histórico do sistema.
 menuHistorico() :-
     cria_animacao_historico(),
     opcoesHistorico.

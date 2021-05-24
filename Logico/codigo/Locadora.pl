@@ -24,3 +24,9 @@ locadora_add_locacao(ID, CPF, Data) :- add_locacao(ID, CPF, Data).
 locadora_eh_genero_valido(Genero, Result) :- eh_genero_valido(Genero, Result).
 
 locadora_recomenda_filme(Genero, ID) :- get_filme_recomendado(Genero, ID).
+
+locadora_lista_locacoes_cliente(CPF) :- lista_locacoes_cliente(CPF).
+
+locadora_locacao_existe(ID, Result) :- locacao_existe(ID, Result).
+
+locadora_finaliza_locacao(ID, IDfilme) :- finaliza_locacao(ID, IDfilme).

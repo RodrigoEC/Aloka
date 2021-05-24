@@ -43,4 +43,29 @@ exibeLocacoes([Locacao|Resto]) :-
     exibeLocacoes(Resto).
 
 
+locacao_existe(ID, Result) :- locacaoExiste(ID, Result).
+
 add_locacao(ID, CPF, Data) :- cadastraLocacao(ID, CPF, Data).
+
+finaliza_locacao(ID, IDFilme) :- 
+    getLocacaoById(ID, Locacao),
+    getAllAttributesLocacao(Locacao, L, IDFilme, C, D, S),
+    finalizaLocacao(ID).
+
+lista_locacoes_cliente(CPF) :- 
+    getLocacoesEmAndamentoCliente(CPF, Locacoes),
+    lista_locacoes(Locacoes).
+
+lista_locacoes([]).
+lista_locacoes([Locacao|Locacoes]) :- 
+    lista_locacao(Locacao), 
+    lista_locacoes(Locacoes).
+
+lista_locacao(Locacao) :- 
+    getAllAttributesLocacao(Locacao, IDL, IDF, CPF, Data, Status),
+    write("Id locação: "), write(IDL),
+    write("\nId filme: "), write(IDF), 
+    write("\nCPF cliente: "), write(CPF), 
+    write("\nData locação: "), write(Data), 
+    write("\nStatus: "), write(Status),
+    write("\n---"), nl.

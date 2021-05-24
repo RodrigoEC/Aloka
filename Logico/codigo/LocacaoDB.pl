@@ -13,10 +13,14 @@ cadastraLocacao(IdFilme, CpfCliente, DataLocacao) :-
         aluga(IdFilme)
         ; cadastraLocacao(IdFilme, CpfCliente, DataLocacao, Status)
     ).
-    
+
 %Gera o Id da locação de forma randômica
 geraIdLocacao(Id):-
     random(0, 1000, Id).
+
+locacaoExiste(IdLocacao, Result):-
+    lerCsvRowList('Locacoes.csv', Locacoes),
+    verificaNaLista(IdLocacao, Locacoes, Result).
 
 % Retorna uma lista com todas as locações cadastradas
 getLocacoes(Result) :-

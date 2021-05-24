@@ -256,11 +256,11 @@ msgDevolucaoTop() :-
     put_logo(),
     writeln('       -------DEVOLUÇÃO------'),
     writeln('\nUau, já assistiu?!'),
-    writeln('Você possui a(s) seguinte(s) locação(ões) em andamento:').
+    writeln('Você possui a(s) seguinte(s) locação(ões) em andamento:\n').
 
 % Método que realiza a exibição de mensagem inicial relacionada a devolução de um dado filme.
 msgDevolucaoBottom() :-
-    writeln('Qual locação você deseja encerrar?\n'),
+    writeln('Qual locação você deseja encerrar?'),
     writeln('OBS: Para voltar ao menu basta digitar "S"!'),
     writeln('\nID da locação: ').
 

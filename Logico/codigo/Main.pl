@@ -244,4 +244,23 @@ recomenda_filme(Genero, CPF) :-
 
 proximaEtapaRecomenda("n", CPF, _) :- menu_principal_cliente(CPF).
 proximaEtapaRecomenda("y", CPF, ID) :- loca_filme(ID, CPF).
+proximaEtapaRecomenda("S", CPF, ID) :- menu_principal_cliente(CPF).
 proximaEtapaRecomenda(_, CPF, _) :- opcaoInvalida, retorna(0, recomendar_filme(CPF)).
+
+% Metodo responsavel por finalizar uma locaçao do cliente e devolver o filme.
+devolver_filme(CPF) :- 
+    msgDevolucaoTop,
+    locadora_lista_locacoes_cliente(CPF),
+    msgDevolucaoBottom,
+    read(Entrada),
+    proximaEtapaDevolucao(Entrada, CPF).
+
+proximaEtapaDevolucao("S", CPF) :- menu_principal_cliente(CPF).
+proximaEtapaDevolucao(ID, CPF) :- locadora_locacao_existe(ID, L),
+    (L -> devolve_filme(ID, CPF); opcaoInvalida, retorna(0, devolver_filme(CPF))).
+
+devolve_filme(ID, CPF) :-
+    locadora_finaliza_locacao(ID, IDFilme),
+    locadora_get_estoque(IDFilme, Estoque),
+    msgDevolveFilme(Estoque),
+    retorna(0, menu_principal_cliente(CPF)).

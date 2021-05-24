@@ -4,6 +4,7 @@
 :- include('animacoes.pl').
 :- include('Locacao.pl').
 :- include('Cliente.pl').
+:- include('Filme.pl').
 
 % Exibição do menu principal do sistema.
 menu_principal :-
@@ -12,7 +13,7 @@ menu_principal :-
     escolheOpcoesMenuPrincipal(Opcao).
 
 % Método que realiza a seleção e exibição das opções referentes ao menu de funcionalidades do administrador.
-escolheOpcoesMenuPrincipal(1) :- write('Login como cliente').
+escolheOpcoesMenuPrincipal(1) :- login_cliente.
 escolheOpcoesMenuPrincipal(2) :- menu_principal_admin.
 escolheOpcoesMenuPrincipal(3) :- cadastro_usuario.
 escolheOpcoesMenuPrincipal(4) :- cria_outro.
@@ -154,7 +155,47 @@ cadastra_usuario(Nome, CPF, Telefone, Endereco) :-
     adiciona_cliente(Nome, CPF, Telefone, Endereco, Resumo),
     msgResumoCadastroUsuario(Resumo),
     read(Opcao),
-    retorna(Opcao).
+    retorna(Opcao, menu_principal).
 
-retorna("S") :- menu_principal.
-retorna(_) :- msgDigiteS, read(Opcao), retorna(Opcao).
+retorna("S", X) :- X.
+retorna(_, X) :- msgDigiteS, read(Opcao), retorna(Opcao, X).
+
+
+login_cliente :- 
+    msgLoginCliente,
+    read(Entrada),
+    verificaEntradaLoginCliente(Entrada).
+
+verificaEntradaLoginCliente("S") :- menu_principal.
+verificaEntradaLoginCliente(CPF) :- eh_cliente(CPF, R),
+    (R -> menu_principal_cliente(CPF); msgUserInvalido, retorna(0, login_cliente)).
+verificaEntradaLoginCliente(_) :- opcaoInvalida, login_cliente.
+
+menu_principal_cliente(CPF) :- 
+    get_nome(CPF, Nome),
+    opcoesMenuCliente(Nome),
+    cliente_read(Opcao),
+    escolheOpcoesMenuPrincipalCliente(Opcao, CPF).
+
+escolheOpcoesMenuPrincipalCliente(1, CPF) :- listar_filmes(CPF, menu_principal_cliente(CPF)).
+escolheOpcoesMenuPrincipalCliente(2, CPF) :- locar_filme(CPF).
+escolheOpcoesMenuPrincipalCliente(3, CPF) :- recomendar_filme(CPF).
+escolheOpcoesMenuPrincipalCliente(4, CPF) :- devolver_filme(CPF).
+escolheOpcoesMenuPrincipalCliente(5, CPF) :- menu_principal.
+escolheOpcoesMenuPrincipalAdmin(_, CPF) :- menu_principal_cliente(CPF).
+
+listar_filmes(CPF, X) :-
+    msgListaFilmes, nl,
+    lista_filmes,
+    retorna(0, X).
+
+locar_filme(CPF) :- 
+    msgLocacaoFilme,
+    read(Entrada),
+    verificaEntradaLocacao(Entrada, CPF).
+
+verificaEntradaLocacao(Entrada, CPF) :- ID is Entrada,
+    (Entrada =:= "S" -> menu_principal_cliente(CPF);
+    Entrada =:= "L" -> listar_filmes(CPF, 'L');
+    /*verificaIdFilme(ID) -> loca_filme(ID, CPF),  menu_principal_cliente(CPF);*/
+    msgIdInvalido, locar_filme(CPF)).

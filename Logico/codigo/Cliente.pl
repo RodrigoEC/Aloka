@@ -1,5 +1,8 @@
 :- include('ClienteDB.pl').
 
+eh_cliente(CPF, Result) :- clienteExiste(CPF, Result).
+
+get_nome(CPF, Result) :- getNome(CPF, Result).
 
 adiciona_cliente(Nome, CPF, Telefone, Endereco, Result) :- clienteExiste(CPF, R),
     (R -> Result = "Erro: usuário já cadastrado!";
@@ -18,5 +21,3 @@ resumoCliente(Nome, CPF, Telefone, Endereco, Result):-
     string_concat(R1, C, R2),
     string_concat(R2, T, R3),
     string_concat(R3, E, Result).
-
-

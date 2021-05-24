@@ -157,7 +157,8 @@ msgResumoCadastroUsuario(Cliente) :-
     writeln('       -------CADASTRO-------'),
     writeln('\n-----\n'),
     writeln(Cliente),
-    writeln('\n-----').
+    writeln('\n-----'),
+    msgDigiteS.
 
 %Método que realiza a exibição de mensagem de pedido de título do filme que será cadastrado pelo administrador.
 msgCadastroFilmeTitulo() :-
@@ -188,14 +189,15 @@ msgDataLocacao() :-
 
 % Método que realiza a exibição de mensagens de sucesso de locação e quantidade restantes do dado filme alugado no estoque.
 msgLocaFilme(NomeFilme, Qtd) :-
-    writeln('\nJá pode ir preparando a pipoca...\n'),
+    nl, logo_pipoca,
+    writeln('\nJá pode ir preparando a pipoca...'),
     string_concat('Filme, ', NomeFilme, Return),
     write(Return),
-    writeln(' alugado com sucesso!\n'),
+    writeln(' alugado com sucesso!'),
     string_concat('Agora só temos: ', Qtd, R),
     write(R),
     writeln(' unidade(s) disponivel(is).'),
-    writeln('---\n').
+    writeln('---').
 
 % Método que realiza a exibição da logo de histórico de locacoes.
 msgHistoricoLocacoes() :-
@@ -243,8 +245,8 @@ msgRecomendacao(NomeFilme) :-
     put_logo(),
     writeln('       -HMM VEJAMOS, JÁ SEI!-'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'),   
-    write('\nBaseado no seu perfil, recomendamos o seguinte filme: '),
-    writeln(NomeFilme).
+    write('\nBaseado no seu perfil, recomendamos o seguinte filme:\n'), nl,
+    writeln(NomeFilme), nl.
 
 % Método que exibe mensagem inicial em relação a listagem de filmes.
 msgListaFilmes() :-
@@ -252,19 +254,19 @@ msgListaFilmes() :-
     writeln('       ----LISTA DE FILMES---').
 
 % Método que realiza a exibição da mensagem de instrução para voltar alguma operação no sistema.
-msgTeclaEnter() :-
-    writeln('\nPressione a tecla ENTER para voltar').
+msgDigiteS() :-
+    writeln('\nPara voltar basta digitar "S"!').
 
 % Método que exibe a mensagem inicial para a operação de devolução de um dado filme locado juntamente com a mensagem inicial que irá conter todas as locações em andamento.
 msgDevolucaoTop() :-
     put_logo(),
     writeln('       -------DEVOLUÇÃO------'),
     writeln('\nUau, já assistiu?!'),
-    writeln('Você possui a(s) seguinte(s) locação(ões) em andamento:').
+    writeln('Você possui a(s) seguinte(s) locação(ões) em andamento:\n').
 
 % Método que realiza a exibição de mensagem inicial relacionada a devolução de um dado filme.
 msgDevolucaoBottom() :-
-    writeln('Qual locação você deseja encerrar?\n'),
+    writeln('Qual locação você deseja encerrar?'),
     writeln('OBS: Para voltar ao menu basta digitar "S"!'),
     writeln('\nID da locação: ').
 

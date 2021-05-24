@@ -7,16 +7,20 @@ cadastraLocacao(IdFilme, CpfCliente, DataLocacao) :-
     geraIdLocacao(IdLocacao),
     getLocacaoById(IdLocacao, Locacao),
     (not(member(_,Locacao))
-        -> open('../dados/Locacoes.csv', append, File),
+        -> open('./dados/Locacoes.csv', append, File),
         writeln(File, (IdLocacao, IdFilme, CpfCliente, DataLocacao, Status)),
         close(File),
         aluga(IdFilme)
-        ; cadastraLocacao(IdFilme, CpfCliente, DataLocacao, Status)
+        ; cadastraLocacao(IdFilme, CpfCliente, DataLocacao)
     ).
-    
+
 %Gera o Id da locação de forma randômica
 geraIdLocacao(Id):-
     random(0, 1000, Id).
+
+locacaoExiste(IdLocacao, Result):-
+    lerCsvRowList('Locacoes.csv', Locacoes),
+    verificaNaLista(IdLocacao, Locacoes, Result).
 
 % Retorna uma lista com todas as locações cadastradas
 getLocacoes(Result) :-
@@ -96,7 +100,7 @@ finalizaLocacao(IdLocacao):-
 
 %Limpa os dados do csv Locacoes.csv
 limpaCsvLocacoes:-
-    open('../dados/Locacoes.csv', write, File),
+    open('./dados/Locacoes.csv', write, File),
     write(File, ''),
     close(File).
 
@@ -108,7 +112,7 @@ escreveLocacoes([H|T]) :-
     escreveLocacoes(T)).
 
 setLocacao(IdLocacao, IdFilme, CpfCliente, DataLocacao, Status) :-
-    open('../dados/Locacoes.csv', append, File),
+    open('./dados/Locacoes.csv', append, File),
     writeln(File, (IdLocacao, IdFilme, CpfCliente, DataLocacao, Status)),
     close(File).
 

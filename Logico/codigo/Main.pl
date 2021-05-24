@@ -3,8 +3,7 @@
 :- include('Info.pl').
 :- include('animacoes.pl').
 :- include('Locacao.pl').
-:- include('Cliente.pl').
-:- include('Filme.pl').
+:- include('Locadora.pl').
 
 % Exibição do menu principal do sistema.
 menu_principal :-
@@ -154,7 +153,7 @@ recebeEnderecoUsuario(Nome, CPF, Telefone, Endereco) :-
     cadastra_usuario(Nome, CPF, Telefone, Endereco).
 
 cadastra_usuario(Nome, CPF, Telefone, Endereco) :-
-    adiciona_cliente(Nome, CPF, Telefone, Endereco, Resumo),
+    locadora_add_cliente(Nome, CPF, Telefone, Endereco, Resumo),
     msgResumoCadastroUsuario(Resumo),
     read(Opcao),
     retorna(Opcao, menu_principal).
@@ -172,12 +171,12 @@ login_cliente :-
     proximaEtapaLoginCliente(Entrada).
 
 proximaEtapaLoginCliente("S") :- menu_principal.
-proximaEtapaLoginCliente(CPF) :- eh_cliente(CPF, R),
+proximaEtapaLoginCliente(CPF) :- locadora_eh_cliente(CPF, R),
     (R -> menu_principal_cliente(CPF); msgUserInvalido, retorna(0, login_cliente)).
 
 % Metodo de exibição do menu de opções do cliente.
 menu_principal_cliente(CPF) :- 
-    get_nome(CPF, Nome),
+    locadora_get_nome(CPF, Nome),
     opcoesMenuCliente(Nome),
     cliente_read(Opcao),
     escolheOpcoesMenuPrincipalCliente(Opcao, CPF).
@@ -195,7 +194,7 @@ escolheOpcoesMenuPrincipalAdmin(_, CPF) :- menu_principal_cliente(CPF).
 % Metodo responsavel por listar todos os filmes disponiveis para locação.
 listar_filmes(CPF, X) :-
     msgListaFilmes, nl,
-    lista_filmes,
+    locadora_lista_filmes,
     retorna(0, X).
 
 
@@ -207,10 +206,10 @@ locar_filme(CPF) :-
 
 proximaEtapaLocacao("S", CPF) :- menu_principal_cliente(CPF).
 proximaEtapaLocacao("L", CPF) :- listar_filmes(CPF, locar_filme(CPF)).
-proximaEtapaLocacao(Entrada, CPF) :- eh_filme(Entrada, F),
+proximaEtapaLocacao(Entrada, CPF) :- locadora_eh_filme(Entrada, F),
     (F ->  loca_filme(Entrada, CPF); msgFilmeNaoCadastrado, retorna(0, locar_filme(CPF))).
 
-loca_filme(ID, CPF) :- filme_disponivel(ID, D),
+loca_filme(ID, CPF) :- locadora_filme_disponivel(ID, D),
     (not(D) -> msgFilmeNaoDisponivel, retorna(0, locar_filme(CPF));
     msgDataLocacao,
     read(Entrada),
@@ -218,8 +217,8 @@ loca_filme(ID, CPF) :- filme_disponivel(ID, D),
 
 recebeDataLocacao("S", CPF, _) :- menu_principal_cliente(CPF).
 recebeDataLocacao(Data, CPF, ID) :- 
-    add_locacao(ID, CPF, Data),
-    get_titulo(ID, Titulo),
-    get_estoque(ID, Estoque),
+    locadora_add_locacao(ID, CPF, Data),
+    locadora_get_titulo(ID, Titulo),
+    locadora_get_estoque(ID, Estoque),
     msgLocaFilme(Titulo, Estoque),
     retorna(0, menu_principal_cliente(CPF)).

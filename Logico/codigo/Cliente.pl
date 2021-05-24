@@ -4,11 +4,11 @@ eh_cliente(CPF, Result) :- clienteExiste(CPF, Result).
 
 get_nome(CPF, Result) :- getNome(CPF, Result).
 
-adiciona_cliente(Nome, CPF, Telefone, Endereco, Result) :- clienteExiste(CPF, R),
+add_cliente(Nome, CPF, Telefone, Endereco, Result) :- clienteExiste(CPF, R),
     (R -> Result = "Erro: usuário já cadastrado!";
-    add_Cliente(Nome, CPF, Telefone, Endereco, Result)).
+    adiciona_cliente(Nome, CPF, Telefone, Endereco, Result)).
 
-add_Cliente(Nome, CPF, Telefone, Endereco, Result) :- 
+adiciona_cliente(Nome, CPF, Telefone, Endereco, Result) :- 
     addCliente(CPF, Nome, Telefone, Endereco),
     resumoCliente(Nome, CPF, Telefone, Endereco, Result).
 

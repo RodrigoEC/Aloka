@@ -17,7 +17,7 @@ locadora_get_estoque(ID, Result) :- get_estoque(ID, Result).
 
 locadora_get_titulo(ID, Result) :- get_titulo(ID, Result).
 
-locadora_lista_filmes :- lista_filmes.
+locadora_lista_filmes_disponiveis :- lista_filmes_disponiveis.
 
 locadora_add_locacao(ID, CPF, Data) :- add_locacao(ID, CPF, Data).
 

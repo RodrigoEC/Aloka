@@ -22,6 +22,11 @@ logo_historico :-
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas).
 
+logo_pipoca :-
+    cria_path_frames('pipoca', '', Path),
+    le_arquivo(Path, Linhas),
+    escreve_lista(Linhas).
+
 % Metodo que recebe o path do arquivo, abre, lê e retorna uma lista com o conteúdo
 % do arquivo.
 le_arquivo(Path, Linhas) :-

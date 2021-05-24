@@ -184,6 +184,7 @@ msgDataLocacao() :-
 
 % Método que realiza a exibição de mensagens de sucesso de locação e quantidade restantes do dado filme alugado no estoque.
 msgLocaFilme(NomeFilme, Qtd) :-
+    nl, logo_pipoca,
     writeln('\nJá pode ir preparando a pipoca...'),
     string_concat('Filme, ', NomeFilme, Return),
     write(Return),

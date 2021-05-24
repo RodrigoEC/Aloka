@@ -194,7 +194,7 @@ escolheOpcoesMenuPrincipalAdmin(_, CPF) :- menu_principal_cliente(CPF).
 % Metodo responsavel por listar todos os filmes disponiveis para locação.
 listar_filmes(CPF, X) :-
     msgListaFilmes, nl,
-    locadora_lista_filmes,
+    locadora_lista_filmes_disponiveis,
     retorna(0, X).
 
 

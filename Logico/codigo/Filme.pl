@@ -10,14 +10,15 @@ get_titulo(ID, Result) :- getTitulo(ID, Result).
 
 eh_genero_valido(Genero, Result) :- ehGeneroValido(Genero, Result).
 
-lista_filmes() :- 
+lista_filmes_disponiveis() :- 
     getFilmes(Filmes),
-    exibe_filmes(Filmes).
+    exibe_filmes_disponiveis(Filmes).
 
-exibe_filmes([]).
-exibe_filmes([Filme|Filmes]) :- elementByIndex(0, Filme, Id), getEstoque(Id, Estoque),
-    (Estoque > 0 -> exibe_filme(Filme), exibe_filmes(Filmes);
-    exibe_filmes(Filmes)).
+exibe_filmes_disponiveis([]).
+exibe_filmes_disponiveis([Filme|Filmes]) :- 
+    elementByIndex(0, Filme, Id), getEstoque(Id, Estoque),
+    (Estoque > 0 -> exibe_filme(Filme), exibe_filmes_disponiveis(Filmes);
+    exibe_filmes_disponiveis(Filmes)).
 
 exibe_filme(Filme) :- 
     getAll(Filme, Id, Titulo, Diretor, Data, Genero, Estoque),

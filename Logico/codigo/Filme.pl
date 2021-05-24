@@ -1,5 +1,13 @@
 :- include('FilmeDB.pl').
 
+eh_filme(ID, Result) :- filmeExiste(ID, Result).
+
+filme_disponivel(ID, Result) :- verificaEstoque(ID, Result).
+
+get_estoque(ID, Result) :- getEstoque(ID, Result).
+
+get_titulo(ID, Result) :- getTitulo(ID, Result).
+
 lista_filmes() :- 
     getFilmes(Filmes),
     exibe_filmes(Filmes).

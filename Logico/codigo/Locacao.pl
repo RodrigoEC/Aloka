@@ -1,4 +1,5 @@
 :- include('Util.pl').
+:- include('LocacaoDB.pl').
 
 exibe_historico_geral() :- 
     nl,
@@ -40,3 +41,6 @@ exibeLocacoes([Locacao|Resto]) :-
     exibeLocacao(Locacao),
     writeln('<- - - ->'),
     exibeLocacoes(Resto).
+
+
+add_locacao(ID, CPF, Data) :- cadastraLocacao(ID, CPF, Data).

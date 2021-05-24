@@ -124,6 +124,8 @@ main :-
     halt.
 
 
+% Metodo responsavel por realizar o cadastro de um novo usuario no sitema 
+% com nome, cpf, telefone e endereco.
 cadastro_usuario :- 
     msgCadastroNome,
     read(Nome),
@@ -157,26 +159,31 @@ cadastra_usuario(Nome, CPF, Telefone, Endereco) :-
     read(Opcao),
     retorna(Opcao, menu_principal).
 
+
+% Metodo responsavel por retornar a uma funcao especifica X, 
+% ou persistir em caso de opcao invalida.
 retorna("S", X) :- X.
 retorna(_, X) :- msgDigiteS, read(Opcao), retorna(Opcao, X).
 
-
+% Metodo responsavel por realizar o login de um clinete ao sistema.
 login_cliente :- 
     msgLoginCliente,
     read(Entrada),
-    verificaEntradaLoginCliente(Entrada).
+    proximaEtapaLoginCliente(Entrada).
 
-verificaEntradaLoginCliente("S") :- menu_principal.
-verificaEntradaLoginCliente(CPF) :- eh_cliente(CPF, R),
+proximaEtapaLoginCliente("S") :- menu_principal.
+proximaEtapaLoginCliente(CPF) :- eh_cliente(CPF, R),
     (R -> menu_principal_cliente(CPF); msgUserInvalido, retorna(0, login_cliente)).
-verificaEntradaLoginCliente(_) :- opcaoInvalida, login_cliente.
 
+% Metodo de exibição do menu de opções do cliente.
 menu_principal_cliente(CPF) :- 
     get_nome(CPF, Nome),
     opcoesMenuCliente(Nome),
     cliente_read(Opcao),
     escolheOpcoesMenuPrincipalCliente(Opcao, CPF).
 
+% Metodo que recebe uma opção de usuario como parâmetro e é responsável por chamar a função
+% adequada. Caso a opção seja invalida o menuPrincipalAdmin é novamente chamado.
 escolheOpcoesMenuPrincipalCliente(1, CPF) :- listar_filmes(CPF, menu_principal_cliente(CPF)).
 escolheOpcoesMenuPrincipalCliente(2, CPF) :- locar_filme(CPF).
 escolheOpcoesMenuPrincipalCliente(3, CPF) :- recomendar_filme(CPF).
@@ -184,18 +191,35 @@ escolheOpcoesMenuPrincipalCliente(4, CPF) :- devolver_filme(CPF).
 escolheOpcoesMenuPrincipalCliente(5, CPF) :- menu_principal.
 escolheOpcoesMenuPrincipalAdmin(_, CPF) :- menu_principal_cliente(CPF).
 
+
+% Metodo responsavel por listar todos os filmes disponiveis para locação.
 listar_filmes(CPF, X) :-
     msgListaFilmes, nl,
     lista_filmes,
     retorna(0, X).
 
+
+% Metodo responsavel por fazer a locação de um filme para um cliente.
 locar_filme(CPF) :- 
     msgLocacaoFilme,
     read(Entrada),
-    verificaEntradaLocacao(Entrada, CPF).
+    proximaEtapaLocacao(Entrada, CPF).
 
-verificaEntradaLocacao(Entrada, CPF) :- ID is Entrada,
-    (Entrada =:= "S" -> menu_principal_cliente(CPF);
-    Entrada =:= "L" -> listar_filmes(CPF, 'L');
-    /*verificaIdFilme(ID) -> loca_filme(ID, CPF),  menu_principal_cliente(CPF);*/
-    msgIdInvalido, locar_filme(CPF)).
+proximaEtapaLocacao("S", CPF) :- menu_principal_cliente(CPF).
+proximaEtapaLocacao("L", CPF) :- listar_filmes(CPF, locar_filme(CPF)).
+proximaEtapaLocacao(Entrada, CPF) :- eh_filme(Entrada, F),
+    (F ->  loca_filme(Entrada, CPF); msgFilmeNaoCadastrado, retorna(0, locar_filme(CPF))).
+
+loca_filme(ID, CPF) :- filme_disponivel(ID, D),
+    (not(D) -> msgFilmeNaoDisponivel, retorna(0, locar_filme(CPF));
+    msgDataLocacao,
+    read(Entrada),
+    recebeDataLocacao(Entrada, CPF, ID)).
+
+recebeDataLocacao("S", CPF, _) :- menu_principal_cliente(CPF).
+recebeDataLocacao(Data, CPF, ID) :- 
+    add_locacao(ID, CPF, Data),
+    get_titulo(ID, Titulo),
+    get_estoque(ID, Estoque),
+    msgLocaFilme(Titulo, Estoque),
+    retorna(0, menu_principal_cliente(CPF)).

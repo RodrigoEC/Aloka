@@ -20,3 +20,7 @@ locadora_get_titulo(ID, Result) :- get_titulo(ID, Result).
 locadora_lista_filmes :- lista_filmes.
 
 locadora_add_locacao(ID, CPF, Data) :- add_locacao(ID, CPF, Data).
+
+locadora_eh_genero_valido(Genero, Result) :- eh_genero_valido(Genero, Result).
+
+locadora_recomenda_filme(Genero, ID) :- get_filme_recomendado(Genero, ID).

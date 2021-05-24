@@ -206,8 +206,8 @@ locar_filme(CPF) :-
 
 proximaEtapaLocacao("S", CPF) :- menu_principal_cliente(CPF).
 proximaEtapaLocacao("L", CPF) :- listar_filmes(CPF, locar_filme(CPF)).
-proximaEtapaLocacao(Entrada, CPF) :- locadora_eh_filme(Entrada, F),
-    (F ->  loca_filme(Entrada, CPF); msgFilmeNaoCadastrado, retorna(0, locar_filme(CPF))).
+proximaEtapaLocacao(ID, CPF) :- locadora_eh_filme(ID, F),
+    (F ->  loca_filme(ID, CPF); msgFilmeNaoCadastrado, retorna(0, locar_filme(CPF))).
 
 loca_filme(ID, CPF) :- locadora_filme_disponivel(ID, D),
     (not(D) -> msgFilmeNaoDisponivel, retorna(0, locar_filme(CPF));
@@ -222,3 +222,26 @@ recebeDataLocacao(Data, CPF, ID) :-
     locadora_get_estoque(ID, Estoque),
     msgLocaFilme(Titulo, Estoque),
     retorna(0, menu_principal_cliente(CPF)).
+
+
+% Metodo responsavel por recomendar um filme ao cliente com base no genero ecolhido.
+recomendar_filme(CPF) :- 
+    msgRecomendacaoGenero,
+    read(Entrada),
+    proximaEtapaRecomendacao(Entrada, CPF).
+
+proximaEtapaRecomendacao("S", CPF) :- menu_principal_cliente(CPF).
+proximaEtapaRecomendacao(Genero, CPF) :- locadora_eh_genero_valido(Genero, R),
+    (R -> recomenda_filme(Genero, CPF); msgGeneroInvalido, retorna(0, recomendar_filme(CPF))).
+
+recomenda_filme(Genero, CPF) :-
+    locadora_recomenda_filme(Genero, ID),
+    locadora_get_titulo(ID, Titulo),
+    msgRecomendacao(Titulo),
+    msgRecomendaLocacao,
+    read(Opcao),
+    proximaEtapaRecomenda(Opcao, CPF, ID).
+
+proximaEtapaRecomenda("n", CPF, _) :- menu_principal_cliente(CPF).
+proximaEtapaRecomenda("y", CPF, ID) :- loca_filme(ID, CPF).
+proximaEtapaRecomenda(_, CPF, _) :- opcaoInvalida, retorna(0, recomendar_filme(CPF)).

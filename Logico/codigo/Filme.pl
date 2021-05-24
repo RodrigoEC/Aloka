@@ -8,6 +8,8 @@ get_estoque(ID, Result) :- getEstoque(ID, Result).
 
 get_titulo(ID, Result) :- getTitulo(ID, Result).
 
+eh_genero_valido(Genero, Result) :- ehGeneroValido(Genero, Result).
+
 lista_filmes() :- 
     getFilmes(Filmes),
     exibe_filmes(Filmes).
@@ -22,3 +24,5 @@ exibe_filme(Filme) :-
     write("["), write(Id), write("] "),
     write("Título: "), write(Titulo), 
     write(", Genero: "), write(Genero), nl.
+
+get_filme_recomendado(Genero, ID) :- recomenda(Genero, ID).

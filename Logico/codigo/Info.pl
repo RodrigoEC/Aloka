@@ -184,14 +184,14 @@ msgDataLocacao() :-
 
 % Método que realiza a exibição de mensagens de sucesso de locação e quantidade restantes do dado filme alugado no estoque.
 msgLocaFilme(NomeFilme, Qtd) :-
-    writeln('\nJá pode ir preparando a pipoca...\n'),
+    writeln('\nJá pode ir preparando a pipoca...'),
     string_concat('Filme, ', NomeFilme, Return),
     write(Return),
-    writeln(' alugado com sucesso!\n'),
+    writeln(' alugado com sucesso!'),
     string_concat('Agora só temos: ', Qtd, R),
     write(R),
     writeln(' unidade(s) disponivel(is).'),
-    writeln('---\n').
+    writeln('---').
 
 % Método que realiza a exibição da logo de histórico de locacoes.
 msgHistoricoLocacoes() :-
@@ -239,8 +239,8 @@ msgRecomendacao(NomeFilme) :-
     put_logo(),
     writeln('       -HMM VEJAMOS, JÁ SEI!-'),
     writeln('\nOBS: Para voltar ao menu basta digitar "S"!\n'),   
-    write('\nBaseado no seu perfil, recomendamos o seguinte filme: '),
-    writeln(NomeFilme).
+    write('\nBaseado no seu perfil, recomendamos o seguinte filme:\n'), nl,
+    writeln(NomeFilme), nl.
 
 % Método que exibe mensagem inicial em relação a listagem de filmes.
 msgListaFilmes() :-

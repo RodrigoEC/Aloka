@@ -18,16 +18,11 @@ menu_principal :-
 
 % Metodo que recebe uma opção de usuario como parâmetro e é responsável por chamar a função
 % adequada. Caso a opção seja invalida o menuPrincipalAdmin é novamente chamado.
-escolheOpcoesMenuPrincipal(1) :-
-    login_cliente.
-escolheOpcoesMenuPrincipal(2) :-
-    menu_principal_admin.
-escolheOpcoesMenuPrincipal(3) :-
-    cadastro_usuario.
-escolheOpcoesMenuPrincipal(4) :-
-    criaoutro. %saída do sistema.
-escolheOpcoesMenuPrincipal() :-
-    menu_principal.
+escolheOpcoesMenuPrincipal(1) :- login_cliente.
+escolheOpcoesMenuPrincipal(2) :- menu_principal_admin.
+escolheOpcoesMenuPrincipal(3) :- cadastro_usuario.
+escolheOpcoesMenuPrincipal(4) :- criaoutro. %saída do sistema.
+escolheOpcoesMenuPrincipal() :- menu_principal.
 
 %  Método de exibição do primeiro menu de opções do admin.
 menu_principal_admin :-
@@ -37,29 +32,18 @@ menu_principal_admin :-
 
 % Metodo que recebe uma opção de usuario como parâmetro e é responsável por chamar a função
 % adequada. Caso a opção seja invalida o menuPrincipalAdmin é novamente chamado.
-escolheOpcoesMenuPrincipalAdmin(1) :-
-    cadastrar_filme.
-escolheOpcoesMenuPrincipalAdmin(2) :-
-    exibir_menu_historico.
-escolheOpcoesMenuPrincipalAdmin(3) :-
-    menu_admin_gerenciar_estoque.
-escolheOpcoesMenuPrincipalAdmin(4) :-
-    menu_principal.
-escolheOpcoesMenuPrincipalAdmin(_) :-
-    menu_principal_admin.
+escolheOpcoesMenuPrincipalAdmin(1) :- cadastrar_filme.
+escolheOpcoesMenuPrincipalAdmin(2) :- exibir_menu_historico.
+escolheOpcoesMenuPrincipalAdmin(3) :- menu_admin_gerenciar_estoque.
+escolheOpcoesMenuPrincipalAdmin(4) :- menu_principal.
+escolheOpcoesMenuPrincipalAdmin(_) :- menu_principal_admin.
 
 % Metodo responsável por receber uma opção do administrador como parâmetro e chamar a função
 %escolhida. Caso a opção seja invalida o menu_admin_gerenciar_estoque será novamente executada.
-escolheOpcoesGerenciarEstoque(1) :-
-    adicionaFilmeAoEstoque.
-escolheOpcoesGerenciarEstoque(2) :-
-    verificaDisponibilidadeFilme.
-escolheOpcoesGerenciarEstoque(3) :-
-    opcoesMenuAdmin,
-    adm_read(Opcao),
-    escolheOpcoesMenuPrincipalAdmin(Opcao).
-escolheOpcoesGerenciarEstoque(_) :-
-    menu_admin_gerenciar_estoque.
+escolheOpcoesGerenciarEstoque(1) :- adicionaFilmeAoEstoque.
+escolheOpcoesGerenciarEstoque(2) :- verificaDisponibilidadeFilme.
+escolheOpcoesGerenciarEstoque(3) :- opcoesMenuAdmin, adm_read(Opcao), escolheOpcoesMenuPrincipalAdmin(Opcao).
+escolheOpcoesGerenciarEstoque(_) :- menu_admin_gerenciar_estoque.
 
 % Metodo de exibição do menu principal do perfil de administrador do sistema.
 menu_admin_gerenciar_estoque :-
@@ -188,6 +172,7 @@ escolheOpcoesMenuPrincipalCliente(4, CPF) :- devolver_filme(CPF).
 escolheOpcoesMenuPrincipalCliente(5, CPF) :- menu_principal.
 escolheOpcoesMenuPrincipalAdmin(_, CPF) :- menu_principal_cliente(CPF).
 
+%---------------------------------------Adm/Cadastro/Gerenciamento/Filme------------------------------------------------------
 % Método responsável por pedir os dados do filme para que seja possível realizar o cadastro de filme no sistema.
 cadastrar_filme :-
     msgCadastroFilmeTitulo,
@@ -269,6 +254,7 @@ recebeQuantidadeEstoque(IdFilme) :-
     msgEstoqueAdicionado(Estoque, Titulo), retorna(0, menu_admin_gerenciar_estoque);
     msgFilmeIdNaoCadastrado(IdFilme), nl, 
     retorna(0, adicionaFilmeAoEstoque)).
+
 
 % Metodo responsavel por listar todos os filmes disponiveis para locação.
 listar_filmes(CPF, X) :-

@@ -1,5 +1,6 @@
 :- include('FilmeDB.pl').
 
+%Método responsável por verificar se o id passado como parâmetro é de um filme cadastrado.
 eh_filme(ID, Result) :-
     filmeExiste(ID, Result).
 
@@ -31,13 +32,16 @@ exibe_filme(Filme) :-
     write("Título: "), write(Titulo), 
     write(", Genero: "), write(Genero), nl.
 
+%Método responsável por realizar o cadastro de um filme.
 cadastraFilme(Titulo, Diretor, Data, Genero, Estoque, Id) :- 
     addFilme(Titulo, Diretor, Data, Genero, Estoque, Id).
 
+%Método responsável por listar todos os filmes cadastrados.
 lista_todos_filmes() :- 
     getFilmes(Filmes),
     exibe_todos_filmes(Filmes).
 
+%Método responsável por exibir todos os filmes cadastrados.
 exibe_todos_filmes([]).
 exibe_todos_filmes([Filme|Filmes]) :- 
     exibe_filme(Filme),

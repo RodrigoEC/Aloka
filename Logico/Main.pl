@@ -21,7 +21,7 @@ menu_principal :-
 escolheOpcoesMenuPrincipal(1) :- login_cliente.
 escolheOpcoesMenuPrincipal(2) :- menu_principal_admin.
 escolheOpcoesMenuPrincipal(3) :- cadastro_usuario.
-escolheOpcoesMenuPrincipal(4) :- criaoutro. %saída do sistema.
+escolheOpcoesMenuPrincipal(4) :- cria_outro. %saída do sistema.
 escolheOpcoesMenuPrincipal() :- menu_principal.
 
 %  Método de exibição do primeiro menu de opções do admin.

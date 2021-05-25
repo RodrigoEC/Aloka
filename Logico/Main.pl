@@ -105,6 +105,7 @@ escolhe_opcoes_historico(_) :-
     sleep(1),
     exibir_menu_historico.
 
+
 % Metodo responsavel por realizar o cadastro de um novo usuario no sitema 
 % com nome, cpf, telefone e endereco.
 cadastro_usuario :- 
@@ -112,28 +113,33 @@ cadastro_usuario :-
     read(Nome),
     recebeNomeUsuario(Nome).
 
+% Metodo responsavel por verificar o nome do usuario e seguir para a proxima etapa de cadastro.
 recebeNomeUsuario("S") :- menu_principal.
 recebeNomeUsuario(Nome) :- 
     msgCadastroCpf,
     read(CPF),
     recebeCpfUsuario(Nome, CPF).
 
+% Metdodo responsavel por verificar o cpf do ususario e segir para a proxima etapa do cadastro.
 recebeCpfUsuario(_, "S") :- menu_principal.
 recebeCpfUsuario(Nome, CPF) :- 
     msgCadastroTelefone,
     read(Telefone),
     recebeTelefoneUsuario(Nome, CPF, Telefone).
 
+% Metdodo responsavel por verificar o telefone do ususario e segir para a proxima etapa do cadastro.
 recebeTelefoneUsuario(_, _, "S") :- menu_principal.
 recebeTelefoneUsuario(Nome, CPF, Telefone) :-
     msgCadastroEndereco,
     read(Endereco),
     recebeEnderecoUsuario(Nome, CPF, Telefone, Endereco).
 
+% Metdodo responsavel por verificar o endereco do ususario e segir para a proxima etapa do cadastro.
 recebeEnderecoUsuario(_, _, _, "S") :- menu_principal.
 recebeEnderecoUsuario(Nome, CPF, Telefone, Endereco) :-
     cadastra_usuario(Nome, CPF, Telefone, Endereco).
 
+% Metdodo responsavel por finalizar o cadastro do usuario.
 cadastra_usuario(Nome, CPF, Telefone, Endereco) :-
     locadora_add_cliente(Nome, CPF, Telefone, Endereco, Resumo),
     msgResumoCadastroUsuario(Resumo),
@@ -146,12 +152,14 @@ cadastra_usuario(Nome, CPF, Telefone, Endereco) :-
 retorna("S", X) :- X.
 retorna(_, X) :- msgDigiteS, read(Opcao), retorna(Opcao, X).
 
+
 % Metodo responsavel por realizar o login de um clinete ao sistema.
 login_cliente :- 
     msgLoginCliente,
     read(Entrada),
     proximaEtapaLoginCliente(Entrada).
 
+% Metodo responsavel por verificar o cpf do cliente e possibilitar o login.
 proximaEtapaLoginCliente("S") :- menu_principal.
 proximaEtapaLoginCliente(CPF) :- locadora_eh_cliente(CPF, R),
     (R -> menu_principal_cliente(CPF); msgUserInvalido, retorna(0, login_cliente)).
@@ -172,6 +180,7 @@ escolheOpcoesMenuPrincipalCliente(4, CPF) :- devolver_filme(CPF).
 escolheOpcoesMenuPrincipalCliente(5, CPF) :- menu_principal.
 escolheOpcoesMenuPrincipalAdmin(_, CPF) :- menu_principal_cliente(CPF).
 
+
 %---------------------------------------Adm/Cadastro/Gerenciamento/Filme------------------------------------------------------
 % Método responsável por pedir os dados do filme para que seja possível realizar o cadastro de filme no sistema.
 cadastrar_filme :-
@@ -179,31 +188,37 @@ cadastrar_filme :-
     read(Titulo),
     recebeTituloFilme(Titulo).
 
+% Metodo reponsavel por verificar o tiulo e  seguir para proxima etapa do cadastro.
 recebeTituloFilme("S") :- menu_principal_admin.
 recebeTituloFilme(Titulo) :- 
     msgCadastroFilmeGenero, read(Genero),
     recebeGeneroFilme(Genero, Titulo).
 
+% Metodo reponsavel por verificar o genero e  seguir para proxima etapa do cadastro.
 recebeGeneroFilme("S", _) :- menu_principal_admin.
 recebeGeneroFilme(Genero, Titulo):-
     msgCadastroFilmeDiretor, read(Diretor),
     recebeDiretorFilme(Diretor, Genero, Titulo).
 
+% Metodo reponsavel por verificar o diretor e  seguir para proxima etapa do cadastro.
 recebeDiretorFilme("S", _, _) :- menu_principal_admin.
 recebeDiretorFilme(Diretor, Genero, Titulo ):-
     msgCadastroFilmeData, read(Data),
     recebeDataFilme(Data, Diretor, Genero, Titulo).
 
+% Metodo reponsavel por verificar a data e  seguir para proxima etapa do cadastro.
 recebeDataFilme("S", _, _, _) :- menu_principal_admin.
 recebeDataFilme(Data, Diretor, Genero, Titulo):-
     msgFilmeQuantidade, read(Quantidade),
     recebeQuantidadeFilme(Quantidade, Data, Diretor, Genero, Titulo).
 
+% Metodo reponsavel por verificar a quantidade e finalizar o cadastro do filme.
 recebeQuantidadeFilme("S", _, _, _, _) :- menu_principal_admin.
 recebeQuantidadeFilme(Quantidade, Data, Diretor, Genero, Titulo) :-
     (Quantidade > 0 ->  cadastraFilme(Titulo, Diretor, Data, Genero, Quantidade, Id),
     msgResumoCadastroFilme(Id,Titulo, Genero, Diretor, Data, Quantidade),  retorna(0,menu_principal_admin);
     msgQuantidadeInvalida, retorna(0, cadastrar_filme)).
+
 
 % Método responsável por verificar a quantidade de um determinado filme no estoque.
 verificaDisponibilidadeFilme :-
@@ -227,6 +242,7 @@ disponibilidade_filme(Id) :-
     msgQtdTituloFilme(Estoque, Titulo),
     retorna(0, menu_admin_gerenciar_estoque).
 
+
 % Método responsável por adicionar uma quantidade X indicada pelo administrador do sistema, no estoque de filmes da locadora.
 adicionaFilmeAoEstoque :-
     msgEstoqueFilmes,
@@ -242,7 +258,6 @@ recebeIdFilmeEstoque(Id) :- locadora_eh_filme(Id, R),
 
 %Método responsável por receber a nova quantidade do filme e adicionar a quantidade passada pelo usuario a atual,
 %além de verificar se a opção passada pelo usuário é válida e se caso ele digitar "S", ele será redirecionado para o menu anterior.
-
 recebeQuantidadeEstoque("S") :- menu_admin_gerenciar_estoque.
 recebeQuantidadeEstoque(IdFilme) :- 
     msgFilmeQuantidade,
@@ -263,23 +278,26 @@ listar_filmes(CPF, X) :-
     retorna(0, X).
 
 
-% Metodo responsavel por fazer a locação de um filme para um cliente.
+% Metodo responsavel por fazer a locação de um filme para um cliente com id do filme e dada da locacao.
 locar_filme(CPF) :- 
     msgLocacaoFilme,
     read(Entrada),
     proximaEtapaLocacao(Entrada, CPF).
 
+% Metodo responsavel por fazer verificacoes de entrada e seguir para a proxima etapa da locacao.
 proximaEtapaLocacao("S", CPF) :- menu_principal_cliente(CPF).
 proximaEtapaLocacao("L", CPF) :- listar_filmes(CPF, locar_filme(CPF)).
 proximaEtapaLocacao(ID, CPF) :- locadora_eh_filme(ID, F),
     (F ->  loca_filme(ID, CPF); msgFilmeNaoCadastrado, retorna(0, locar_filme(CPF))).
 
+% Metodo responsavel por receber a data da locacao e segir para a proxima etapa da locacao.
 loca_filme(ID, CPF) :- locadora_filme_disponivel(ID, D),
     (not(D) -> msgFilmeNaoDisponivel, retorna(0, locar_filme(CPF));
     msgDataLocacao,
     read(Entrada),
     recebeDataLocacao(Entrada, CPF, ID)).
 
+% Metodo reponsaavel por verificar a data e finalizar a locacao.
 recebeDataLocacao("S", CPF, _) :- menu_principal_cliente(CPF).
 recebeDataLocacao(Data, CPF, ID) :- 
     locadora_add_locacao(ID, CPF, Data),
@@ -292,14 +310,15 @@ recebeDataLocacao(Data, CPF, ID) :-
 % Metodo responsavel por recomendar um filme ao cliente com base no genero ecolhido.
 recomendar_filme(CPF) :- 
     msgRecomendacaoGenero,
-    writeln("Utilize aspas simples no nome do gênero"),
     read(Entrada),
     proximaEtapaRecomendacao(Entrada, CPF).
 
+% Metodo responsavel por verificar o genero e seguir para a proxima etapa de recomendacao.
 proximaEtapaRecomendacao("S", CPF) :- menu_principal_cliente(CPF).
 proximaEtapaRecomendacao(Genero, CPF) :- locadora_eh_genero_valido(Genero, R),
     (R -> recomenda_filme(Genero, CPF); msgGeneroInvalido, retorna(0, recomendar_filme(CPF))).
 
+% Metodo responsavel por recomendar e solicitar ao cliente a locacao do filme recomendado.
 recomenda_filme(Genero, CPF) :-
     locadora_recomenda_filme(Genero, ID),
     locadora_get_titulo(ID, Titulo),
@@ -308,6 +327,7 @@ recomenda_filme(Genero, CPF) :-
     read(Opcao),
     proximaEtapaRecomenda(Opcao, CPF, ID).
 
+% Metodo responsavel por verificar a opcao do cliente em relacao a locacao e finalizar a recomendacao.
 proximaEtapaRecomenda("n", CPF, _) :- menu_principal_cliente(CPF).
 proximaEtapaRecomenda("y", CPF, ID) :- loca_filme(ID, CPF).
 proximaEtapaRecomenda("S", CPF, ID) :- menu_principal_cliente(CPF).
@@ -320,10 +340,12 @@ devolver_filme(CPF) :-
     msgDevolucaoBottom, read(Entrada),
     proximaEtapaDevolucao(Entrada, CPF).
 
+% Metodo responsavel por verificar o id da locacao e seguir para a proxima etapa da devolucao.
 proximaEtapaDevolucao("S", CPF) :- menu_principal_cliente(CPF).
 proximaEtapaDevolucao(ID, CPF) :- locadora_locacao_existe(ID, L),
     (L -> devolve_filme(ID, CPF); opcaoInvalida, retorna(0, devolver_filme(CPF))).
 
+% Metodo responsavel por finlizar a devolucao de um filme.
 devolve_filme(ID, CPF) :-
     locadora_finaliza_locacao(ID, IDFilme),
     locadora_get_estoque(IDFilme, Estoque),

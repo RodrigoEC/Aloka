@@ -47,24 +47,30 @@ exibeLocacoes([Locacao|Resto]) :-
     exibeLocacao(Locacao),
     exibeLocacoes(Resto).
 
+% Metodo responsavel por verificar se uma locacao esta cadastrada no sistema.
 locacao_existe(ID, Result) :- locacaoExiste(ID, Result).
 
+% Metodo responsavel  por cadastrar uma locacao com ID, cpf e data.
 add_locacao(ID, CPF, Data) :- cadastraLocacao(ID, CPF, Data).
 
+% Metodo responsavel por finalizar uma locacao e retornar o id do filme devolvido.
 finaliza_locacao(ID, IDFilme) :- 
     getLocacaoById(ID, Locacao),
     getAllAttributesLocacao(Locacao, L, IDFilme, C, D, S),
     finalizaLocacao(ID).
 
+% Metodo responsavel por listar as locacoes em andamento de um cliente  a partir do seu cpf.
 lista_locacoes_cliente(CPF) :- 
     getLocacoesEmAndamentoCliente(CPF, Locacoes),
     lista_locacoes(Locacoes).
 
+% Metodo responsavel por exibir todas as locacoes.
 lista_locacoes([]).
 lista_locacoes([Locacao|Locacoes]) :- 
     lista_locacao(Locacao), 
     lista_locacoes(Locacoes).
 
+% Metodo responsavel por exibir o resumo de uma locacao.
 lista_locacao(Locacao) :- 
     getAllAttributesLocacao(Locacao, IDL, IDF, CPF, Data, Status),
     write("Id locação: "), write(IDL),

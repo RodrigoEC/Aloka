@@ -247,8 +247,10 @@ msgRecomendaLocacao() :-
 msgRecomendacaoGenero() :-
    put_logo(),
    writeln("       -----RECOMENDAÇÃO-----"),
-   writeln("\nOBS: Para voltar ao menu basta digitar 'S'!\n"),  
+   writeln("\nOBS: Para voltar ao menu basta digitar 'S'!\n"),
+   writeln("Utilize aspas simples no nome do gênero"),
    writeln("\nInsira o gênero: ").
+
  
 % Método que exibe mensagem inicial do resultado da recomendação de filmes para locações por parte da locadora para o cliente.
 msgRecomendacao(NomeFilme) :-

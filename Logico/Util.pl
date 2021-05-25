@@ -3,11 +3,14 @@ clear :- writeln('\e[H\e[2J').
 
 % Metodo que costumiza a entrada do sistema. Dessa forma, o read possui um formato diferente.
 % Ex:
-%   administrador >> 
+%   administrador>> 
 adm_read(Entrada) :-
     write('administrador>> '),
     read(Entrada).
 
+% Metodo que costumiza a entrada do sistema. Dessa forma, o read possui um formato diferente.
+% Ex:
+%   cliente>> 
 cliente_read(Entrada) :-
     write('cliente>> '),
     read(Entrada).
@@ -26,6 +29,7 @@ logo_historico :-
     le_arquivo(Path, Linhas),
     escreve_lista(Linhas).
 
+% Exibe logo da pipoca. 
 logo_pipoca :-
     cria_path_frames('pipoca', '', Path),
     le_arquivo(Path, Linhas),

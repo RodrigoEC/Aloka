@@ -65,6 +65,10 @@ Um usuário novo pode desejar se cadastrar no sistema do *ALOKA*, dessa forma, �
 
 - [:movie_camera: Vídeo demonstrativo](https://youtu.be/gpDahoevNeQ)
 
+- [:pencil: Acesse o passo a passo para executar o projeto na linguagem Prolog](https://github.com/RodrigoEC/Aloka/blob/main/Logico/README.md)
+
+- [:movie_camera: Vídeo demonstrativo](https://youtu.be/KO7z1ojzmg8)
+
 ## :pushpin: Equipe do ALOKA(H)
 
 - [Daniel Gomes de Lima](https://github.com/dnlgomesl)

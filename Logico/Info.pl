@@ -72,7 +72,7 @@ opcoesGerenciarEstoque() :-
    writeln("\nComo deseja prosseguir?"),
    writeln("[1] Adicionar estoque ao filme"),
    writeln("[2] Verificar disponibilidade de filmes"),
-   writeln("[3] Voltar ao menu inicial\n").
+   writeln("[3] Voltar ao menu do administrador\n").
  
 % Método que faz a exibição de erro quando uma dada opção escolhida é inválida.
 opcaoInvalida() :-

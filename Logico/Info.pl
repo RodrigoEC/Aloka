@@ -96,11 +96,14 @@ msgGeneroInvalido() :-
 
 % Método que realiza a exibição de erro quando a quantidade digitada é inválida.
 msgQuantidadeInvalida() :-
-   writeln('\nErro: quantidade inválida!').
+   writeln('\nErro: quantidade inválida!\n').
 
 % Método que realiza a exibição de erro quando o filme requerido para locação não está devidamente cadastrado no sistema.
 msgFilmeNaoCadastrado() :-
    writeln('\nErro: filme não cadastrado!').
+
+msgFilmeIdNaoCadastrado(IdFilme) :-
+    write('\nErro: filme '), write(IdFilme), write(' não cadastrado!\n').
 
 % Método que realiza a exibição de erro quando o filme requerido para a locação não está disponível no estoque da locadora.
 msgFilmeNaoDisponivel() :-
@@ -168,12 +171,19 @@ msgCadastroFilmeTitulo() :-
     writeln('\nTítulo: ').
 
 % Método que realiza a exibição de resumo do cadastro do cliente.
-msgResumoCadastroFilme(Filme) :-
+msgResumoCadastroFilme(Id, Titulo, Genero, Diretor, Data, Quantidade) :-
     put_logo(),
     writeln('       -------CADASTRO-------'),
     writeln('\n-----\n'),
-    writeln(Filme),
-    writeln('\n-----\n').
+    write("Filme de id: "),
+    write(Id),
+    write(" cadastrado com sucesso!"),
+    write("\nTítulo: "), writeln(Titulo),
+    write("Gênero: "), writeln(Genero), 
+    write("Diretor: "), writeln(Diretor),
+    write("Data: "), writeln(Data),
+    write("Quantidade: "), writeln(Quantidade),
+    writeln('\n-----').
 
 % Método que realiza a exibição do pedido do identificador do filme para que este possa ser listado, caso esteja disponível para locação.
 msgLocacaoFilme() :-
@@ -277,3 +287,9 @@ msgDevolveFilme(Qtd):-
     write(Return),
     writeln(' unidade(s) disponivel(is).'),
     write('---\n').
+
+msgQtdTituloFilme(Quantidade, Titulo):-
+write("\nHá no estoque "), write(Quantidade), write(" filme(s) "),write(Titulo), write(" disponível(is) para locação.\n").
+
+msgEstoqueAdicionado(Quantidade, Titulo):-
+    write("\nAgora temos "), write(Quantidade), write(" filme(s) "), write(Titulo), write(" no estoque!\n").

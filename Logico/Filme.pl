@@ -1,16 +1,21 @@
 :- include('FilmeDB.pl').
 
-eh_filme(ID, Result) :- filmeExiste(ID, Result).
+eh_filme(ID, Result) :-
+    filmeExiste(ID, Result).
 
-filme_disponivel(ID, Result) :- verificaEstoque(ID, Result).
+filme_disponivel(ID, Result) :-
+    verificaEstoque(ID, Result).
 
-get_estoque(ID, Result) :- getEstoque(ID, Result).
+get_estoque(ID, Result) :-
+    getEstoque(ID, Result).
 
-get_titulo(ID, Result) :- getTitulo(ID, Result).
+get_titulo(ID, Result) :-
+    getTitulo(ID, Result).
 
-eh_genero_valido(Genero, Result) :- ehGeneroValido(Genero, Result).
+eh_genero_valido(Genero, Result) :-
+    ehGeneroValido(Genero, Result).
 
-lista_filmes_disponiveis() :- 
+lista_filmes_disponiveis() :-
     getFilmes(Filmes),
     exibe_filmes_disponiveis(Filmes).
 
@@ -25,5 +30,22 @@ exibe_filme(Filme) :-
     write("["), write(Id), write("] "),
     write("Título: "), write(Titulo), 
     write(", Genero: "), write(Genero), nl.
+
+cadastraFilme(Titulo, Diretor, Data, Genero, Estoque, Id) :- 
+    addFilme(Titulo, Diretor, Data, Genero, Estoque, Id).
+
+lista_todos_filmes() :- 
+    getFilmes(Filmes),
+    exibe_todos_filmes(Filmes).
+
+exibe_todos_filmes([]).
+exibe_todos_filmes([Filme|Filmes]) :- 
+    exibe_filme(Filme),
+    exibe_todos_filmes(Filmes).
+
+verificaDisponibilidade() :-
+    lista_todos_filmes().
+
+%get_disponibilidade(IdFilme):-
 
 get_filme_recomendado(Genero, ID) :- recomenda(Genero, ID).

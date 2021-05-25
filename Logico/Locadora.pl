@@ -30,3 +30,5 @@ locadora_lista_locacoes_cliente(CPF) :- lista_locacoes_cliente(CPF).
 locadora_locacao_existe(ID, Result) :- locacao_existe(ID, Result).
 
 locadora_finaliza_locacao(ID, IDfilme) :- finaliza_locacao(ID, IDfilme).
+
+locadora_lista_todos_filmes :- lista_todos_filmes.

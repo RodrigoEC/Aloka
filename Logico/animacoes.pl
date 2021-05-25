@@ -8,8 +8,9 @@ cria_intro() :-
 
 % Metodo que cria a animação de saída do sistema
 cria_outro() :-
+    Path = 'logo/',
     NomesArquivos = [logo, 0.3, loading4, 0.3, loading3, 0.3, loading2, 0.3, loading1, 0.3, claquete, 0.5],
-    cria_animacao(NomesArquivos, 'logo/').
+    cria_animacao(NomesArquivos, Path).
 
 % Metodo que cria a animação do menu de histórico
 cria_animacao_historico() :-

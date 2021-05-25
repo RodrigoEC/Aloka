@@ -5,19 +5,24 @@
 :- include('Locacao.pl').
 :- include('Locadora.pl').
 
+main :-
+    cria_intro,
+    menu_principal,
+    halt.
+
 % Exibição do menu principal do sistema.
 menu_principal :-
     opcoesMenuInicial,
     read(Opcao),
     escolheOpcoesMenuPrincipal(Opcao).
 
-% Método que realiza a seleção e exibição das opções referentes ao menu de funcionalidades do administrador.
+% Metodo que recebe uma opção de usuario como parâmetro e é responsável por chamar a função
+% adequada. Caso a opção seja invalida o menuPrincipalAdmin é novamente chamado.
 escolheOpcoesMenuPrincipal(1) :- login_cliente.
 escolheOpcoesMenuPrincipal(2) :- menu_principal_admin.
 escolheOpcoesMenuPrincipal(3) :- cadastro_usuario.
-escolheOpcoesMenuPrincipal(4) :- cria_outro.
-escolheOpcoesMenuPrincipal(_) :- opcaoInvalida, menu_principal.
-
+escolheOpcoesMenuPrincipal(4) :- cria_outro. %saída do sistema.
+escolheOpcoesMenuPrincipal() :- menu_principal.
 
 %  Método de exibição do primeiro menu de opções do admin.
 menu_principal_admin :-
@@ -27,36 +32,18 @@ menu_principal_admin :-
 
 % Metodo que recebe uma opção de usuario como parâmetro e é responsável por chamar a função
 % adequada. Caso a opção seja invalida o menuPrincipalAdmin é novamente chamado.
-escolheOpcoesMenuPrincipalAdmin(1) :- cadastrar_filme, sleep(2), adm_read(Opcao), escolheOpcoesMenuPrincipalAdmin(Opcao).
+escolheOpcoesMenuPrincipalAdmin(1) :- cadastrar_filme.
 escolheOpcoesMenuPrincipalAdmin(2) :- exibir_menu_historico.
 escolheOpcoesMenuPrincipalAdmin(3) :- menu_admin_gerenciar_estoque.
 escolheOpcoesMenuPrincipalAdmin(4) :- menu_principal.
-escolheOpcoesMenuPrincipalAdmin(_) :- opcaoInvalida, menu_principal_admin.
+escolheOpcoesMenuPrincipalAdmin(_) :- menu_principal_admin.
 
 % Metodo responsável por receber uma opção do administrador como parâmetro e chamar a função
 %escolhida. Caso a opção seja invalida o menu_admin_gerenciar_estoque será novamente executada.
 escolheOpcoesGerenciarEstoque(1) :- adicionaFilmeAoEstoque.
 escolheOpcoesGerenciarEstoque(2) :- verificaDisponibilidadeFilme.
-escolheOpcoesGerenciarEstoque(3) :- sleep(2),opcoesMenuAdmin, adm_read(Opcao), escolheOpcoesMenuPrincipalAdmin(Opcao).
-escolheOpcoesGerenciarEstoque(_) :- opcaoInvalida, sleep(2), menu_admin_gerenciar_estoque.
-
-% Método responsável por verificar a disponibilidade de filmes no estoque da locadora.
-verificaDisponibilidadeFilme :-
-    msgDisponibilidadeFilmes,
-    sleep(2),
-    msgDisponibilidadeFilmes,
-    adm_read(Opcao),
-    escolheOpcoesGerenciarEstoque(Opcao). 
-
-% Método responsável por adicionar uma quantidade X indicada pelo administrador do sistema, no estoque de filmes da locadora.
-adicionaFilmeAoEstoque :-
-    msgEstoqueFilmes,
-    msgFilmeIdentificador,
-    msgFilmeQuantidade,
-    sleep(2),
-    msgEstoqueFilmes,
-    adm_read(Opcao),
-    escolheOpcoesGerenciarEstoque(Opcao).
+escolheOpcoesGerenciarEstoque(3) :- opcoesMenuAdmin, adm_read(Opcao), escolheOpcoesMenuPrincipalAdmin(Opcao).
+escolheOpcoesGerenciarEstoque(_) :- menu_admin_gerenciar_estoque.
 
 % Metodo de exibição do menu principal do perfil de administrador do sistema.
 menu_admin_gerenciar_estoque :-
@@ -64,18 +51,9 @@ menu_admin_gerenciar_estoque :-
     adm_read(Opcao),
     escolheOpcoesGerenciarEstoque(Opcao).
 
-% Método responsável por pedir os dados do filme para que seja possível realizar o cadastro de filme no sistema.
-cadastrar_filme :-
-    msgCadastroFilmeTitulo,
-    msgCadastroFilmeGenero,
-    msgCadastroFilmeDiretor,
-    msgCadastroFilmeData,
-    msgFilmeQuantidade. 
-
 %  Método de exibição do menu de opções de históricos do admin.
 exibir_menu_historico :-
-    menuHistorico,
-    nl,
+    menuHistorico, nl,
     adm_read(Opcao),
     escolhe_opcoes_historico(Opcao).
 
@@ -119,17 +97,13 @@ escolhe_opcoes_historico(3) :-
 
 % Opção 04 do histórico. O usuário é redirecionado para o menu de opções do admin.
 escolhe_opcoes_historico(4) :- menu_principal_admin.
+
 % Caso o usuário passe uma entrada que não se encaixa nas quatro opções acima uma mensagem de erro é
 % exibida e o sistema volta ao menu de históricos depois de 1 segundo.
 escolhe_opcoes_historico(_) :-
     opcaoInvalida,
     sleep(1),
     exibir_menu_historico.
-
-main :-
-    cria_intro,
-    menu_principal,
-    halt.
 
 % Metodo responsavel por realizar o cadastro de um novo usuario no sitema 
 % com nome, cpf, telefone e endereco.
@@ -198,6 +172,89 @@ escolheOpcoesMenuPrincipalCliente(4, CPF) :- devolver_filme(CPF).
 escolheOpcoesMenuPrincipalCliente(5, CPF) :- menu_principal.
 escolheOpcoesMenuPrincipalAdmin(_, CPF) :- menu_principal_cliente(CPF).
 
+%---------------------------------------Adm/Cadastro/Gerenciamento/Filme------------------------------------------------------
+% Método responsável por pedir os dados do filme para que seja possível realizar o cadastro de filme no sistema.
+cadastrar_filme :-
+    msgCadastroFilmeTitulo,
+    read(Titulo),
+    recebeTituloFilme(Titulo).
+
+recebeTituloFilme("S") :- menu_principal_admin.
+recebeTituloFilme(Titulo) :- 
+    msgCadastroFilmeGenero, read(Genero),
+    recebeGeneroFilme(Genero, Titulo).
+
+recebeGeneroFilme("S", _) :- menu_principal_admin.
+recebeGeneroFilme(Genero, Titulo):-
+    msgCadastroFilmeDiretor, read(Diretor),
+    recebeDiretorFilme(Diretor, Genero, Titulo).
+
+recebeDiretorFilme("S", _, _) :- menu_principal_admin.
+recebeDiretorFilme(Diretor, Genero, Titulo ):-
+    msgCadastroFilmeData, read(Data),
+    recebeDataFilme(Data, Diretor, Genero, Titulo).
+
+recebeDataFilme("S", _, _, _) :- menu_principal_admin.
+recebeDataFilme(Data, Diretor, Genero, Titulo):-
+    msgFilmeQuantidade, read(Quantidade),
+    recebeQuantidadeFilme(Quantidade, Data, Diretor, Genero, Titulo).
+
+recebeQuantidadeFilme("S", _, _, _, _) :- menu_principal_admin.
+recebeQuantidadeFilme(Quantidade, Data, Diretor, Genero, Titulo) :-
+    (Quantidade > 0 ->  cadastraFilme(Titulo, Diretor, Data, Genero, Quantidade, Id),
+    msgResumoCadastroFilme(Id,Titulo, Genero, Diretor, Data, Quantidade),  retorna(0,menu_principal_admin);
+    msgQuantidadeInvalida, retorna(0, cadastrar_filme)).
+
+% Método responsável por verificar a quantidade de um determinado filme no estoque.
+verificaDisponibilidadeFilme :-
+    msgDisponibilidadeFilmes,
+    locadora_lista_todos_filmes,
+    msgFilmeIdentificador, read(Id),
+    recebeIdFilme(Id).
+
+% Método auxiliar utilizado no método verificaDisponibilidade, responsável por verificar se a opção passada pelo
+%usuário é válida e se caso ele digitar "S", ele será redirecionado para o menu anterior.
+recebeIdFilme("S"):- menu_admin_gerenciar_estoque.
+recebeIdFilme(Id) :- locadora_eh_filme(Id, R),
+    (R -> disponibilidade_filme(Id);
+    msgFilmeIdNaoCadastrado(Id), retorna(0, verificaDisponibilidadeFilme)).
+
+% Método auxiliar utilizado no método verificaDisponibilidade, responsável por listar a disponibilidade do filme,
+%juntamente com sua quantidade e o seu título.
+disponibilidade_filme(Id) :-
+    getEstoque(Id, Estoque),
+    getTitulo(Id, Titulo),
+    msgQtdTituloFilme(Estoque, Titulo),
+    retorna(0, menu_admin_gerenciar_estoque).
+
+% Método responsável por adicionar uma quantidade X indicada pelo administrador do sistema, no estoque de filmes da locadora.
+adicionaFilmeAoEstoque :-
+    msgEstoqueFilmes,
+    msgFilmeIdentificador,
+    read(IdFilme),
+    recebeIdFilmeEstoque(IdFilme).
+
+%Método responsável por verificar se a opção passada pelo usuário é válida e se caso ele digitar "S", ele será redirecionado para o menu anterior.
+recebeIdFilmeEstoque("S"):- menu_admin_gerenciar_estoque.
+recebeIdFilmeEstoque(Id) :- locadora_eh_filme(Id, R),
+    (R -> recebeQuantidadeEstoque(Id);
+    msgFilmeIdNaoCadastrado(Id), retorna(0, adicionaFilmeAoEstoque)).
+
+%Método responsável por receber a nova quantidade do filme e adicionar a quantidade passada pelo usuario a atual,
+%além de verificar se a opção passada pelo usuário é válida e se caso ele digitar "S", ele será redirecionado para o menu anterior.
+
+recebeQuantidadeEstoque("S") :- menu_admin_gerenciar_estoque.
+recebeQuantidadeEstoque(IdFilme) :- 
+    msgFilmeQuantidade,
+    read(Quantidade),
+    (Quantidade < 1 -> msgQuantidadeInvalida, retorna(0, adicionaFilmeAoEstoque);
+    setEstoque(IdFilme, Quantidade),
+    getEstoque(IdFilme, Estoque),
+    getTitulo(IdFilme, Titulo),
+    msgEstoqueAdicionado(Estoque, Titulo), retorna(0, menu_admin_gerenciar_estoque);
+    msgFilmeIdNaoCadastrado(IdFilme), nl, 
+    retorna(0, adicionaFilmeAoEstoque)).
+
 
 % Metodo responsavel por listar todos os filmes disponiveis para locação.
 listar_filmes(CPF, X) :-
@@ -246,8 +303,7 @@ recomenda_filme(Genero, CPF) :-
     locadora_recomenda_filme(Genero, ID),
     locadora_get_titulo(ID, Titulo),
     msgRecomendacao(Titulo),
-    msgRecomendaLocacao,
-    read(Opcao),
+    msgRecomendaLocacao, read(Opcao),
     proximaEtapaRecomenda(Opcao, CPF, ID).
 
 proximaEtapaRecomenda("n", CPF, _) :- menu_principal_cliente(CPF).
@@ -259,8 +315,7 @@ proximaEtapaRecomenda(_, CPF, _) :- opcaoInvalida, retorna(0, recomendar_filme(C
 devolver_filme(CPF) :- 
     msgDevolucaoTop,
     locadora_lista_locacoes_cliente(CPF),
-    msgDevolucaoBottom,
-    read(Entrada),
+    msgDevolucaoBottom, read(Entrada),
     proximaEtapaDevolucao(Entrada, CPF).
 
 proximaEtapaDevolucao("S", CPF) :- menu_principal_cliente(CPF).

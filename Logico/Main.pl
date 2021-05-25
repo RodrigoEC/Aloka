@@ -292,6 +292,7 @@ recebeDataLocacao(Data, CPF, ID) :-
 % Metodo responsavel por recomendar um filme ao cliente com base no genero ecolhido.
 recomendar_filme(CPF) :- 
     msgRecomendacaoGenero,
+    writeln("Utilize aspas simples no nome do gênero"),
     read(Entrada),
     proximaEtapaRecomendacao(Entrada, CPF).
 
@@ -303,7 +304,8 @@ recomenda_filme(Genero, CPF) :-
     locadora_recomenda_filme(Genero, ID),
     locadora_get_titulo(ID, Titulo),
     msgRecomendacao(Titulo),
-    msgRecomendaLocacao, read(Opcao),
+    msgRecomendaLocacao,
+    read(Opcao),
     proximaEtapaRecomenda(Opcao, CPF, ID).
 
 proximaEtapaRecomenda("n", CPF, _) :- menu_principal_cliente(CPF).

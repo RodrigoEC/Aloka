@@ -43,9 +43,4 @@ exibe_todos_filmes([Filme|Filmes]) :-
     exibe_filme(Filme),
     exibe_todos_filmes(Filmes).
 
-verificaDisponibilidade() :-
-    lista_todos_filmes().
-
-%get_disponibilidade(IdFilme):-
-
 get_filme_recomendado(Genero, ID) :- recomenda(Genero, ID).

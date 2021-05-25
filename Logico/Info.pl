@@ -288,8 +288,11 @@ msgDevolveFilme(Qtd):-
     writeln(' unidade(s) disponivel(is).'),
     write('---\n').
 
+% Método que realiza a exibição da informação do título e da quantidade de um determinado filme no estoque.
 msgQtdTituloFilme(Quantidade, Titulo):-
 write("\nHá no estoque "), write(Quantidade), write(" filme(s) "),write(Titulo), write(" disponível(is) para locação.\n").
 
+% Método que realiza a exibição da informação do título e da quantidade de um determinado filme no estoque, após ter 
+%sua quantidade incrementada de um valor X.
 msgEstoqueAdicionado(Quantidade, Titulo):-
     write("\nAgora temos "), write(Quantidade), write(" filme(s) "), write(Titulo), write(" no estoque!\n").

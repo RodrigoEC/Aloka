@@ -5,13 +5,19 @@
 :- include('Locacao.pl').
 :- include('Locadora.pl').
 
+main :-
+    cria_intro,
+    menu_principal,
+    halt.
+
 % Exibição do menu principal do sistema.
 menu_principal :-
     opcoesMenuInicial,
     read(Opcao),
     escolheOpcoesMenuPrincipal(Opcao).
 
-% Método que realiz sleep(2)rincipal(4) :-
+% Metodo que recebe uma opção de usuario como parâmetro e é responsável por chamar a função
+% adequada. Caso a opção seja invalida o menuPrincipalAdmin é novamente chamado.
 escolheOpcoesMenuPrincipal(1) :-
     login_cliente.
 escolheOpcoesMenuPrincipal(2) :-
@@ -19,9 +25,8 @@ escolheOpcoesMenuPrincipal(2) :-
 escolheOpcoesMenuPrincipal(3) :-
     cadastro_usuario.
 escolheOpcoesMenuPrincipal(4) :-
-    criaoutro.
+    criaoutro. %saída do sistema.
 escolheOpcoesMenuPrincipal() :-
-    opcaoInvalida,
     menu_principal.
 
 %  Método de exibição do primeiro menu de opções do admin.
@@ -33,10 +38,7 @@ menu_principal_admin :-
 % Metodo que recebe uma opção de usuario como parâmetro e é responsável por chamar a função
 % adequada. Caso a opção seja invalida o menuPrincipalAdmin é novamente chamado.
 escolheOpcoesMenuPrincipalAdmin(1) :-
-    cadastrar_filme,
-    sleep(2),
-    adm_read(Opcao),
-    escolheOpcoesMenuPrincipalAdmin(Opcao).
+    cadastrar_filme.
 escolheOpcoesMenuPrincipalAdmin(2) :-
     exibir_menu_historico.
 escolheOpcoesMenuPrincipalAdmin(3) :-
@@ -44,7 +46,6 @@ escolheOpcoesMenuPrincipalAdmin(3) :-
 escolheOpcoesMenuPrincipalAdmin(4) :-
     menu_principal.
 escolheOpcoesMenuPrincipalAdmin(_) :-
-    opcaoInvalida,
     menu_principal_admin.
 
 % Metodo responsável por receber uma opção do administrador como parâmetro e chamar a função
@@ -58,8 +59,6 @@ escolheOpcoesGerenciarEstoque(3) :-
     adm_read(Opcao),
     escolheOpcoesMenuPrincipalAdmin(Opcao).
 escolheOpcoesGerenciarEstoque(_) :-
-    opcaoInvalida,
-    sleep(2),
     menu_admin_gerenciar_estoque.
 
 % Metodo de exibição do menu principal do perfil de administrador do sistema.
@@ -70,8 +69,7 @@ menu_admin_gerenciar_estoque :-
 
 %  Método de exibição do menu de opções de históricos do admin.
 exibir_menu_historico :-
-    menuHistorico,
-    nl,
+    menuHistorico, nl,
     adm_read(Opcao),
     escolhe_opcoes_historico(Opcao).
 
@@ -115,17 +113,13 @@ escolhe_opcoes_historico(3) :-
 
 % Opção 04 do histórico. O usuário é redirecionado para o menu de opções do admin.
 escolhe_opcoes_historico(4) :- menu_principal_admin.
+
 % Caso o usuário passe uma entrada que não se encaixa nas quatro opções acima uma mensagem de erro é
 % exibida e o sistema volta ao menu de históricos depois de 1 segundo.
 escolhe_opcoes_historico(_) :-
     opcaoInvalida,
     sleep(1),
     exibir_menu_historico.
-
-main :-
-    cria_intro,
-    menu_principal,
-    halt.
 
 % Metodo responsavel por realizar o cadastro de um novo usuario no sitema 
 % com nome, cpf, telefone e endereco.
@@ -202,26 +196,22 @@ cadastrar_filme :-
 
 recebeTituloFilme("S") :- menu_principal_admin.
 recebeTituloFilme(Titulo) :- 
-    msgCadastroFilmeGenero,
-    read(Genero),
+    msgCadastroFilmeGenero, read(Genero),
     recebeGeneroFilme(Genero, Titulo).
 
 recebeGeneroFilme("S", _) :- menu_principal_admin.
 recebeGeneroFilme(Genero, Titulo):-
-    msgCadastroFilmeDiretor,
-    read(Diretor),
+    msgCadastroFilmeDiretor, read(Diretor),
     recebeDiretorFilme(Diretor, Genero, Titulo).
 
 recebeDiretorFilme("S", _, _) :- menu_principal_admin.
 recebeDiretorFilme(Diretor, Genero, Titulo ):-
-    msgCadastroFilmeData,
-    read(Data),
+    msgCadastroFilmeData, read(Data),
     recebeDataFilme(Data, Diretor, Genero, Titulo).
 
 recebeDataFilme("S", _, _, _) :- menu_principal_admin.
 recebeDataFilme(Data, Diretor, Genero, Titulo):-
-    msgFilmeQuantidade,
-    read(Quantidade),
+    msgFilmeQuantidade, read(Quantidade),
     recebeQuantidadeFilme(Quantidade, Data, Diretor, Genero, Titulo).
 
 recebeQuantidadeFilme("S", _, _, _, _) :- menu_principal_admin.
@@ -230,19 +220,22 @@ recebeQuantidadeFilme(Quantidade, Data, Diretor, Genero, Titulo) :-
     msgResumoCadastroFilme(Id,Titulo, Genero, Diretor, Data, Quantidade),  retorna(0,menu_principal_admin);
     msgQuantidadeInvalida, retorna(0, cadastrar_filme)).
 
+% Método responsável por verificar a quantidade de um determinado filme no estoque.
 verificaDisponibilidadeFilme :-
     msgDisponibilidadeFilmes,
     locadora_lista_todos_filmes,
-    msgFilmeIdentificador,
-    read(Id),
+    msgFilmeIdentificador, read(Id),
     recebeIdFilme(Id).
-     
 
+% Método auxiliar utilizado no método verificaDisponibilidade, responsável por verificar se a opção passada pelo
+%usuário é válida e se caso ele digitar "S", ele será redirecionado para o menu anterior.
 recebeIdFilme("S"):- menu_admin_gerenciar_estoque.
 recebeIdFilme(Id) :- locadora_eh_filme(Id, R),
     (R -> disponibilidade_filme(Id);
     msgFilmeIdNaoCadastrado(Id), retorna(0, verificaDisponibilidadeFilme)).
 
+% Método auxiliar utilizado no método verificaDisponibilidade, responsável por listar a disponibilidade do filme,
+%juntamente com sua quantidade e o seu título.
 disponibilidade_filme(Id) :-
     getEstoque(Id, Estoque),
     getTitulo(Id, Titulo),
@@ -256,10 +249,14 @@ adicionaFilmeAoEstoque :-
     read(IdFilme),
     recebeIdFilmeEstoque(IdFilme).
 
+%Método responsável por verificar se a opção passada pelo usuário é válida e se caso ele digitar "S", ele será redirecionado para o menu anterior.
 recebeIdFilmeEstoque("S"):- menu_admin_gerenciar_estoque.
 recebeIdFilmeEstoque(Id) :- locadora_eh_filme(Id, R),
     (R -> recebeQuantidadeEstoque(Id);
     msgFilmeIdNaoCadastrado(Id), retorna(0, adicionaFilmeAoEstoque)).
+
+%Método responsável por receber a nova quantidade do filme e adicionar a quantidade passada pelo usuario a atual,
+%além de verificar se a opção passada pelo usuário é válida e se caso ele digitar "S", ele será redirecionado para o menu anterior.
 
 recebeQuantidadeEstoque("S") :- menu_admin_gerenciar_estoque.
 recebeQuantidadeEstoque(IdFilme) :- 
@@ -320,8 +317,7 @@ recomenda_filme(Genero, CPF) :-
     locadora_recomenda_filme(Genero, ID),
     locadora_get_titulo(ID, Titulo),
     msgRecomendacao(Titulo),
-    msgRecomendaLocacao,
-    read(Opcao),
+    msgRecomendaLocacao, read(Opcao),
     proximaEtapaRecomenda(Opcao, CPF, ID).
 
 proximaEtapaRecomenda("n", CPF, _) :- menu_principal_cliente(CPF).
@@ -333,8 +329,7 @@ proximaEtapaRecomenda(_, CPF, _) :- opcaoInvalida, retorna(0, recomendar_filme(C
 devolver_filme(CPF) :- 
     msgDevolucaoTop,
     locadora_lista_locacoes_cliente(CPF),
-    msgDevolucaoBottom,
-    read(Entrada),
+    msgDevolucaoBottom, read(Entrada),
     proximaEtapaDevolucao(Entrada, CPF).
 
 proximaEtapaDevolucao("S", CPF) :- menu_principal_cliente(CPF).
